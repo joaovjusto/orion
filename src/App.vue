@@ -49,10 +49,7 @@ export default {
   data() {
     return {
       steps,
-      activeForm: {
-        name: 'VehicleData',
-        title: 'Veículo'
-      }
+      activeForm: steps[0]
     }
   },
   methods: {

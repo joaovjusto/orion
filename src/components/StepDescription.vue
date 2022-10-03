@@ -4,7 +4,7 @@
       v-for="(step, i) in steps"
     >
       <span @click="setActiveStep(i+1)" :class="`step ${active === (i+1) ? 'active': ''}`" :key="i">{{ step.title }}</span>
-      <span :key="i" v-if="i + 1 < steps.length" class="material-icons next-item">
+      <span :key="i + 100" v-if="i + 1 < steps.length" class="material-icons next-item">
         chevron_right
       </span>
     </template>
