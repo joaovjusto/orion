@@ -4,7 +4,9 @@
     <div class="body">
       <div class="container pt-5">
         <StepDescription/>
-        <component class="py-5" :is="activeForm"/>
+        <FormContainer class="py-5" title="Veículo">
+          <component :is="activeForm"/>
+        </FormContainer>
       </div>
     </div>
   </div>
@@ -14,13 +16,15 @@
 import NavBar from './components/NavBar.vue'
 import StepDescription from './components/StepDescription.vue'
 import VehicleData from './components/VehicleData.vue'
+import FormContainer from "./components/FormContainer.vue";
 
 export default {
   name: 'App',
   components: {
     NavBar,
     StepDescription,
-    VehicleData
+    VehicleData,
+    FormContainer
   },
   data() {
     return {

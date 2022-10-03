@@ -1,6 +1,5 @@
 <template>
   <div>
-    <FormContainer title="Veículo">
       <el-form
         :model="ruleForm"
         :rules="rules"
@@ -39,18 +38,13 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-    </FormContainer>
   </div>
 </template>
 
 <script>
-import FormContainer from "./FormContainer.vue";
 
 export default {
   name: "VehicleData",
-  components: {
-    FormContainer,
-  },
   data() {
     return {
       ruleForm: {
