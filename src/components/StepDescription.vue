@@ -3,7 +3,7 @@
     <template
       v-for="(step, i) in steps"
     >
-      <span @click="setActiveStep(i+1)" :class="`step ${active === (i+1) ? 'active': ''}`" :key="i">{{ step }}</span>
+      <span @click="setActiveStep(i+1)" :class="`step ${active === (i+1) ? 'active': ''}`" :key="i">{{ step.title }}</span>
       <span :key="i" v-if="i + 1 < steps.length" class="material-icons next-item">
         chevron_right
       </span>
@@ -14,22 +14,21 @@
 <script>
 export default {
   name: "StepDescription",
+  props: {
+    steps: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       active: 1,
-      steps: [
-        "Veículo",
-        "Despesas",
-        "Tributos",
-        "Aduaneira",
-        "Finalização",
-        "Revisão",
-      ],
     };
   },
   methods: {
     setActiveStep(number) {
       this.active = number;
+      this.$emit('changeStep', number)
     },
   },
 };
