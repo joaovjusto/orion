@@ -94,7 +94,7 @@ const vehicleData = [
 ];
 
 export default {
-  name: "VehicleData",
+  name: "TributeData",
   data() {
     return {
       total: "",

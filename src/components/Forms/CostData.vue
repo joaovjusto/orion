@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: "VehicleData",
+  name: "CostData",
   data() {
     return {
       costForm: {},

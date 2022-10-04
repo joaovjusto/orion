@@ -1,29 +1,31 @@
-import Vue from 'vue';
-import ElementUI from 'element-ui';
-import './assets/scss/element-variables.scss'
-import BootstrapVue from 'bootstrap-vue'
+import Vue from "vue";
+import ElementUI from "element-ui";
+import "./assets/scss/element-variables.scss";
+import BootstrapVue from "bootstrap-vue";
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import 'material-icons/iconfont/material-icons.css';
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+import "material-icons/iconfont/material-icons.css";
 
-import VueCookies from 'vue-cookies'
+import locale from "element-ui/lib/locale/lang/pt-br";
 
-import store from './store'
+import VueCookies from "vue-cookies";
+
+import store from "./store";
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
-Vue.use(ElementUI);
+Vue.use(ElementUI, { locale });
 
 // default options config: { expires: '1d', path: '/', domain: '', secure: '', sameSite: 'Lax' }
-Vue.use(VueCookies, { expire: '7d'})
+Vue.use(VueCookies, { expire: "7d" });
 
-import App from './App.vue';
+import App from "./App.vue";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
   store,
-  render: h => h(App),
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");
