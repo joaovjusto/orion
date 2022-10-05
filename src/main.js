@@ -10,16 +10,11 @@ import "material-icons/iconfont/material-icons.css";
 
 import locale from "element-ui/lib/locale/lang/pt-br";
 
-import VueCookies from "vue-cookies";
-
 import store from "./store";
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
 Vue.use(ElementUI, { locale });
-
-// default options config: { expires: '1d', path: '/', domain: '', secure: '', sameSite: 'Lax' }
-Vue.use(VueCookies, { expire: "7d" });
 
 import App from "./App.vue";
 
