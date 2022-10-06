@@ -6,7 +6,7 @@ export default {
     state.costData = newValue;
   },
   SET_TRIBUTE_DATA(state, newValue) {
-    state.costData = newValue;
+    state.tributeData = newValue;
   },
   SET_CREDIT_DATA(state, newValue) {
     state.creditData = newValue;
