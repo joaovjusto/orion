@@ -12,6 +12,8 @@
 </template>
 ``
 <script>
+import Cookies from "js-cookie";
+
 export default {
   name: "StepDescription",
   props: {
@@ -25,12 +27,26 @@ export default {
       active: 1,
     };
   },
+  mounted() {
+    // Change to last step used if has it on cache
+    const lastActiveStep = parseFloat(Cookies.get('lastActiveStep'));
+    if (lastActiveStep) {
+      this.setActiveStep(lastActiveStep);
+    } else {
+      Cookies.set('lastActiveStep', 1);
+    }
+  },
   methods: {
     setActiveStep(number) {
       this.active = number;
-      this.$emit('changeStep', number)
+      Cookies.set('lastActiveStep', number);
     },
   },
+  watch: {
+    active(newValue) {
+      this.$emit('changeStep', newValue)
+    }
+  }
 };
 </script>
 

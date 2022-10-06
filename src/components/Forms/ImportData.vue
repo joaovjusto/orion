@@ -9,22 +9,22 @@
       class="demo-importForm"
     >
       <el-form-item label="Armazenagem (10 dias)" prop="storage">
-        <el-input placeholder="Insira" readonly v-model="importForm.storage"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" readonly v-model="importForm.storage"></el-input>
       </el-form-item>
       <el-form-item label="AFRMM" prop="afrmm">
-        <el-input placeholder="Insira" readonly v-model="importForm.afrmm"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" readonly v-model="importForm.afrmm"></el-input>
       </el-form-item>
       <el-form-item label="DTC" prop="dtc">
-        <el-input placeholder="Insira" v-model="importForm.dtc"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="importForm.dtc"></el-input>
       </el-form-item>
       <el-form-item label="DESOVA E DEVOLUÇÃO CTR" prop="ctr">
-        <el-input placeholder="Insira" v-model="importForm.ctr"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="importForm.ctr"></el-input>
       </el-form-item>
       <el-form-item label="Documentos" prop="docs">
-        <el-input placeholder="Insira" v-model="importForm.docs"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="importForm.docs"></el-input>
       </el-form-item>
       <el-form-item label="S.D.A" prop="sda">
-        <el-input placeholder="Insira" v-model="importForm.sda"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="importForm.sda"></el-input>
       </el-form-item>
     </el-form>
 
@@ -36,10 +36,10 @@
           label-position="top"
           label-width="120px"
           :inline="true"
-          class="demo-vehicleForm"
+          class="demo-importForm"
         >
           <el-form-item label="TOTAL DESPESAS ADUANEIRAS" class="text-left" prop="thc">
-            <el-input readonly v-model="total"></el-input>
+            <el-input @input="inputChanged($event)" readonly v-model="total"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -53,10 +53,10 @@
           label-position="top"
           label-width="120px"
           :inline="true"
-          class="demo-vehicleForm"
+          class="demo-importForm"
         >
           <el-form-item label="TOTAL DESEMBOLSO" class="text-left" prop="thc">
-            <el-input readonly v-model="totalCostData"></el-input>
+            <el-input @input="inputChanged($event)" readonly v-model="totalCostData"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -65,6 +65,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "ImportData",
   data() {
@@ -80,6 +82,21 @@ export default {
         sda: "",
       },
     };
+  },
+  mounted() {
+    if (this.getImportDataFromCache) {
+      this.importForm = this.getImportDataFromCache;
+    }
+  },
+  computed: {
+    ...mapGetters(["getImportDataFromCache"]),
+  },
+  methods: {
+    ...mapActions(["updateFormTreeData"]),
+    inputChanged() {
+      const dataToUpdate = { ...this.importForm };
+      this.updateFormTreeData({data: dataToUpdate, stepName: 'importData'});
+    },
   },
 };
 </script>

@@ -233,10 +233,10 @@ export default {
     ...mapGetters(["getVehicleDataFromCache"]),
   },
   methods: {
-    ...mapActions(["updateVehicleData"]),
+    ...mapActions(["updateFormTreeData"]),
     inputChanged() {
       const dataToUpdate = { ...this.vehicleForm };
-      this.updateVehicleData(dataToUpdate);
+      this.updateFormTreeData({data: dataToUpdate, stepName: 'vehicleData'});
     },
   },
 };

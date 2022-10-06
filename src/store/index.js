@@ -10,6 +10,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     vehicleData: {},
+    costData: {},
+    tributeData: {},
+    creditData: {},
+    importData: {},
+    finalStep: {},
   },
   actions,
   mutations,

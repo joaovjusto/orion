@@ -9,16 +9,16 @@
       class="demo-creditForm"
     >
       <el-form-item label="IPI" prop="ipi">
-        <el-input placeholder="Insira" readonly v-model="creditForm.ipi"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" readonly v-model="creditForm.ipi"></el-input>
       </el-form-item>
       <el-form-item label="ICMS" prop="icms">
-        <el-input placeholder="Insira" readonly v-model="creditForm.icms"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" readonly v-model="creditForm.icms"></el-input>
       </el-form-item>
       <el-form-item label="PIS - Empresas do lucro real" prop="pis">
-        <el-input placeholder="Insira" readonly v-model="creditForm.pis"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" readonly v-model="creditForm.pis"></el-input>
       </el-form-item>
       <el-form-item label="COFINS - Empresas do lucro real" prop="cofins">
-        <el-input placeholder="Insira" readonly v-model="creditForm.cofins"></el-input>
+        <el-input @input="inputChanged($event)" placeholder="Insira" readonly v-model="creditForm.cofins"></el-input>
       </el-form-item>
     </el-form>
 
@@ -33,7 +33,7 @@
           class="demo-vehicleForm"
         >
           <el-form-item label="CUSTO LIQUIDO DE IMPORTAÇÃO" class="text-left" prop="thc">
-            <el-input readonly v-model="totalLiquidCostData"></el-input>
+            <el-input @input="inputChanged($event)" readonly v-model="totalLiquidCostData"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "CreditData",
   data() {
@@ -54,6 +56,21 @@ export default {
         cofins: "",
       },
     };
+  },
+  mounted() {
+    if (this.getCreditDataFromCache) {
+      this.creditForm = this.getCreditDataFromCache;
+    }
+  },
+  computed: {
+    ...mapGetters(["getCreditDataFromCache"]),
+  },
+  methods: {
+    ...mapActions(["updateFormTreeData"]),
+    inputChanged() {
+      const dataToUpdate = { ...this.creditForm };
+      this.updateFormTreeData({data: dataToUpdate, stepName: 'creditData'});
+    },
   },
 };
 </script>
