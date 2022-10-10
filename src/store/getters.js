@@ -1,6 +1,9 @@
 import Cookies from "js-cookie";
 
 export default {
+  getCurrency(state) {
+    return state.currency;
+  },
   getVehicleDataFromCache(state) {
     if (Object.keys(state.vehicleData).length > 0) {
       return state.vehicleData;

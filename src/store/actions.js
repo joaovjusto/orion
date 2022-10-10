@@ -1,6 +1,9 @@
 import Cookies from "js-cookie";
 
 export default {
+  updateCurrencyData({ commit }, currency) {
+    commit("SET_CURRENCY", currency)
+  },
   updateBrowserCache(_, cache) {
     if (cache.name && cache.data) {
       Cookies.set(cache.name, JSON.stringify(cache.data), { expires: 7 });

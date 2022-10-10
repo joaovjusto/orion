@@ -15,6 +15,7 @@ export default new Vuex.Store({
     creditData: {},
     importData: {},
     finalStep: {},
+    currency: {}
   },
   actions,
   mutations,

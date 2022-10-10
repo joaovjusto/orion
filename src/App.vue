@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import NavBar from "./components/NavBar.vue";
 import StepDescription from "./components/StepDescription.vue";
 import FormContainer from "./components/FormContainer.vue";
@@ -92,9 +93,26 @@ export default {
         });
       }
     });
+
+    axios.get('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL').then((result) => {
+      const { EURBRL, USDBRL } = result.data;
+      this.updateCurrencyData({ EURBRL, USDBRL });
+      this.$notify({
+        title: 'Sucesso',
+        message: 'Cotação atualizada - Euro, Dólar',
+        type: 'success'
+      });
+    }).catch((err) => {
+      console.log(err);
+      this.$notify({
+        title: 'Atenção',
+        message: 'Dados da cotação atual não podem ser atualizados',
+        type: 'warning'
+      });
+    });
   },
   methods: {
-    ...mapActions(["updateFormTreeData"]),
+    ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
     changeStep(stepIndex) {
       this.activeForm = steps[stepIndex - 1];
     },

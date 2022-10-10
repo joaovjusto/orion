@@ -17,4 +17,7 @@ export default {
   SET_FINAL_STEP(state, newValue) {
     state.finalStep = newValue;
   },
+  SET_CURRENCY(state, currency) {
+    state.currency = currency;
+  },
 };

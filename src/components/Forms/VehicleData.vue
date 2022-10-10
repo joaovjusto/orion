@@ -10,18 +10,28 @@
       class="demo-vehicleForm"
     >
       <el-form-item label="Moeda" prop="currency">
-        <el-input
-          @input="inputChanged($event)"
-          placeholder="Insira"
+        <el-select
+          @change="updateCurrencyData('currency')"
           v-model="vehicleForm.currency"
-        ></el-input>
+          placeholder="Selecione"
+        >
+          <el-option
+            v-for="(item, i) in currencyOptions"
+            :key="i"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="Taxa Fiscal" prop="currencyTax">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.currencyTax"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
     <el-form
@@ -49,6 +59,7 @@
       </el-form-item>
       <el-form-item label="Data" prop="date">
         <el-date-picker
+        format="dd/MM/yyyy"
           v-model="vehicleForm.date"
           type="date"
           @input="inputChanged($event)"
@@ -78,18 +89,22 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="FOB" prop="fob">
-        <el-input
-          @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
+          @blur="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.fob"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="Frete" prop="shipping">
-        <el-input
-          @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
+          @blur="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.shipping"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="Produto" prop="product">
         <el-input
@@ -100,6 +115,7 @@
       </el-form-item>
       <el-form-item label="Qtde. CNTR" prop="cntr">
         <el-input
+          type="number"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.cntr"
@@ -122,12 +138,14 @@
       <el-form-item label="ICMS Destino" prop="icmsDestination">
         <el-input
           @input="inputChanged($event)"
+          v-mask="['#%', '##%', '###%']"
           placeholder="Insira"
           v-model="vehicleForm.icmsDestination"
         ></el-input>
       </el-form-item>
       <el-form-item label="NCM" prop="ncm">
         <el-input
+          type="number"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.ncm"
@@ -144,6 +162,24 @@ export default {
   name: "VehicleData",
   data() {
     return {
+      inputChangedTimes: 0,
+      money: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "R$ ",
+        precision: 2,
+        masked: false /* doesn't work with directive */,
+      },
+      currencyOptions: [
+        {
+          label: "DÓLAR",
+          value: "USD",
+        },
+        {
+          label: "EURO",
+          value: "EUR",
+        },
+      ],
       vehicleForm: {
         currency: "",
         currencyTax: "",
@@ -230,13 +266,29 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getVehicleDataFromCache"]),
+    ...mapGetters(["getVehicleDataFromCache", "getCurrency"]),
   },
   methods: {
     ...mapActions(["updateFormTreeData"]),
+    updateCurrencyData() {
+      if (Object.keys(this.getCurrency).length > 0) {
+        const currencyTaxResult = Object.keys(this.getCurrency).filter(
+          (value) => value.includes(this.vehicleForm.currency)
+        );
+        this.vehicleForm.currencyTax = parseFloat(
+          this.getCurrency[currencyTaxResult].ask
+        ).toFixed(2);
+      }
+    },
     inputChanged() {
-      const dataToUpdate = { ...this.vehicleForm };
-      this.updateFormTreeData({data: dataToUpdate, stepName: 'vehicleData'});
+      if (this.inputChangedTimes >= 1) {
+        const dataToUpdate = { ...this.vehicleForm };
+        this.updateFormTreeData({
+          data: dataToUpdate,
+          stepName: "vehicleData",
+        });
+      }
+      this.inputChangedTimes += 1;
     },
   },
 };

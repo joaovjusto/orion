@@ -8,6 +8,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "material-icons/iconfont/material-icons.css";
 
+import VueTheMask from 'vue-the-mask'
+import money from 'v-money'
+
+
 import locale from "element-ui/lib/locale/lang/pt-br";
 
 import store from "./store";
@@ -15,6 +19,16 @@ import store from "./store";
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
 Vue.use(ElementUI, { locale });
+Vue.use(VueTheMask)
+
+// register directive v-money and component <money>
+Vue.use(money, {
+  decimal: ',',
+  thousands: '.',
+  prefix: 'R$ ',
+  precision: 2,
+  masked: false /* doesn't work with directive */
+})
 
 import App from "./App.vue";
 
