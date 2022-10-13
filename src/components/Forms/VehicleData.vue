@@ -11,7 +11,7 @@
     >
       <el-form-item label="Moeda" prop="currency">
         <el-select
-          @change="updateCurrencyData('currency')"
+          @change="updateLocalCurrencyData()"
           v-model="vehicleForm.currency"
           placeholder="Selecione"
         >
@@ -27,7 +27,7 @@
       <el-form-item label="Taxa Fiscal" prop="currencyTax">
         <input
           class="el-input__inner"
-          v-money="money"
+          v-money="getCurrency.moneyConfig"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.currencyTax"
@@ -59,7 +59,7 @@
       </el-form-item>
       <el-form-item label="Data" prop="date">
         <el-date-picker
-        format="dd/MM/yyyy"
+          format="dd/MM/yyyy"
           v-model="vehicleForm.date"
           type="date"
           @input="inputChanged($event)"
@@ -91,7 +91,7 @@
       <el-form-item label="FOB" prop="fob">
         <input
           class="el-input__inner"
-          v-money="money"
+          v-money="getCurrency.moneyConfig"
           @blur="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.fob"
@@ -100,7 +100,7 @@
       <el-form-item label="Frete" prop="shipping">
         <input
           class="el-input__inner"
-          v-money="money"
+          v-money="getCurrency.moneyConfig"
           @blur="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.shipping"
@@ -163,13 +163,6 @@ export default {
   data() {
     return {
       inputChangedTimes: 0,
-      money: {
-        decimal: ",",
-        thousands: ".",
-        prefix: "R$ ",
-        precision: 2,
-        masked: false /* doesn't work with directive */,
-      },
       currencyOptions: [
         {
           label: "DÓLAR",
@@ -269,8 +262,8 @@ export default {
     ...mapGetters(["getVehicleDataFromCache", "getCurrency"]),
   },
   methods: {
-    ...mapActions(["updateFormTreeData"]),
-    updateCurrencyData() {
+    ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
+    updateLocalCurrencyData() {
       if (Object.keys(this.getCurrency).length > 0) {
         const currencyTaxResult = Object.keys(this.getCurrency).filter(
           (value) => value.includes(this.vehicleForm.currency)
@@ -278,7 +271,30 @@ export default {
         this.vehicleForm.currencyTax = parseFloat(
           this.getCurrency[currencyTaxResult].ask
         ).toFixed(2);
+
+        this.updateCurrentCurrencyOption();
       }
+    },
+    updateCurrentCurrencyOption() {
+      // Updating to all application the money config
+        const moneyConfigOptions = {
+          EUR: {
+            decimal: ",",
+            thousands: ".",
+            prefix: "€ ",
+            precision: 2,
+            masked: false /* doesn't work with directive */,
+          },
+          USD: {
+          decimal: ",",
+            thousands: ".",
+            prefix: "$ ",
+            precision: 2,
+            masked: false /* doesn't work with directive */,
+          }
+        }
+
+        this.updateCurrencyData({ ...this.getCurrency, moneyConfig: moneyConfigOptions[this.vehicleForm.currency] });
     },
     inputChanged() {
       if (this.inputChangedTimes >= 1) {

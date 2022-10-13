@@ -1,9 +1,11 @@
+import CostBaseFileCalc from "@/utils/CostBaseFileCalc";
+
 export default {
   SET_VEHICLE_DATA(state, newValue) {
     state.vehicleData = newValue;
   },
   SET_COST_DATA(state, newValue) {
-    state.costData = newValue;
+    state.costData = CostBaseFileCalc(newValue);
   },
   SET_TRIBUTE_DATA(state, newValue) {
     state.tributeData = newValue;

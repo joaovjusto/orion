@@ -9,33 +9,40 @@
       class="demo-vehicleForm"
     >
       <el-form-item label="FOB" prop="fob">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           readonly
           @input="inputChanged($event)"
-          placeholder="Insira"
           v-model="costForm.fob"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="Frete" prop="shipping">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
+          readonly
           @input="inputChanged($event)"
-          placeholder="Insira"
           v-model="costForm.shipping"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="Seguro" prop="insurance">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="costForm.insurance"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="THC (Capatazia)" prop="thc">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="costForm.thc"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
@@ -49,8 +56,14 @@
           :inline="true"
           class="demo-vehicleForm"
         >
-          <el-form-item label="TOTAL" class="text-left" prop="thc">
-            <el-input readonly v-model="total"></el-input>
+          <el-form-item label="TOTAL" class="text-left" prop="total">
+            <input
+              class="el-input__inner"
+              v-money="money"
+              @input="inputChanged($event)"
+              readonly
+              v-model="total"
+            />
           </el-form-item>
         </el-form>
       </div>
@@ -60,18 +73,25 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import StringToDouble from "@/utils/common/StringToDouble";
 
 export default {
   name: "CostData",
   data() {
     return {
-      costForm: {
-        fob: "",
-        shipping: "",
-        insurance: "",
-        thc: "",
+      money: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "R$ ",
+        precision: 2,
+        masked: false /* doesn't work with directive */,
       },
-      total: "",
+      costForm: {
+        fob: "0",
+        shipping: "0",
+        insurance: "0",
+        thc: "547,00",
+      },
     };
   },
   mounted() {
@@ -80,7 +100,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getCostDataFromCache"]),
+    ...mapGetters(["getCostDataFromCache", "getCurrency"]),
+    total: {
+      get() {
+        // return (
+        //   StringToDouble(this.costForm.fob) +
+        //   StringToDouble(this.costForm.shipping) +
+        //   StringToDouble(this.costForm.insurance) +
+        //   StringToDouble(this.costForm.thc)
+        // ).toFixed(2);
+        return StringToDouble(this.costForm.fob)
+      },
+      set() {
+      },
+    },
   },
   methods: {
     ...mapActions(["updateFormTreeData"]),

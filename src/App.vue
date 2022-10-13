@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import NavBar from "./components/NavBar.vue";
 import StepDescription from "./components/StepDescription.vue";
 import FormContainer from "./components/FormContainer.vue";
@@ -94,22 +94,54 @@ export default {
       }
     });
 
-    axios.get('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL').then((result) => {
-      const { EURBRL, USDBRL } = result.data;
-      this.updateCurrencyData({ EURBRL, USDBRL });
-      this.$notify({
-        title: 'Sucesso',
-        message: 'Cotação atualizada - Euro, Dólar',
-        type: 'success'
+    axios
+      .get("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL")
+      .then((result) => {
+        const { EURBRL, USDBRL } = result.data;
+
+        // Check if was selected a currency before
+        if (this.getVehicleDataFromCache != null) {
+          if (Object.keys(this.getVehicleDataFromCache).includes("currency")) {
+            // Updating to all application the money config
+            const moneyConfigOptions = {
+              EUR: {
+                decimal: ",",
+                thousands: ".",
+                prefix: "€ ",
+                precision: 2,
+                masked: false /* doesn't work with directive */,
+              },
+              USD: {
+                decimal: ",",
+                thousands: ".",
+                prefix: "$ ",
+                precision: 2,
+                masked: false /* doesn't work with directive */,
+              },
+            };
+            this.updateCurrencyData({
+              ...{ EURBRL, USDBRL },
+              moneyConfig: moneyConfigOptions[this.getVehicleDataFromCache.currency],
+            });
+          }
+        } else {
+          this.updateCurrencyData({ EURBRL, USDBRL });
+        }
+
+        this.$notify({
+          title: "Sucesso",
+          message: "Cotação atualizada - Euro, Dólar",
+          type: "success",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        this.$notify({
+          title: "Atenção",
+          message: "Dados da cotação atual não podem ser atualizados",
+          type: "warning",
+        });
       });
-    }).catch((err) => {
-      console.log(err);
-      this.$notify({
-        title: 'Atenção',
-        message: 'Dados da cotação atual não podem ser atualizados',
-        type: 'warning'
-      });
-    });
   },
   methods: {
     ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
