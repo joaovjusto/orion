@@ -1,13 +1,14 @@
 import store from "@/store";
 
 export default (data) => {
+  const vehicleFormData = { ...store.getters.getVehicleDataFromCache };
   const stepRendered = store.getters.getStepsRendered.find(
     (step) => step.name === "VehicleData"
   );
 
   let baseDataRender = {};
   if (stepRendered) {
-    if (stepRendered.count === 0) {
+    if (stepRendered.count === 0 && !Object.keys(vehicleFormData).includes('importer')) {
       baseDataRender = {
         importer: "VERSAILLES",
         billing: "SP",
