@@ -28,12 +28,12 @@ export default {
   updateStepsRendered({ commit }, stepsRendered) {
     commit("SET_STEPS_RENDERED", stepsRendered);
   },
-  updateAllSteps({ commit }) {
-    commit("SET_VEHICLE_DATA", {});
-    commit("SET_COST_DATA", {});
-    commit("SET_TRIBUTE_DATA", {});
-    commit("SET_CREDIT_DATA", {});
-    commit("SET_IMPORT_DATA", {});
-    commit("SET_FINAL_STEP", {});
+  updateAllSteps({ commit, getters }) {
+    commit("SET_VEHICLE_DATA", getters.getVehicleDataFromCache);
+    commit("SET_COST_DATA", getters.getCostDataFromCache);
+    commit("SET_TRIBUTE_DATA", getters.getTributeDataFromCache);
+    commit("SET_CREDIT_DATA", getters.getCreditDataFromCache);
+    commit("SET_IMPORT_DATA", getters.getImportDataFromCache);
+    commit("SET_FINAL_STEP", getters.getFinalStepFromCache);
   },
 };

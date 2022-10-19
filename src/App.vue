@@ -101,7 +101,7 @@ export default {
         const { EURBRL, USDBRL } = result.data;
 
         // Check if was selected a currency before
-        if (this.getVehicleDataFromCache != null) {
+        if (Object.keys(this.getVehicleDataFromCache).length > 0) {
           if (Object.keys(this.getVehicleDataFromCache).includes("currency")) {
             // Updating to all application the money config
             const moneyConfigOptions = {
@@ -125,9 +125,9 @@ export default {
               moneyConfig:
                 moneyConfigOptions[this.getVehicleDataFromCache.currency],
             });
-          }
-        } else {
+          } else {
           this.updateCurrencyData({ EURBRL, USDBRL });
+        }
         }
 
         this.$notify({

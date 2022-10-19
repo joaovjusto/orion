@@ -13,7 +13,7 @@ export default {
     }
     return Cookies.get("vehicleData")
       ? JSON.parse(Cookies.get("vehicleData"))
-      : null;
+      : {};
   },
   getCostDataFromCache(state) {
     if (Object.keys(state.costData).length > 0) {
@@ -21,7 +21,7 @@ export default {
     }
     return Cookies.get("costData")
       ? JSON.parse(Cookies.get("costData"))
-      : null;
+      : {};
   },
   getTributeDataFromCache(state) {
     if (Object.keys(state.tributeData).length > 0) {
@@ -29,7 +29,7 @@ export default {
     }
     return Cookies.get("tributeData")
       ? JSON.parse(Cookies.get("tributeData"))
-      : null;
+      : {};
   },
   getCreditDataFromCache(state) {
     if (Object.keys(state.creditData).length > 0) {
@@ -37,7 +37,7 @@ export default {
     }
     return Cookies.get("creditData")
       ? JSON.parse(Cookies.get("creditData"))
-      : null;
+      : {};
   },
   getImportDataFromCache(state) {
     if (Object.keys(state.importData).length > 0) {
@@ -45,7 +45,7 @@ export default {
     }
     return Cookies.get("importData")
       ? JSON.parse(Cookies.get("importData"))
-      : null;
+      : {};
   },
   getFinalStepFromCache(state) {
     if (Object.keys(state.finalStep).length > 0) {
@@ -53,6 +53,6 @@ export default {
     }
     return Cookies.get("finalStep")
       ? JSON.parse(Cookies.get("finalStep"))
-      : null;
+      : {};
   },
 };

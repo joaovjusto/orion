@@ -1,9 +1,10 @@
+import VehicleBaseFileCalc from "@/utils/VehicleBaseFileCalc";
 import CostBaseFileCalc from "@/utils/CostBaseFileCalc";
 import TributeBaseFileCalc from "@/utils/TributeBaseFileCalc";
 
 export default {
   SET_VEHICLE_DATA(state, newValue) {
-    state.vehicleData = newValue;
+    state.vehicleData = VehicleBaseFileCalc(newValue);
   },
   SET_COST_DATA(state, newValue) {
     state.costData = CostBaseFileCalc(newValue);

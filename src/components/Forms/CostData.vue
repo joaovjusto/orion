@@ -81,6 +81,8 @@ export default {
   mixins: [commonFormMixin],
   data() {
     return {
+      canChangeInput: false,
+      inputChangedTimes: 0,
       costForm: {
         fob: "0",
         shipping: "0",
@@ -90,9 +92,7 @@ export default {
     };
   },
   mounted() {
-    if (this.getCostDataFromCache) {
-      this.costForm = this.getCostDataFromCache;
-    }
+    this.handleCanChangeInput();
   },
   computed: {
     ...mapGetters(["getCostDataFromCache", "getCurrency"]),
@@ -110,9 +110,20 @@ export default {
   },
   methods: {
     ...mapActions(["updateFormTreeData"]),
+    handleCanChangeInput() {
+      setTimeout(() => {
+        this.canChangeInput = true;
+        if (this.getCostDataFromCache) {
+          this.costForm = this.getCostDataFromCache;
+        }
+      }, 500);
+    },
     inputChanged() {
-      const dataToUpdate = { ...this.costForm };
-      this.updateFormTreeData({ data: dataToUpdate, stepName: "costData" });
+      if (this.inputChangedTimes >= 1 && this.canChangeInput) {
+        const dataToUpdate = { ...this.costForm };
+        this.updateFormTreeData({ data: dataToUpdate, stepName: "costData" });
+      }
+      this.inputChangedTimes += 1;
     },
   },
 };

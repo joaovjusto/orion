@@ -176,22 +176,24 @@ export default {
         },
       ],
       vehicleForm: {
+        canChangeInput: false,
+        inputChangedTimes: 0,
         currency: "",
         currencyTax: "",
-        importer: "VERSAILLES",
-        billing: "SP",
+        importer: "",
+        billing: "",
         date: "",
-        modal: "MARÍTIMO",
-        cargoType: "CTN",
-        purchaser: "PJ",
-        fob: "51.095,00",
-        shipping: "875,00",
+        modal: "",
+        cargoType: "",
+        purchaser: "",
+        fob: "",
+        shipping: "",
         product: "",
-        cntr: "1",
-        origin: "USA",
-        destination: "Santa Catarina",
-        icmsDestination: "4%",
-        ncm: "8703",
+        cntr: "",
+        origin: "",
+        destination: "",
+        icmsDestination: "",
+        ncm: "",
       },
       rules: {
         // name: [
@@ -256,15 +258,21 @@ export default {
     };
   },
   mounted() {
-    if (this.getVehicleDataFromCache) {
-      this.vehicleForm = this.getVehicleDataFromCache;
-    }
+    this.handleCanChangeInput();
   },
   computed: {
     ...mapGetters(["getVehicleDataFromCache", "getCurrency"]),
   },
   methods: {
     ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
+    handleCanChangeInput() {
+      setTimeout(() => {
+        this.canChangeInput = true;
+        if (this.getVehicleDataFromCache) {
+          this.vehicleForm = this.getVehicleDataFromCache;
+        }
+      }, 500);
+    },
     updateLocalCurrencyData() {
       if (Object.keys(this.getCurrency).length > 0) {
         const currencyTaxResult = Object.keys(this.getCurrency).filter(
@@ -299,7 +307,7 @@ export default {
         this.updateCurrencyData({ ...this.getCurrency, moneyConfig: moneyConfigOptions[this.vehicleForm.currency] });
     },
     inputChanged() {
-      if (this.inputChangedTimes >= 1) {
+      if (this.inputChangedTimes >= 1 && this.canChangeInput) {
         const dataToUpdate = { ...this.vehicleForm };
         this.updateFormTreeData({
           data: dataToUpdate,

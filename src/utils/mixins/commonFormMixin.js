@@ -13,24 +13,35 @@ export default {
     };
   },
   mounted() {
-    const isThisStepAlreadyRenderedBefore = this.getStepsRendered.findIndex(
+    const selectedStep = this.getStepsRendered.find(
       (step) => step.name === this.$options.name
     );
     let count = 0;
-    let updatedArray = this.getStepsRendered;
-    if (isThisStepAlreadyRenderedBefore >= 0) {
-      count = this.getStepsRendered.find((step) => this.$options.name === step.name).count + 1;
-      updatedArray = this.getStepsRendered.slice(0, isThisStepAlreadyRenderedBefore).concat(this.getStepsRendered.slice(-isThisStepAlreadyRenderedBefore));
-      this.updateStepsRendered([...updatedArray, { name: this.$options.name, count }]);
 
-      // After user on the page update the render time parameter 1s
-      setTimeout(() => {
-        count = this.getStepsRendered.find((step) => this.$options.name === step.name).count + 1;
-        updatedArray = this.getStepsRendered.slice(0, isThisStepAlreadyRenderedBefore).concat(this.getStepsRendered.slice(-isThisStepAlreadyRenderedBefore));
-      }, 1000);
+    if (selectedStep) {
+      const newArr = this.getStepsRendered.map((item) => {
+        if (item.name !== this.$options.name) {
+          return item
+        } else {
+          return { name: this.$options.name, count: count + 1 }
+        }
+      });
+      this.updateStepsRendered(newArr)
     }else {
-      this.updateStepsRendered([...this.getStepsRendered, { name: this.$options.name, count: 0 }]); 
+      this.updateStepsRendered([...this.getStepsRendered, { name: this.$options.name, count: count}])
     }
+
+     // After user on the page update the render time parameter 1s
+      setTimeout(() => {
+        const newArr = this.getStepsRendered.map((item) => {
+          if (item.name !== this.$options.name) {
+            return item
+          } else {
+            return { name: this.$options.name, count: count + 1 }
+          }
+        });
+        this.updateStepsRendered(newArr)
+      }, 1000);
   },
   methods: {
     ...mapActions(["updateStepsRendered"]),
