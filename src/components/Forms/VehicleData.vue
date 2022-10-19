@@ -27,7 +27,7 @@
       <el-form-item label="Taxa Fiscal" prop="currencyTax">
         <input
           class="el-input__inner"
-          v-money="getCurrency.moneyConfig"
+          v-money="money"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.currencyTax"
@@ -162,6 +162,13 @@ export default {
   name: "VehicleData",
   data() {
     return {
+      money: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "R$ ",
+        precision: 2,
+        masked: false /* doesn't work with directive */,
+      },
       inputChangedTimes: 0,
       currencyOptions: [
         {
@@ -176,20 +183,20 @@ export default {
       vehicleForm: {
         currency: "",
         currencyTax: "",
-        importer: "",
-        billing: "",
+        importer: "VERSAILLES",
+        billing: "SP",
         date: "",
-        modal: "",
-        cargoType: "",
-        purchaser: "",
-        fob: "",
-        shipping: "",
+        modal: "MARÍTIMO",
+        cargoType: "CTN",
+        purchaser: "PJ",
+        fob: "51.095,00",
+        shipping: "875,00",
         product: "",
-        cntr: "",
-        origin: "",
-        destination: "",
-        icmsDestination: "",
-        ncm: "",
+        cntr: "1",
+        origin: "USA",
+        destination: "Santa Catarina",
+        icmsDestination: "4%",
+        ncm: "8703",
       },
       rules: {
         // name: [

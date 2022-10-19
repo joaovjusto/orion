@@ -103,16 +103,14 @@ export default {
     ...mapGetters(["getCostDataFromCache", "getCurrency"]),
     total: {
       get() {
-        // return (
-        //   StringToDouble(this.costForm.fob) +
-        //   StringToDouble(this.costForm.shipping) +
-        //   StringToDouble(this.costForm.insurance) +
-        //   StringToDouble(this.costForm.thc)
-        // ).toFixed(2);
-        return StringToDouble(this.costForm.fob)
+        return (
+          parseFloat(StringToDouble(this.costForm.fob)) +
+          parseFloat(StringToDouble(this.costForm.shipping)) +
+          parseFloat(StringToDouble(this.costForm.insurance)) +
+          parseFloat(StringToDouble(this.costForm.thc))
+        ).toFixed(2);
       },
-      set() {
-      },
+      set() {},
     },
   },
   methods: {

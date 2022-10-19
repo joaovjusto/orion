@@ -167,7 +167,5 @@ export default {
     #6a6a6a,
     #595959
   );
-  .body {
-  }
 }
 </style>
