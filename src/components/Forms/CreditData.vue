@@ -43,9 +43,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
   name: "CreditData",
+  mixins: [commonFormMixin],
   data() {
     return {
       totalLiquidCostData: "1000",

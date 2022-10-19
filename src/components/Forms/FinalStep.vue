@@ -204,9 +204,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
   name: "FinalStep",
+   mixins: [commonFormMixin],
   data() {
     return {
       totalOutcome: "",

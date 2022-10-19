@@ -157,18 +157,13 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
   name: "VehicleData",
+  mixins: [commonFormMixin],
   data() {
     return {
-      money: {
-        decimal: ",",
-        thousands: ".",
-        prefix: "R$ ",
-        precision: 2,
-        masked: false /* doesn't work with directive */,
-      },
       inputChangedTimes: 0,
       currencyOptions: [
         {

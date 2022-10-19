@@ -74,23 +74,18 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import StringToDouble from "@/utils/common/StringToDouble";
+import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
   name: "CostData",
+  mixins: [commonFormMixin],
   data() {
     return {
-      money: {
-        decimal: ",",
-        thousands: ".",
-        prefix: "R$ ",
-        precision: 2,
-        masked: false /* doesn't work with directive */,
-      },
       costForm: {
         fob: "0",
         shipping: "0",
         insurance: "0",
-        thc: "547,00",
+        thc: "0",
       },
     };
   },

@@ -1,10 +1,17 @@
 <template>
   <div class="stepper-container d-flex justify-content-between">
-    <template
-      v-for="(step, i) in steps"
-    >
-      <span @click="setActiveStep(i+1)" :class="`step ${active === (i+1) ? 'active': ''}`" :key="i">{{ step.title }}</span>
-      <span :key="i + 100" v-if="i + 1 < steps.length" class="material-icons next-item">
+    <template v-for="(step, i) in steps">
+      <span
+        @click="setActiveStep(i + 1)"
+        :class="`step ${active === i + 1 ? 'active' : ''}`"
+        :key="i"
+        >{{ step.title }}</span
+      >
+      <span
+        :key="i + 100"
+        v-if="i + 1 < steps.length"
+        class="material-icons next-item"
+      >
         chevron_right
       </span>
     </template>
@@ -13,6 +20,7 @@
 ``
 <script>
 import Cookies from "js-cookie";
+import { mapActions } from "vuex";
 
 export default {
   name: "StepDescription",
@@ -29,24 +37,26 @@ export default {
   },
   mounted() {
     // Change to last step used if has it on cache
-    const lastActiveStep = parseFloat(Cookies.get('lastActiveStep'));
+    const lastActiveStep = parseFloat(Cookies.get("lastActiveStep"));
     if (lastActiveStep) {
       this.setActiveStep(lastActiveStep);
     } else {
-      Cookies.set('lastActiveStep', 1);
+      Cookies.set("lastActiveStep", 1);
     }
   },
   methods: {
+    ...mapActions(["updateAllSteps"]),
     setActiveStep(number) {
       this.active = number;
-      Cookies.set('lastActiveStep', number);
+      Cookies.set("lastActiveStep", number);
     },
   },
   watch: {
     active(newValue) {
-      this.$emit('changeStep', newValue)
-    }
-  }
+      this.$emit("changeStep", newValue);
+      this.updateAllSteps();
+    },
+  },
 };
 </script>
 
@@ -64,9 +74,10 @@ export default {
     border-radius: 4px;
     color: #fff;
     font-size: 14px;
-    transition: .2s linear all;
+    transition: 0.2s linear all;
     background-color: transparent;
-    &:hover, &.active {
+    &:hover,
+    &.active {
       background-color: #fff;
       color: #424242;
     }

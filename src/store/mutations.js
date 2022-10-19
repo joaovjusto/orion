@@ -1,4 +1,5 @@
 import CostBaseFileCalc from "@/utils/CostBaseFileCalc";
+import TributeBaseFileCalc from "@/utils/TributeBaseFileCalc";
 
 export default {
   SET_VEHICLE_DATA(state, newValue) {
@@ -8,7 +9,7 @@ export default {
     state.costData = CostBaseFileCalc(newValue);
   },
   SET_TRIBUTE_DATA(state, newValue) {
-    state.tributeData = newValue;
+    state.tributeData = TributeBaseFileCalc(newValue);
   },
   SET_CREDIT_DATA(state, newValue) {
     state.creditData = newValue;
@@ -21,5 +22,8 @@ export default {
   },
   SET_CURRENCY(state, currency) {
     state.currency = currency;
+  },
+  SET_STEPS_RENDERED(state, stepsRendered) {
+    state.stepsRendered = stepsRendered;
   },
 };

@@ -4,6 +4,9 @@ export default {
   getCurrency(state) {
     return state.currency;
   },
+  getStepsRendered(state) {
+    return state.stepsRendered;
+  },
   getVehicleDataFromCache(state) {
     if (Object.keys(state.vehicleData).length > 0) {
       return state.vehicleData;

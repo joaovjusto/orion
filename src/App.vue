@@ -85,6 +85,7 @@ export default {
       },
     };
 
+    // Updating only cached states
     Object.keys(cachesCreated).forEach((cacheName) => {
       if (Object.keys(steps).includes(cacheName)) {
         this.updateFormTreeData({
@@ -121,7 +122,8 @@ export default {
             };
             this.updateCurrencyData({
               ...{ EURBRL, USDBRL },
-              moneyConfig: moneyConfigOptions[this.getVehicleDataFromCache.currency],
+              moneyConfig:
+                moneyConfigOptions[this.getVehicleDataFromCache.currency],
             });
           }
         } else {
@@ -142,9 +144,14 @@ export default {
           type: "warning",
         });
       });
+    this.updateAllSteps();
   },
   methods: {
-    ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
+    ...mapActions([
+      "updateFormTreeData",
+      "updateCurrencyData",
+      "updateAllSteps",
+    ]),
     changeStep(stepIndex) {
       this.activeForm = steps[stepIndex - 1];
     },

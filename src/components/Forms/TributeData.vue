@@ -1,17 +1,20 @@
 <template>
   <div>
-    <el-form>
-      <el-form-item prop="currency">
-        <el-dropdown>
-          <el-button type="primary">
-            Tipo de Veículo<i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(option, i) in vehicleData" :key="i">{{
-              option
-            }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+    <el-form :model="tributeForm" label-position="top">
+      <el-form-item label="Tipo de Veículo" prop="currency">
+        <el-select
+          @change="updateVehicleData()"
+          v-model="tributeForm.vehicleType"
+          placeholder="Selecione"
+        >
+          <el-option
+            v-for="(item, i) in vehicleBaseData"
+            :key="i"
+            :label="item.type"
+            :value="item.type"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <el-form
@@ -22,46 +25,102 @@
       class="demo-vehicleForm"
     >
       <el-form-item label="II" prop="ii">
-        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="tributeForm.ii"></el-input>
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          v-model="tributeForm.ii"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Valor II" prop="valueIi">
-        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="tributeForm.valueIi"></el-input>
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
+          v-model="tributeForm.valueIi"
+        />
       </el-form-item>
     </el-form>
     <el-form label-position="top" :inline="true">
       <el-form-item label="IPI" prop="ipi">
-        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="tributeForm.ipi"></el-input>
-      </el-form-item>
-      <el-form-item label="Valor IPI" prop="valueIpi">
         <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           @input="inputChanged($event)"
           placeholder="Insira"
-          v-model="tributeForm.valueIpi"
+          v-model="tributeForm.ipi"
         ></el-input>
+      </el-form-item>
+      <el-form-item label="Valor IPI" prop="valueIpi">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
+          v-model="tributeForm.valueIpi"
+        />
+      </el-form-item>
+    </el-form>
+    <el-form label-position="top" :inline="true">
+      <el-form-item label="PIS" prop="pis">
+        <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="tributeForm.pis"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Valor IPI" prop="valuePis">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
+          v-model="tributeForm.valuePis"
+        />
       </el-form-item>
     </el-form>
     <el-form label-position="top" :inline="true">
       <el-form-item label="COFINS" prop="cofins">
-        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="tributeForm.cofins"></el-input>
+        <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="tributeForm.cofins"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Valor COFINS" prop="valueCofins">
-        <el-input
-        @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
           placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
           v-model="tributeForm.valueCofins"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
     <el-form label-position="top" :inline="true">
       <el-form-item label="TUS" prop="tus">
-        <el-input @input="inputChanged($event)" placeholder="Insira" v-model="tributeForm.tus"></el-input>
+        <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="tributeForm.tus"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Valor TUS" prop="valueTus">
-        <el-input
-        @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
           placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
           v-model="tributeForm.valueTus"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
@@ -75,8 +134,14 @@
           :inline="true"
           class="demo-vehicleForm"
         >
-          <el-form-item label="TOTAL" class="text-left" prop="thc">
-            <el-input @input="inputChanged($event)" readonly v-model="total"></el-input>
+          <el-form-item label="TOTAL" class="text-left" prop="total">
+            <input
+              class="el-input__inner"
+              v-money="money"
+              @input="inputChanged($event)"
+              readonly
+              v-model="total"
+            />
           </el-form-item>
         </el-form>
       </div>
@@ -87,48 +152,73 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
-const vehicleData = [
-  "A partir de 2000cc",
-  "Até 1999cc",
-  "Até 1500cc",
-  "Elétrico",
-  "Híbrido",
-  "Pick-up Gasolina",
-  "Diesel Leve",
-  "Diesel Pesado",
-];
+import { vehicleBaseData } from "./data/vehicleBaseData.json";
+
+import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
   name: "TributeData",
+  mixins: [commonFormMixin],
   data() {
     return {
+      canChangeInput: false,
+      inputChangedTimes: 0,
       total: "",
-      vehicleData,
+      vehicleBaseData,
       tributeForm: {
-        ii: "",
+        vehicleType: "",
+        ii: "0%",
         valueIi: "",
-        ipi: "",
+        ipi: "0%",
         valueIpi: "",
-        cofins: "",
+        pis: "0%",
+        valuePis: "",
+        cofins: "0%",
         valueCofins: "",
         tus: "",
-        valueTus: "",
+        valueTus: "R$ 0,00",
       },
     };
   },
   mounted() {
-    if (this.getTributeDataFromCache) {
-      this.tributeForm = this.getTributeDataFromCache;
-    }
+    this.handleCanChangeInput();
   },
   computed: {
     ...mapGetters(["getTributeDataFromCache"]),
   },
   methods: {
     ...mapActions(["updateFormTreeData"]),
-    inputChanged() {
-      const dataToUpdate = { ...this.tributeForm };
-      this.updateFormTreeData({data: dataToUpdate, stepName: 'tributeData'});
+    handleCanChangeInput() {
+      setTimeout(() => {
+        this.canChangeInput = true;
+        if (this.getTributeDataFromCache) {
+          this.tributeForm = this.getTributeDataFromCache;
+        }
+      }, 500);
+    },
+    inputChanged(_, dataToUpdateParam) {
+      if (this.inputChangedTimes >= 1 && this.canChangeInput) {
+        let dataToUpdate = { ...this.tributeForm };
+        if (dataToUpdateParam) {
+          dataToUpdate = dataToUpdateParam;
+        }
+        this.updateFormTreeData({
+          data: dataToUpdate,
+          stepName: "tributeData",
+        });
+      }
+      this.inputChangedTimes += 1;
+    },
+    updateVehicleData() {
+      const [selectedValue] = this.vehicleBaseData.filter(
+        (value) => this.tributeForm.vehicleType === value.type
+      );
+      const { ii, ipi } = selectedValue;
+      this.tributeForm.ii = ii;
+      this.tributeForm.ipi = ipi;
+
+      // Updating cache
+      this.inputChanged();
     },
   },
 };
