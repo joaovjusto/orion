@@ -1,5 +1,4 @@
-{
-    "vehicleBaseData": [
+export const vehicleBaseData = [
         {
           "type"  : "A partir de 2000cc",
           "ii"  : "35%",
@@ -41,4 +40,3 @@
           "ipi"  : "0%"
         }
       ]
-} 

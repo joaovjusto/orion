@@ -118,7 +118,6 @@
           v-money="money"
           placeholder="Insira"
           @input="inputChanged($event)"
-          readonly
           v-model="tributeForm.valueTus"
         />
       </el-form-item>
@@ -152,8 +151,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
-import { vehicleBaseData } from "./data/vehicleBaseData.json";
+import { vehicleBaseData } from "./data/vehicleBaseData";
 
+import StringToDouble from "@/utils/common/StringToDouble";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
@@ -163,7 +163,6 @@ export default {
     return {
       canChangeInput: false,
       inputChangedTimes: 0,
-      total: "",
       vehicleBaseData,
       tributeForm: {
         vehicleType: "",
@@ -185,6 +184,18 @@ export default {
   },
   computed: {
     ...mapGetters(["getTributeDataFromCache"]),
+    total: {
+      get() {
+        return (
+          parseFloat(StringToDouble(this.tributeForm.valueIi)) +
+          parseFloat(StringToDouble(this.tributeForm.valueIpi)) +
+          parseFloat(StringToDouble(this.tributeForm.valuePis)) +
+          parseFloat(StringToDouble(this.tributeForm.valueCofins)) +
+          parseFloat(StringToDouble(this.tributeForm.valueTus))
+        ).toFixed(2);
+      },
+      set() {},
+    },
   },
   methods: {
     ...mapActions(["updateFormTreeData"]),
