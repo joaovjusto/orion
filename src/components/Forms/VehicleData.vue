@@ -166,6 +166,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
+import handlePercentageCalc from "@/utils/common/PercentageTotalCalc";
 
 export default {
   name: "VehicleData",
@@ -273,9 +274,6 @@ export default {
   },
   methods: {
     ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
-    handlePercentageCalc(percent, total) {
-      return ((percent/ 100) * total).toFixed(2)
-    },
     handleModifierChange() {
       if (Object.keys(this.getCurrency).length > 0 && this.vehicleForm.currency) {
         const currencyTaxResult = Object.keys(this.getCurrency).filter(
@@ -286,7 +284,7 @@ export default {
           this.getCurrency[currencyTaxResult].ask
         ).toFixed(2);
 
-        const percentage = this.handlePercentageCalc(this.vehicleForm.modifier.replace('%', ''), total)
+        const percentage = handlePercentageCalc(this.vehicleForm.modifier.replace('%', ''), total)
 
         this.vehicleForm.currencyTax = (parseFloat(total) + parseFloat(percentage)).toFixed(2);
 

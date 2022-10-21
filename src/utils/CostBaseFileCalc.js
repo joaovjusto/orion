@@ -17,7 +17,8 @@ export default (data) => {
   if (stepRendered) {
     if (stepRendered.count === 0 && !Object.keys(costFormData).includes('thc')) {
       baseDataRender = {
-        thc: "547,00"
+        thc: "547,00",
+        insurance: "0",
       };
     }
   }

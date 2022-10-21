@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="tributeForm" label-position="top">
+    <el-form ref="vehicleForm" label-position="top">
       <el-form-item label="Tipo de Veículo" prop="currency">
         <el-select
           @change="updateVehicleData()"
@@ -37,13 +37,12 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          @input="inputChanged($event)"
           readonly
           v-model="tributeForm.valueIi"
         />
       </el-form-item>
     </el-form>
-    <el-form label-position="top" :inline="true">
+    <el-form ref="ipi" label-position="top" :inline="true">
       <el-form-item label="IPI" prop="ipi">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
@@ -57,13 +56,12 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          @input="inputChanged($event)"
           readonly
           v-model="tributeForm.valueIpi"
         />
       </el-form-item>
     </el-form>
-    <el-form label-position="top" :inline="true">
+    <el-form ref="pis" label-position="top" :inline="true">
       <el-form-item label="PIS" prop="pis">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
@@ -77,13 +75,12 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          @input="inputChanged($event)"
           readonly
           v-model="tributeForm.valuePis"
         />
       </el-form-item>
     </el-form>
-    <el-form label-position="top" :inline="true">
+    <el-form ref="cofins" label-position="top" :inline="true">
       <el-form-item label="COFINS" prop="cofins">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
@@ -97,13 +94,12 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          @input="inputChanged($event)"
           readonly
           v-model="tributeForm.valueCofins"
         />
       </el-form-item>
     </el-form>
-    <el-form label-position="top" :inline="true">
+    <el-form ref="tus" label-position="top" :inline="true">
       <el-form-item label="TUS" prop="tus">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
@@ -117,7 +113,7 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          @input="inputChanged($event)"
+          @input="handleUpdateTusValue()"
           v-model="tributeForm.valueTus"
         />
       </el-form-item>
@@ -137,7 +133,6 @@
             <input
               class="el-input__inner"
               v-money="money"
-              @input="inputChanged($event)"
               readonly
               v-model="total"
             />
@@ -149,12 +144,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 import { vehicleBaseData } from "./data/vehicleBaseData";
 
 import StringToDouble from "@/utils/common/StringToDouble";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
+
+import TributeBaseFileCalc from "@/utils/TributeBaseFileCalc";
 
 export default {
   name: "TributeData",
@@ -198,7 +195,23 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["updateFormTreeData"]),
+    ...mapActions(["updateFormTreeData", "updateAllSteps", "updateBrowserCache"]),
+    ...mapMutations(["SET_TRIBUTE_DATA"]),
+    handleUpdateTusValue() {
+      if (this.inputChangedTimes >= 1 && this.canChangeInput) {
+        this.SET_TRIBUTE_DATA(this.tributeForm);
+        this.updateBrowserCache({ name: 'tributeData', data: this.tributeForm })
+      }
+    },
+    handleUpdatedCalcValues() {
+      const { valueIi, valueIpi, valuePis, valueCofins } = TributeBaseFileCalc(
+        Object.assign({ ...this.tributeForm }, {})
+      );
+      this.tributeForm.valueIi = valueIi;
+      this.tributeForm.valueIpi = valueIpi;
+      this.tributeForm.valuePis = valuePis;
+      this.tributeForm.valueCofins = valueCofins;
+    },
     handleCanChangeInput() {
       setTimeout(() => {
         this.canChangeInput = true;
@@ -207,16 +220,14 @@ export default {
         }
       }, 500);
     },
-    inputChanged(_, dataToUpdateParam) {
+    inputChanged() {
       if (this.inputChangedTimes >= 1 && this.canChangeInput) {
         let dataToUpdate = { ...this.tributeForm };
-        if (dataToUpdateParam) {
-          dataToUpdate = dataToUpdateParam;
-        }
         this.updateFormTreeData({
           data: dataToUpdate,
           stepName: "tributeData",
         });
+        this.handleUpdatedCalcValues();
       }
       this.inputChangedTimes += 1;
     },
@@ -234,6 +245,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped></style>
