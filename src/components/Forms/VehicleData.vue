@@ -24,6 +24,14 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="Modificador" prop="modifier">
+        <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          @input="handleModifierChange($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.modifier"
+        ></el-input>
+      </el-form-item>
       <el-form-item label="Taxa Fiscal" prop="currencyTax">
         <input
           class="el-input__inner"
@@ -265,6 +273,26 @@ export default {
   },
   methods: {
     ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
+    handlePercentageCalc(percent, total) {
+      return ((percent/ 100) * total).toFixed(2)
+    },
+    handleModifierChange() {
+      if (Object.keys(this.getCurrency).length > 0 && this.vehicleForm.currency) {
+        const currencyTaxResult = Object.keys(this.getCurrency).filter(
+          (value) => value.includes(this.vehicleForm.currency)
+        );
+
+        const total = parseFloat(
+          this.getCurrency[currencyTaxResult].ask
+        ).toFixed(2);
+
+        const percentage = this.handlePercentageCalc(this.vehicleForm.modifier.replace('%', ''), total)
+
+        this.vehicleForm.currencyTax = (parseFloat(total) + parseFloat(percentage)).toFixed(2);
+
+        this.inputChanged();
+      }
+    },
     handleCanChangeInput() {
       setTimeout(() => {
         this.canChangeInput = true;
@@ -274,37 +302,35 @@ export default {
       }, 500);
     },
     updateLocalCurrencyData() {
-      if (Object.keys(this.getCurrency).length > 0) {
-        const currencyTaxResult = Object.keys(this.getCurrency).filter(
-          (value) => value.includes(this.vehicleForm.currency)
-        );
-        this.vehicleForm.currencyTax = parseFloat(
-          this.getCurrency[currencyTaxResult].ask
-        ).toFixed(2);
+      if (Object.keys(this.getCurrency).length > 0) {        
+        this.handleModifierChange()
 
         this.updateCurrentCurrencyOption();
       }
     },
     updateCurrentCurrencyOption() {
       // Updating to all application the money config
-        const moneyConfigOptions = {
-          EUR: {
-            decimal: ",",
-            thousands: ".",
-            prefix: "€ ",
-            precision: 2,
-            masked: false /* doesn't work with directive */,
-          },
-          USD: {
+      const moneyConfigOptions = {
+        EUR: {
           decimal: ",",
-            thousands: ".",
-            prefix: "$ ",
-            precision: 2,
-            masked: false /* doesn't work with directive */,
-          }
-        }
+          thousands: ".",
+          prefix: "€ ",
+          precision: 2,
+          masked: false /* doesn't work with directive */,
+        },
+        USD: {
+          decimal: ",",
+          thousands: ".",
+          prefix: "$ ",
+          precision: 2,
+          masked: false /* doesn't work with directive */,
+        },
+      };
 
-        this.updateCurrencyData({ ...this.getCurrency, moneyConfig: moneyConfigOptions[this.vehicleForm.currency] });
+      this.updateCurrencyData({
+        ...this.getCurrency,
+        moneyConfig: moneyConfigOptions[this.vehicleForm.currency],
+      });
     },
     inputChanged() {
       if (this.inputChangedTimes >= 1 && this.canChangeInput) {
