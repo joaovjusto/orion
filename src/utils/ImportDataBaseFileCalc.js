@@ -3,6 +3,7 @@ import StringToDouble from "./common/StringToDouble";
 import handlePercentageCalc from "@/utils/common/PercentageTotalCalc";
 
 export default (data) => {
+  const importFormData = { ...store.getters.getImportDataFromCache };
   const costFormData = { ...store.getters.getCostDataFromCache };
   const stepRendered = store.getters.getStepsRendered.find(
     (step) => step.name === "VehicleData"
@@ -17,7 +18,6 @@ export default (data) => {
 
   let { storage, afrmm } = data;
 
-  //   afrmm = (StringToDouble(variablesToCalc.shipping) * StringToDouble(variablesToCalc.currencyTax)).toFixed(2);
   storage = handlePercentageCalc(0.65, totalCostData);
 
   afrmm = (parseFloat(StringToDouble(costFormData.shipping)) / 4).toFixed(2);
@@ -26,7 +26,7 @@ export default (data) => {
   if (stepRendered) {
     if (
       stepRendered.count === 0 &&
-      !Object.keys(costFormData).includes("thc")
+      !Object.keys(importFormData).includes("dtc")
     ) {
       baseDataRender = {
         dtc: "1750,00",
