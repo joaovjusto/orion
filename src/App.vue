@@ -22,7 +22,6 @@ import VehicleData from "./components/Forms/VehicleData.vue";
 import CostData from "./components/Forms/CostData.vue";
 import TributeData from "./components/Forms/TributeData.vue";
 import ImportData from "./components/Forms/ImportData.vue";
-import CreditData from "./components/Forms/CreditData.vue";
 import FinalStep from "./components/Forms/FinalStep.vue";
 import ResumeData from "./components/Forms/ResumeData.vue";
 
@@ -35,7 +34,6 @@ const steps = [
   { name: "CostData", title: "Despesas" },
   { name: "TributeData", title: "Tributos" },
   { name: "ImportData", title: "Aduaneira" },
-  { name: "CreditData", title: "Créditos" },
   { name: "FinalStep", title: "Finalização" },
   { name: "ResumeData", title: "Revisão" },
 ];
@@ -50,7 +48,6 @@ export default {
     CostData,
     TributeData,
     ImportData,
-    CreditData,
     FinalStep,
     ResumeData,
   },
@@ -65,7 +62,6 @@ export default {
       "getVehicleDataFromCache",
       "getCostDataFromCache",
       "getTributeDataFromCache",
-      "getCreditDataFromCache",
       "getImportDataFromCache",
       "getFinalStepFromCache",
     ]),
@@ -77,7 +73,6 @@ export default {
       vehicleData: this.getVehicleDataFromCache,
       costData: this.getCostDataFromCache,
       tributeData: this.getTributeDataFromCache,
-      creditData: this.getCreditDataFromCache,
       importData: this.getImportDataFromCache,
       finalStep: this.getFinalStepFromCache,
       default: (stepData) => {

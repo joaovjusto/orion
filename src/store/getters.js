@@ -31,14 +31,6 @@ export default {
       ? JSON.parse(Cookies.get("tributeData"))
       : {};
   },
-  getCreditDataFromCache(state) {
-    if (Object.keys(state.creditData).length > 0) {
-      return state.creditData;
-    }
-    return Cookies.get("creditData")
-      ? JSON.parse(Cookies.get("creditData"))
-      : {};
-  },
   getImportDataFromCache(state) {
     if (Object.keys(state.importData).length > 0) {
       return state.importData;

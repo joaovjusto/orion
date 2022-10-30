@@ -13,7 +13,6 @@ export default new Vuex.Store({
     vehicleData: {},
     costData: {},
     tributeData: {},
-    creditData: {},
     importData: {},
     finalStep: {},
     currency: {}

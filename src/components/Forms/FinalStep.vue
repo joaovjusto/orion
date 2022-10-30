@@ -1,6 +1,25 @@
 <template>
   <div>
     <el-form
+      label-position="top"
+      label-width="120px"
+      :inline="true"
+      class="demo-finalStepForm"
+    >
+      <el-form-item
+        label="CUSTO LIQUIDO DE IMPORTAÇÃO"
+        class="text-left"
+        prop="thc"
+      >
+        <el-input
+          @input="inputChanged($event)"
+          readonly
+          v-model="totalLiquidCostData"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <el-divider></el-divider>
+    <el-form
       :model="finalStepForm"
       label-position="top"
       ref="finalStepForm"
@@ -208,9 +227,10 @@ import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
   name: "FinalStep",
-   mixins: [commonFormMixin],
+  mixins: [commonFormMixin],
   data() {
     return {
+      totalLiquidCostData: "",
       totalOutcome: "",
       totalLastNF: "",
       totalCharges: "1000",

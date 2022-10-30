@@ -14,7 +14,6 @@ export default {
       vehicleData: (stepData) => commit("SET_VEHICLE_DATA", stepData),
       costData: (stepData) => commit("SET_COST_DATA", stepData),
       tributeData: (stepData) => commit("SET_TRIBUTE_DATA", stepData),
-      creditData: (stepData) => commit("SET_CREDIT_DATA", stepData),
       importData: (stepData) => commit("SET_IMPORT_DATA", stepData),
       finalStep: (stepData) => commit("SET_FINAL_STEP", stepData),
       default: (stepData) => {
@@ -32,7 +31,6 @@ export default {
     commit("SET_VEHICLE_DATA", getters.getVehicleDataFromCache);
     commit("SET_COST_DATA", getters.getCostDataFromCache);
     commit("SET_TRIBUTE_DATA", getters.getTributeDataFromCache);
-    commit("SET_CREDIT_DATA", getters.getCreditDataFromCache);
     commit("SET_IMPORT_DATA", getters.getImportDataFromCache);
     commit("SET_FINAL_STEP", getters.getFinalStepFromCache);
   },

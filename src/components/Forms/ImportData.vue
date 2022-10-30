@@ -9,48 +9,70 @@
       class="demo-importForm"
     >
       <el-form-item label="Armazenagem (10 dias)" prop="storage">
-        <el-input
-          @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
           placeholder="Insira"
           readonly
+          @input="inputChanged($event)"
           v-model="importForm.storage"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="AFRMM" prop="afrmm">
-        <el-input
-          @input="inputChanged($event)"
-          placeholder="Insira"
+        <input
+          class="el-input__inner"
+          v-money="money"
           readonly
+          placeholder="Insira"
+          @input="inputChanged($event)"
           v-model="importForm.afrmm"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="DTC" prop="dtc">
-        <el-input
-          @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
           placeholder="Insira"
+          @input="inputChanged($event)"
           v-model="importForm.dtc"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="DESOVA E DEVOLUÇÃO CTR" prop="ctr">
-        <el-input
-          @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
           placeholder="Insira"
+          @input="inputChanged($event)"
           v-model="importForm.ctr"
-        ></el-input>
+        />
+      </el-form-item>
+      <el-form-item label="Despacho" prop="dispatch">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.dispatch"
+        />
       </el-form-item>
       <el-form-item label="Documentos" prop="docs">
-        <el-input
-          @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
           placeholder="Insira"
+          @input="inputChanged($event)"
           v-model="importForm.docs"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="S.D.A" prop="sda">
-        <el-input
-          @input="inputChanged($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
           placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
           v-model="importForm.sda"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
@@ -69,32 +91,13 @@
             class="text-left"
             prop="thc"
           >
-            <el-input
+            <input
+              class="el-input__inner"
+              v-money="money"
               @input="inputChanged($event)"
               readonly
               v-model="total"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
-
-    <el-divider />
-
-    <div class="row">
-      <div class="col-12 text-right">
-        <el-form
-          label-position="top"
-          label-width="120px"
-          :inline="true"
-          class="demo-importForm"
-        >
-          <el-form-item label="TOTAL DESEMBOLSO" class="text-left" prop="thc">
-            <el-input
-              @input="inputChanged($event)"
-              readonly
-              v-model="totalCostData"
-            ></el-input>
+            />
           </el-form-item>
         </el-form>
       </div>
@@ -104,6 +107,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import StringToDouble from "@/utils/common/StringToDouble";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
@@ -111,35 +115,56 @@ export default {
   mixins: [commonFormMixin],
   data() {
     return {
-      totalCostData: "",
-      total: "",
+      canChangeInput: false,
+      inputChangedTimes: 0,
       importForm: {
-        storage: "300",
-        afrmm: "500",
+        storage: "",
+        afrmm: "",
         dtc: "",
         ctr: "",
         docs: "",
         sda: "",
+        dispatch: "",
       },
     };
   },
   mounted() {
-    if (this.getImportDataFromCache) {
-      this.importForm = this.getImportDataFromCache;
-    }
+    this.handleCanChangeInput();
   },
   computed: {
     ...mapGetters(["getImportDataFromCache"]),
+    total: {
+      get() {
+        return (
+          parseFloat(StringToDouble(this.importForm.storage)) +
+          parseFloat(StringToDouble(this.importForm.afrmm)) +
+          parseFloat(StringToDouble(this.importForm.dtc)) +
+          parseFloat(StringToDouble(this.importForm.ctr)) +
+          parseFloat(StringToDouble(this.importForm.docs)) +
+          parseFloat(StringToDouble(this.importForm.sda)) +
+          parseFloat(StringToDouble(this.importForm.dispatch))
+        ).toFixed(2);
+      },
+      set() {},
+    },
   },
   methods: {
     ...mapActions(["updateFormTreeData"]),
+    handleCanChangeInput() {
+      setTimeout(() => {
+        this.canChangeInput = true;
+        if (this.getImportDataFromCache) {
+          this.importForm = this.getImportDataFromCache;
+        }
+      }, 500);
+    },
     inputChanged() {
-      const dataToUpdate = { ...this.importForm };
-      this.updateFormTreeData({ data: dataToUpdate, stepName: "importData" });
+      if (this.inputChangedTimes >= 1 && this.canChangeInput) {
+        const dataToUpdate = { ...this.importForm };
+        this.updateFormTreeData({ data: dataToUpdate, stepName: "importData" });
+      }
+      this.inputChangedTimes += 1;
     },
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped></style>
