@@ -11,11 +11,13 @@
         class="text-left"
         prop="thc"
       >
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
           readonly
           v-model="totalLiquidCostData"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
     <el-divider></el-divider>
@@ -28,114 +30,136 @@
       class="demo-finalStepForm"
     >
       <el-form-item label="Base de calculo faturamento" prop="invoiceValue">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
-          placeholder="Insira"
           readonly
           v-model="finalStepForm.invoiceValue"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
     <el-form label-position="top" :inline="true">
       <el-form-item label="ICMS" prop="icms">
         <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           @input="inputChanged($event)"
           placeholder="Insira"
+          readonly
           v-model="finalStepForm.icms"
         ></el-input>
       </el-form-item>
       <el-form-item label="Valor" prop="valueIcms">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
-          placeholder="Insira"
+          readonly
           v-model="finalStepForm.valueIcms"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
     <el-form label-position="top" :inline="true">
       <el-form-item label="PIS" prop="pis">
         <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="finalStepForm.pis"
         ></el-input>
       </el-form-item>
       <el-form-item label="Valor" prop="valuePis">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
-          placeholder="Insira"
+          readonly
           v-model="finalStepForm.valuePis"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
     <el-form label-position="top" :inline="true">
       <el-form-item label="COFINS" prop="cofins">
         <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="finalStepForm.cofins"
         ></el-input>
       </el-form-item>
       <el-form-item label="Valor" prop="valueCofins">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
-          placeholder="Insira"
+          readonly
           v-model="finalStepForm.valueCofins"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
     <el-form label-position="top" :inline="true">
       <el-form-item label="Margem" prop="margin">
         <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="finalStepForm.margin"
         ></el-input>
       </el-form-item>
       <el-form-item label="Valor" prop="valueMargin">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
-          placeholder="Insira"
+          readonly
           v-model="finalStepForm.valueMargin"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
     <el-form label-position="top" :inline="true">
       <el-form-item label="Mark Up Divisor" prop="markUpDivisor">
         <el-input
+          readonly
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="finalStepForm.markUpDivisor"
         ></el-input>
       </el-form-item>
       <el-form-item label="Valor" prop="valueMarkUpDivisor">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
-          placeholder="Insira"
+          readonly
           v-model="finalStepForm.valueMarkUpDivisor"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
     <el-form label-position="top" :inline="true">
       <el-form-item label="IPI" prop="ipi">
         <el-input
+          readonly
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           @input="inputChanged($event)"
           placeholder="Insira"
           v-model="finalStepForm.ipi"
         ></el-input>
       </el-form-item>
       <el-form-item label="Valor" prop="valueIpi">
-        <el-input
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
-          placeholder="Insira"
+          readonly
           v-model="finalStepForm.valueIpi"
-        ></el-input>
+        />
       </el-form-item>
     </el-form>
 
@@ -151,19 +175,23 @@
           :inline="true"
           class="demo-vehicleForm"
         >
-          <el-form-item label="Percentagem" prop="margin">
+          <el-form-item label="Percentagem" prop="totalChargesPercentage">
             <el-input
+              readonly
+              v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
               @input="inputChanged($event)"
               placeholder="Insira"
               v-model="finalStepForm.totalChargesPercentage"
             ></el-input>
           </el-form-item>
           <el-form-item label="TOTAL" class="text-left" prop="charges">
-            <el-input
+            <input
+              class="el-input__inner"
+              v-money="money"
               @input="inputChanged($event)"
               readonly
               v-model="totalCharges"
-            ></el-input>
+            />
           </el-form-item>
         </el-form>
       </div>
@@ -184,11 +212,13 @@
             class="text-left"
             prop="totalLastNF"
           >
-            <el-input
+            <input
+              class="el-input__inner"
+              v-money="money"
               @input="inputChanged($event)"
               readonly
               v-model="totalLastNF"
-            ></el-input>
+            />
           </el-form-item>
         </el-form>
       </div>
@@ -209,11 +239,13 @@
             class="text-left"
             prop="totalOutcome"
           >
-            <el-input
+            <input
+              class="el-input__inner"
+              v-money="money"
               @input="inputChanged($event)"
               readonly
               v-model="totalOutcome"
-            ></el-input>
+            />
           </el-form-item>
         </el-form>
       </div>
@@ -230,41 +262,55 @@ export default {
   mixins: [commonFormMixin],
   data() {
     return {
-      totalLiquidCostData: "",
-      totalOutcome: "",
-      totalLastNF: "",
-      totalCharges: "1000",
+      canChangeInput: false,
+      inputChangedTimes: 0,
+      totalLiquidCostData: "R$ 0,00",
+      totalOutcome: "R$ 0,00",
+      totalLastNF: "R$ 0,00",
+      totalCharges: "R$ 0,00",
       finalStepForm: {
         invoiceValue: "",
-        icms: "",
+        icms: "0%",
         valueIcms: "",
-        pis: "",
+        pis: "0%",
         valuePis: "",
-        cofins: "",
+        cofins: "0%",
         valueCofins: "",
-        margin: "",
+        margin: "0%",
         valueMargin: "",
-        markUpDivisor: "",
+        markUpDivisor: "0%",
         valueMarkUpDivisor: "",
-        ipi: "",
+        ipi: "0%",
         valueIpi: "",
-        totalChargesPercentage: "",
+        totalChargesPercentage: "0%",
       },
     };
   },
   mounted() {
-    if (this.getFinalStepFromCache) {
-      this.finalStepForm = this.getFinalStepFromCache;
-    }
+    this.handleCanChangeInput();
   },
   computed: {
     ...mapGetters(["getFinalStepFromCache"]),
   },
   methods: {
     ...mapActions(["updateFormTreeData"]),
+    handleCanChangeInput() {
+      setTimeout(() => {
+        this.canChangeInput = true;
+        if (this.getFinalStepFromCache) {
+          this.finalStepForm = {
+            ...this.finalStepForm,
+            ...this.getFinalStepFromCache,
+          };
+        }
+      }, 500);
+    },
     inputChanged() {
-      const dataToUpdate = { ...this.finalStepForm };
-      this.updateFormTreeData({ data: dataToUpdate, stepName: "finalStep" });
+      if (this.inputChangedTimes >= 1 && this.canChangeInput) {
+        const dataToUpdate = { ...this.finalStepForm };
+        this.updateFormTreeData({ data: dataToUpdate, stepName: "finalStep" });
+      }
+      this.inputChangedTimes += 1;
     },
   },
 };
