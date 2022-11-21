@@ -1,5 +1,6 @@
 import store from "@/store";
 import StringToDouble from "./common/StringToDouble";
+import handlePercentageToNumber from "@/utils/common/PercentageToNumber";
 // import handlePercentageCalc from "@/utils/common/PercentageTotalCalc";
 
 export default (data) => {
@@ -7,11 +8,14 @@ export default (data) => {
   const tributesFormData = { ...store.getters.getTributeDataFromCache };
   const importFormData = { ...store.getters.getImportDataFromCache };
   const finalStepFormData = { ...store.getters.getFinalStepFromCache };
+  const vehicleFormData = { ...store.getters.getVehicleDataFromCache };
   const stepRendered = store.getters.getStepsRendered.find(
     (step) => step.name === "FinalStep"
   );
 
   let baseDataRender = {};
+
+  // First item of form
 
   const totalImportData = (
     parseFloat(StringToDouble(importFormData.storage)) +
@@ -50,20 +54,50 @@ export default (data) => {
     parseFloat(totalCostData)
   ).toFixed(2);
 
-  baseDataRender.totalLiquidCostData = totalNFLUXOR - totalMinimalTributes;
+  baseDataRender.totalLiquidCostData = (
+    parseFloat(totalNFLUXOR) - parseFloat(totalMinimalTributes)
+  ).toFixed(2);
+
+  // First item of form
+
+  // Last step of form first load items
 
   if (!stepRendered) {
     if (Object.keys(finalStepFormData).length === 0) {
       baseDataRender = {
         cofins: "9.60%",
-        margem: "2%",
+        margin: "2%",
         pis: "2%",
       };
     }
   }
 
+  // Last step of form static items
+
+  const icms = vehicleFormData.icmsDestination;
+  const ipi = tributesFormData.ipi;
+
+  const totalChargesPercentage = (
+    parseFloat(handlePercentageToNumber(icms)) +
+    parseFloat(handlePercentageToNumber(data.cofins)) +
+    parseFloat(handlePercentageToNumber(data.margin)) +
+    parseFloat(handlePercentageToNumber(data.pis))
+  ).toFixed(2).toString() + '%';
+
+  const markUpDivisor = ((1 - (parseFloat(totalChargesPercentage) / 100)) * 100).toFixed(2).toString() + '%'
+
+  const invoiceValue = (
+    (parseFloat(totalNFLUXOR) - parseFloat(totalMinimalTributes)) /
+    ((parseFloat(markUpDivisor) / 100).toFixed(3))
+  ).toFixed(2);
+
   return {
     ...data,
     ...baseDataRender,
+    icms,
+    ipi,
+    markUpDivisor,
+    invoiceValue,
+    totalChargesPercentage
   };
 };

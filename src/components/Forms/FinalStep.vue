@@ -284,6 +284,7 @@ export default {
         valueIpi: "",
         totalChargesPercentage: "0%",
       },
+      oldFinalStepFormValue: {},
     };
   },
   mounted() {
@@ -291,6 +292,23 @@ export default {
   },
   computed: {
     ...mapGetters(["getFinalStepFromCache"]),
+  },
+  watch: {
+    // Dynamic update totalChargesPercentage variable without getting loop
+    getFinalStepFromCache: {
+      deep: true,
+      handler(newValue) {
+        if (
+          this.oldFinalStepFormValue.pis !== newValue.pis ||
+          this.oldFinalStepFormValue.cofins !== newValue.cofins ||
+          this.oldFinalStepFormValue.margin !== newValue.margin
+        ) {
+          this.finalStepForm.totalChargesPercentage = newValue.totalChargesPercentage;
+          
+          this.oldFinalStepFormValue = newValue;
+        }
+      },
+    },
   },
   methods: {
     ...mapActions(["updateFormTreeData"]),
@@ -315,6 +333,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped></style>
