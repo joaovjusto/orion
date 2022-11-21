@@ -7,7 +7,7 @@
       class="demo-finalStepForm"
     >
       <el-form-item
-        label="CUSTO LIQUIDO DE IMPORTAÇÃO"
+        label="CUSTO LIQUIDO DE IMPORTAÇÃO - LUXOR"
         class="text-left"
         prop="thc"
       >
@@ -16,7 +16,7 @@
           v-money="money"
           @input="inputChanged($event)"
           readonly
-          v-model="totalLiquidCostData"
+          v-model="finalStepForm.totalLiquidCostData"
         />
       </el-form-item>
     </el-form>
@@ -264,11 +264,11 @@ export default {
     return {
       canChangeInput: false,
       inputChangedTimes: 0,
-      totalLiquidCostData: "R$ 0,00",
       totalOutcome: "R$ 0,00",
       totalLastNF: "R$ 0,00",
       totalCharges: "R$ 0,00",
       finalStepForm: {
+        totalLiquidCostData: "R$ 0,00",
         invoiceValue: "",
         icms: "0%",
         valueIcms: "",
