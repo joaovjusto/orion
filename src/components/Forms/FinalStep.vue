@@ -122,27 +122,6 @@
     </el-form>
 
     <el-form label-position="top" :inline="true">
-      <el-form-item label="Mark Up Divisor" prop="markUpDivisor">
-        <el-input
-          readonly
-          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
-          placeholder="Insira"
-          v-model="finalStepForm.markUpDivisor"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="Valor" prop="valueMarkUpDivisor">
-        <input
-          class="el-input__inner"
-          v-money="money"
-          @input="inputChanged($event)"
-          readonly
-          v-model="finalStepForm.valueMarkUpDivisor"
-        />
-      </el-form-item>
-    </el-form>
-
-    <el-form label-position="top" :inline="true">
       <el-form-item label="IPI" prop="ipi">
         <el-input
           readonly
@@ -160,6 +139,18 @@
           readonly
           v-model="finalStepForm.valueIpi"
         />
+      </el-form-item>
+    </el-form>
+
+    <el-form label-position="top" :inline="true">
+      <el-form-item label="Mark Up Divisor" prop="markUpDivisor">
+        <el-input
+          readonly
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="finalStepForm.markUpDivisor"
+        ></el-input>
       </el-form-item>
     </el-form>
 
@@ -190,7 +181,7 @@
               v-money="money"
               @input="inputChanged($event)"
               readonly
-              v-model="totalCharges"
+              v-model="finalStepForm.totalCharges"
             />
           </el-form-item>
         </el-form>
@@ -217,7 +208,7 @@
               v-money="money"
               @input="inputChanged($event)"
               readonly
-              v-model="totalLastNF"
+              v-model="finalStepForm.totalLastNF"
             />
           </el-form-item>
         </el-form>
@@ -244,7 +235,7 @@
               v-money="money"
               @input="inputChanged($event)"
               readonly
-              v-model="totalOutcome"
+              v-model="finalStepForm.totalOutcome"
             />
           </el-form-item>
         </el-form>
@@ -264,10 +255,10 @@ export default {
     return {
       canChangeInput: false,
       inputChangedTimes: 0,
-      totalOutcome: "R$ 0,00",
-      totalLastNF: "R$ 0,00",
-      totalCharges: "R$ 0,00",
       finalStepForm: {
+        totalCharges: "R$ 0,00",
+        totalOutcome: "R$ 0,00",
+        totalLastNF: "R$ 0,00",
         totalLiquidCostData: "R$ 0,00",
         invoiceValue: "",
         icms: "0%",
@@ -279,7 +270,6 @@ export default {
         margin: "0%",
         valueMargin: "",
         markUpDivisor: "0%",
-        valueMarkUpDivisor: "",
         ipi: "0%",
         valueIpi: "",
         totalChargesPercentage: "0%",
