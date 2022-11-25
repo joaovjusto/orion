@@ -15,6 +15,14 @@ export default {
       ? JSON.parse(Cookies.get("vehicleData"))
       : {};
   },
+  getResumeDataFromCache(state) {
+    if (Object.keys(state.resumeData).length > 0) {
+      return state.resumeData;
+    }
+    return Cookies.get("resumeData")
+      ? JSON.parse(Cookies.get("resumeData"))
+      : {};
+  },
   getCostDataFromCache(state) {
     if (Object.keys(state.costData).length > 0) {
       return state.costData;

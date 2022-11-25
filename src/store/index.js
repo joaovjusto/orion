@@ -15,6 +15,7 @@ export default new Vuex.Store({
     tributeData: {},
     importData: {},
     finalStep: {},
+    resumeData: {},
     currency: {}
   },
   actions,

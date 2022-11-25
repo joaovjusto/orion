@@ -28,6 +28,7 @@ export default {
       tributeData: (stepData) => commit("SET_TRIBUTE_DATA", stepData),
       importData: (stepData) => commit("SET_IMPORT_DATA", stepData),
       finalStep: (stepData) => commit("SET_FINAL_STEP", stepData),
+      resumeData: (stepData) => commit("SET_RESUME_DATA", stepData),
       default: (stepData) => {
         return stepData;
       },
@@ -45,5 +46,6 @@ export default {
     commit("SET_TRIBUTE_DATA", getters.getTributeDataFromCache);
     commit("SET_IMPORT_DATA", getters.getImportDataFromCache);
     commit("SET_FINAL_STEP", getters.getFinalStepFromCache);
+    commit("SET_RESUME_DATA", getters.getResumeDataFromCache);
   },
 };

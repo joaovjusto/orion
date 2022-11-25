@@ -3,6 +3,7 @@ import CostBaseFileCalc from "@/utils/CostBaseFileCalc";
 import TributeBaseFileCalc from "@/utils/TributeBaseFileCalc";
 import ImportDataBaseFileCalc from "@/utils/ImportDataBaseFileCalc";
 import FinalStepBaseFileCalc from "@/utils/FinalStepBaseFileCalc";
+import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
 
 export default {
   SET_VEHICLE_DATA(state, newValue) {
@@ -19,6 +20,9 @@ export default {
   },
   SET_FINAL_STEP(state, newValue) {
     state.finalStep = FinalStepBaseFileCalc(newValue);
+  },
+  SET_RESUME_DATA(state, newValue) {
+    state.resumeData = ResumeDataBaseFileCalc(newValue);
   },
   SET_CURRENCY(state, currency) {
     state.currency = currency;

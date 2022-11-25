@@ -64,6 +64,7 @@ export default {
       "getTributeDataFromCache",
       "getImportDataFromCache",
       "getFinalStepFromCache",
+      "getResumeDataFromCache",
     ]),
   },
   mounted() {
@@ -75,6 +76,7 @@ export default {
       tributeData: this.getTributeDataFromCache,
       importData: this.getImportDataFromCache,
       finalStep: this.getFinalStepFromCache,
+      resumeData: this.getResumeDataFromCache,
       default: (stepData) => {
         return stepData;
       },
