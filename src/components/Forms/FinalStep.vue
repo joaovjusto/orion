@@ -14,7 +14,6 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="inputChanged($event)"
           readonly
           v-model="finalStepForm.totalLiquidCostData"
         />
@@ -33,7 +32,6 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="inputChanged($event)"
           readonly
           v-model="finalStepForm.invoiceValue"
         />
@@ -54,7 +52,6 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="inputChanged($event)"
           readonly
           v-model="finalStepForm.valueIcms"
         />
@@ -74,7 +71,6 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="inputChanged($event)"
           readonly
           v-model="finalStepForm.valuePis"
         />
@@ -94,7 +90,6 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="inputChanged($event)"
           readonly
           v-model="finalStepForm.valueCofins"
         />
@@ -114,7 +109,6 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="inputChanged($event)"
           readonly
           v-model="finalStepForm.valueMargin"
         />
@@ -126,7 +120,6 @@
         <el-input
           readonly
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
           placeholder="Insira"
           v-model="finalStepForm.ipi"
         ></el-input>
@@ -135,7 +128,6 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="inputChanged($event)"
           readonly
           v-model="finalStepForm.valueIpi"
         />
@@ -147,7 +139,6 @@
         <el-input
           readonly
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
           placeholder="Insira"
           v-model="finalStepForm.markUpDivisor"
         ></el-input>
@@ -170,7 +161,6 @@
             <el-input
               readonly
               v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-              @input="inputChanged($event)"
               placeholder="Insira"
               v-model="finalStepForm.totalChargesPercentage"
             ></el-input>
@@ -179,7 +169,6 @@
             <input
               class="el-input__inner"
               v-money="money"
-              @input="inputChanged($event)"
               readonly
               v-model="finalStepForm.totalCharges"
             />
@@ -206,7 +195,6 @@
             <input
               class="el-input__inner"
               v-money="money"
-              @input="inputChanged($event)"
               readonly
               v-model="finalStepForm.totalLastNF"
             />
@@ -233,7 +221,6 @@
             <input
               class="el-input__inner"
               v-money="money"
-              @input="inputChanged($event)"
               readonly
               v-model="finalStepForm.totalOutcome"
             />
@@ -247,6 +234,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
+
+import FinalStepBaseFileCalc from "@/utils/FinalStepBaseFileCalc";
 
 export default {
   name: "FinalStep",
@@ -283,23 +272,6 @@ export default {
   computed: {
     ...mapGetters(["getFinalStepFromCache"]),
   },
-  watch: {
-    // Dynamic update totalChargesPercentage variable without getting loop
-    getFinalStepFromCache: {
-      deep: true,
-      handler(newValue) {
-        if (
-          this.oldFinalStepFormValue.pis !== newValue.pis ||
-          this.oldFinalStepFormValue.cofins !== newValue.cofins ||
-          this.oldFinalStepFormValue.margin !== newValue.margin
-        ) {
-          this.finalStepForm.totalChargesPercentage = newValue.totalChargesPercentage;
-          
-          this.oldFinalStepFormValue = newValue;
-        }
-      },
-    },
-  },
   methods: {
     ...mapActions(["updateFormTreeData"]),
     handleCanChangeInput() {
@@ -313,10 +285,44 @@ export default {
         }
       }, 500);
     },
+    handleUpdatedCalcValues() {
+      setTimeout(() => {
+        const {
+          totalLiquidCostData,
+          invoiceValue,
+          valueIcms,
+          valuePis,
+          valueCofins,
+          valueMargin,
+          ipi,
+          valueIpi,
+          markUpDivisor,
+          totalChargesPercentage,
+          totalCharges,
+          totalLastNF,
+          totalOutcome,
+        } = FinalStepBaseFileCalc(Object.assign({ ...this.finalStepForm }, {}));
+
+        this.finalStepForm.totalChargesPercentage = totalChargesPercentage;
+        this.finalStepForm.totalLiquidCostData = totalLiquidCostData;
+        this.finalStepForm.invoiceValue = invoiceValue;
+        this.finalStepForm.valueIcms = valueIcms;
+        this.finalStepForm.valuePis = valuePis;
+        this.finalStepForm.valueCofins = valueCofins;
+        this.finalStepForm.valueMargin = valueMargin;
+        this.finalStepForm.ipi = ipi;
+        this.finalStepForm.valueIpi = valueIpi;
+        this.finalStepForm.markUpDivisor = markUpDivisor;
+        this.finalStepForm.totalCharges = totalCharges;
+        this.finalStepForm.totalLastNF = totalLastNF;
+        this.finalStepForm.totalOutcome = totalOutcome;
+      }, 300);
+    },
     inputChanged() {
       if (this.inputChangedTimes >= 1 && this.canChangeInput) {
         const dataToUpdate = { ...this.finalStepForm };
         this.updateFormTreeData({ data: dataToUpdate, stepName: "finalStep" });
+        this.handleUpdatedCalcValues();
       }
       this.inputChangedTimes += 1;
     },
