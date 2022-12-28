@@ -5,6 +5,10 @@
     </div>
     <div class="form-body">
       <slot />
+      <div class="d-flex justify-content-end w-100">
+        <el-button v-if="activeStep > 0" @click="changeStep(activeStep)" class="mr-2">Voltar</el-button>
+        <el-button v-if="activeStep < steps.length -1" @click="changeStep(activeStep + 2)" type="primary">Avançar</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -17,7 +21,20 @@ export default {
       type: String,
       default: "",
     },
+    activeStep: {
+      type: Number,
+      default: 0,
+    },
+    steps: {
+      type: Array,
+      default: () => [],
+    },
   },
+  methods: {
+    changeStep(step) {
+      this.$emit("changeStep", step);
+    }
+  }
 };
 </script>
 

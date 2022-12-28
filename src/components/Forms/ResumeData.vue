@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form
+    <!-- <el-form
       label-position="top"
       label-width="120px"
       :inline="true"
@@ -96,7 +96,7 @@
           v-model="resumeForm.totalCost"
         />
       </el-form-item>
-    </el-form>
+    </el-form> -->
   </div>
 </template>
 

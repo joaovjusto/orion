@@ -3,8 +3,14 @@
     <NavBar />
     <div class="body">
       <div class="container pt-5">
-        <StepDescription :steps="steps" @changeStep="changeStep" />
-        <FormContainer class="py-5" :title="activeForm.title">
+        <StepDescription :activeStep="activeIndex" :steps="steps" @changeStep="changeStep" />
+        <FormContainer
+          class="py-5"
+          :steps="steps"
+          :title="activeForm.title"
+          :activeStep="activeIndex"
+          @changeStep="changeStep"
+        >
           <component :is="activeForm.name" />
         </FormContainer>
       </div>
@@ -55,7 +61,15 @@ export default {
     return {
       steps,
       activeForm: steps[0],
+      activeIndex: 0,
     };
+  },
+  watch: {
+    // Uncomment if necessary
+    // activeIndex() {
+      // this.$emit("changeStep", newValue);
+      // this.updateAllSteps();
+    // },
   },
   computed: {
     ...mapGetters([
@@ -123,8 +137,8 @@ export default {
                 moneyConfigOptions[this.getVehicleDataFromCache.currency],
             });
           } else {
-          this.updateCurrencyData({ EURBRL, USDBRL });
-        }
+            this.updateCurrencyData({ EURBRL, USDBRL });
+          }
         }
 
         this.$notify({
@@ -150,7 +164,9 @@ export default {
       "updateAllSteps",
     ]),
     changeStep(stepIndex) {
+      this.activeIndex = stepIndex - 1;
       this.activeForm = steps[stepIndex - 1];
+      Cookies.set("lastActiveStep", stepIndex)
     },
   },
 };

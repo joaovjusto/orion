@@ -4,7 +4,7 @@
       <template v-for="(step, i) in steps">
         <span
           @click="setActiveStep(i + 1)"
-          :class="`step ${active === i + 1 ? 'active' : ''}`"
+          :class="`step ${activeStep === i ? 'active' : ''}`"
           :key="i"
           >{{ step.title }}</span
         >
@@ -21,7 +21,7 @@
       <div class="stepper-container stepper-container--mobile" v-for="(step, i) in steps" :key="i">
         <span
           @click="setActiveStep(i + 1)"
-          :class="`step ${active === i + 1 ? 'active' : ''}`"
+          :class="`step ${activeStep === i ? 'active' : ''}`"
           :key="i"
           >{{ step.title }}</span
         >
@@ -41,11 +41,10 @@ export default {
       type: Array,
       default: () => [],
     },
-  },
-  data() {
-    return {
-      active: 1,
-    };
+    activeStep: {
+      type: Number,
+      default: 1,
+    },
   },
   mounted() {
     // Change to last step used if has it on cache
@@ -59,14 +58,7 @@ export default {
   methods: {
     ...mapActions(["updateAllSteps"]),
     setActiveStep(number) {
-      this.active = number;
-      Cookies.set("lastActiveStep", number);
-    },
-  },
-  watch: {
-    active(newValue) {
-      this.$emit("changeStep", newValue);
-      this.updateAllSteps();
+      this.$emit("changeStep", number);
     },
   },
 };

@@ -24,12 +24,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Modificador" prop="modifier">
-        <el-input
-          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="handleModifierChange($event)"
+        <input
+          class="el-input__inner"
+          v-money="money"
+          @keydown="handleModifierChange($event)"
           placeholder="Insira"
           v-model="vehicleForm.modifier"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item label="Taxa Fiscal" prop="currencyTax">
         <input
@@ -163,8 +164,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import StringToDouble from "@/utils/common/StringToDouble";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
-import handlePercentageCalc from "@/utils/common/PercentageTotalCalc";
 
 export default {
   name: "VehicleData",
@@ -213,21 +214,21 @@ export default {
   methods: {
     ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
     handleModifierChange() {
-      if (Object.keys(this.getCurrency).length > 0 && this.vehicleForm.currency) {
-        const currencyTaxResult = Object.keys(this.getCurrency).filter(
-          (value) => value.includes(this.vehicleForm.currency)
-        );
-
-        const total = parseFloat(
-          this.getCurrency[currencyTaxResult].ask
-        ).toFixed(2);
-
-        const percentage = handlePercentageCalc(this.vehicleForm.modifier.replace('%', ''), total)
-
-        this.vehicleForm.currencyTax = (parseFloat(total) + parseFloat(percentage)).toFixed(2);
-
-        this.inputChanged();
-      }
+      setTimeout(() => {
+        if (Object.keys(this.getCurrency).length > 0 && this.vehicleForm.currency) {
+          const currencyTaxResult = Object.keys(this.getCurrency).filter(
+            (value) => value.includes(this.vehicleForm.currency)
+          );
+  
+          const total = parseFloat(
+            this.getCurrency[currencyTaxResult].ask
+          ).toFixed(2);
+  
+          this.vehicleForm.currencyTax = (parseFloat(total) + parseFloat(StringToDouble(this.vehicleForm.modifier))).toFixed(2);
+  
+          this.inputChanged();
+        }
+      }, 500)
     },
     handleCanChangeInput() {
       setTimeout(() => {
