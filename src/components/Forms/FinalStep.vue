@@ -14,7 +14,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           v-model="finalStepForm.totalLiquidCostData"
         />
       </el-form-item>
@@ -32,7 +32,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           v-model="finalStepForm.invoiceValue"
         />
       </el-form-item>
@@ -44,7 +44,7 @@
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           @input="inputChanged($event)"
           placeholder="Insira"
-          readonly
+          readonly id="readonly"
           v-model="finalStepForm.icms"
         ></el-input>
       </el-form-item>
@@ -52,7 +52,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           v-model="finalStepForm.valueIcms"
         />
       </el-form-item>
@@ -71,7 +71,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           v-model="finalStepForm.valuePis"
         />
       </el-form-item>
@@ -90,7 +90,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           v-model="finalStepForm.valueCofins"
         />
       </el-form-item>
@@ -109,7 +109,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           v-model="finalStepForm.valueMargin"
         />
       </el-form-item>
@@ -118,7 +118,7 @@
     <el-form label-position="top" :inline="true">
       <el-form-item label="IPI" prop="ipi">
         <el-input
-          readonly
+          readonly id="readonly"
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           placeholder="Insira"
           v-model="finalStepForm.ipi"
@@ -128,7 +128,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           v-model="finalStepForm.valueIpi"
         />
       </el-form-item>
@@ -137,7 +137,7 @@
     <el-form label-position="top" :inline="true">
       <el-form-item label="Mark Up Divisor" prop="markUpDivisor">
         <el-input
-          readonly
+          readonly id="readonly"
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           placeholder="Insira"
           v-model="finalStepForm.markUpDivisor"
@@ -159,7 +159,7 @@
         >
           <el-form-item label="Percentagem" prop="totalChargesPercentage">
             <el-input
-              readonly
+              readonly id="readonly"
               v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
               placeholder="Insira"
               v-model="finalStepForm.totalChargesPercentage"
@@ -169,7 +169,7 @@
             <input
               class="el-input__inner"
               v-money="money"
-              readonly
+              readonly id="readonly"
               v-model="finalStepForm.totalCharges"
             />
           </el-form-item>
@@ -195,7 +195,7 @@
             <input
               class="el-input__inner"
               v-money="money"
-              readonly
+              readonly id="readonly"
               v-model="finalStepForm.totalLastNF"
             />
           </el-form-item>
@@ -221,7 +221,7 @@
             <input
               class="el-input__inner"
               v-money="money"
-              readonly
+              readonly id="readonly"
               v-model="finalStepForm.totalOutcome"
             />
           </el-form-item>

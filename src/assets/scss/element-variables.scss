@@ -4,4 +4,10 @@ $--color-primary: #ff5f18;
 /* icon font path, required */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
+.el-form-item__content input:read-only.el-input__inner#readonly {
+    border: 1px dotted;
+    // background-color: grey;
+    opacity: .6;
+}
+
 @import "~element-ui/packages/theme-chalk/src/index";

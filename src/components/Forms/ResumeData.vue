@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <el-form
+    <el-form
       label-position="top"
       label-width="120px"
       :inline="true"
@@ -10,7 +10,7 @@
       <el-form-item label="Margem Lucro Vision" prop="marginValue">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
+          @blur="inputChanged($event)"
           placeholder="Insira"
           v-model="resumeForm.marginValue"
         ></el-input>
@@ -35,7 +35,7 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @blur="inputChanged($event)"
           v-model="resumeForm.costUsa"
         />
       </el-form-item>
@@ -57,7 +57,6 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
           readonly
           v-model="resumeForm.homologation"
         />
@@ -67,6 +66,7 @@
         prop="homologationBrl"
       >
         <input
+          @blur="inputChanged($event)"
           class="el-input__inner"
           v-money="money"
           v-model="resumeForm.homologationBrl"
@@ -96,7 +96,7 @@
           v-model="resumeForm.totalCost"
         />
       </el-form-item>
-    </el-form> -->
+    </el-form>
   </div>
 </template>
 

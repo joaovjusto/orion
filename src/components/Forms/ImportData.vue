@@ -13,7 +13,7 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          readonly
+          readonly id="readonly"
           @input="inputChanged($event)"
           v-model="importForm.storage"
         />
@@ -22,7 +22,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           placeholder="Insira"
           @input="inputChanged($event)"
           v-model="importForm.afrmm"
@@ -70,7 +70,7 @@
           v-money="money"
           placeholder="Insira"
           @input="inputChanged($event)"
-          readonly
+          readonly id="readonly"
           v-model="importForm.sda"
         />
       </el-form-item>
@@ -95,7 +95,7 @@
               class="el-input__inner"
               v-money="money"
               @input="inputChanged($event)"
-              readonly
+              readonly id="readonly"
               v-model="total"
             />
           </el-form-item>

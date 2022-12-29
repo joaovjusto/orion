@@ -12,7 +12,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           @input="inputChanged($event)"
           v-model="costForm.fob"
         />
@@ -21,7 +21,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           @input="inputChanged($event)"
           v-model="costForm.shipping"
         />
@@ -61,7 +61,7 @@
               class="el-input__inner"
               v-money="money"
               @input="inputChanged($event)"
-              readonly
+              readonly id="readonly"
               v-model="total"
             />
           </el-form-item>

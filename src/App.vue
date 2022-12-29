@@ -65,11 +65,9 @@ export default {
     };
   },
   watch: {
-    // Uncomment if necessary
-    // activeIndex() {
-      // this.$emit("changeStep", newValue);
-      // this.updateAllSteps();
-    // },
+    activeIndex() {
+      this.updateAllSteps();
+    },
   },
   computed: {
     ...mapGetters([
@@ -155,7 +153,8 @@ export default {
           type: "warning",
         });
       });
-    this.updateAllSteps();
+
+      this.updateAllSteps()
   },
   methods: {
     ...mapActions([

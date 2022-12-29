@@ -37,7 +37,7 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          readonly
+          readonly id="readonly"
           v-model="tributeForm.valueIi"
         />
       </el-form-item>
@@ -56,7 +56,7 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          readonly
+          readonly id="readonly"
           v-model="tributeForm.valueIpi"
         />
       </el-form-item>
@@ -75,7 +75,7 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          readonly
+          readonly id="readonly"
           v-model="tributeForm.valuePis"
         />
       </el-form-item>
@@ -94,7 +94,7 @@
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          readonly
+          readonly id="readonly"
           v-model="tributeForm.valueCofins"
         />
       </el-form-item>
@@ -133,7 +133,7 @@
             <input
               class="el-input__inner"
               v-money="money"
-              readonly
+              readonly id="readonly"
               v-model="total"
             />
           </el-form-item>
