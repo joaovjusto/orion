@@ -3,7 +3,11 @@
     <NavBar />
     <div class="body">
       <div class="container pt-5">
-        <StepDescription :activeStep="activeIndex" :steps="steps" @changeStep="changeStep" />
+        <StepDescription
+          :activeStep="activeIndex"
+          :steps="steps"
+          @changeStep="changeStep"
+        />
         <FormContainer
           class="py-5"
           :steps="steps"
@@ -154,7 +158,7 @@ export default {
         });
       });
 
-      this.updateAllSteps()
+    this.updateAllSteps();
   },
   methods: {
     ...mapActions([
@@ -165,15 +169,33 @@ export default {
     changeStep(stepIndex) {
       this.activeIndex = stepIndex - 1;
       this.activeForm = steps[stepIndex - 1];
-      Cookies.set("lastActiveStep", stepIndex)
+      Cookies.set("lastActiveStep", stepIndex);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import url(//db.onlinewebfonts.com/c/066ce24dae3730ed6c648b09efaea93a?family=Acumin+Variable+Concept);
+
 * {
   font-family: "Roboto", sans-serif;
+}
+.pdf {
+  @font-face {
+    font-family: "Acumin Variable Concept";
+    src: url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.eot");
+    src: url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.eot?#iefix")
+        format("embedded-opentype"),
+      url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.woff2")
+        format("woff2"),
+      url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.woff")
+        format("woff"),
+      url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.ttf")
+        format("truetype"),
+      url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.svg#Acumin Variable Concept")
+        format("svg");
+  }
 }
 #app {
   min-height: calc(100vh);

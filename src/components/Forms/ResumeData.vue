@@ -127,6 +127,9 @@ export default {
   },
   mounted() {
     this.handleCanChangeInput();
+    setTimeout(() => {
+      this.inputChanged()
+    }, 1000);
   },
   computed: {
     ...mapGetters([

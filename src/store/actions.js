@@ -5,20 +5,8 @@ export default {
     commit("SET_CURRENCY", currency);
   },
   updateBrowserCache(_, cache) {
-    // Clear old cookies with 7d expiration
-    if (!Cookies.get('oldCookies')) {
-      Object.keys(Cookies.get()).forEach(cookie => {
-        Cookies.remove(cookie)
-      });
-      Cookies.set('oldCookies', true)
-
-      setTimeout(() => {
-        location.reload()
-      }, 1000)
-    }else {
-      if (cache.name && cache.data) {
-        Cookies.set(cache.name, JSON.stringify(cache.data), { expires: 1 });
-      }
+    if (cache.name && cache.data) {
+      Cookies.set(cache.name, JSON.stringify(cache.data), { expires: 1 });
     }
   },
   updateFormTreeData({ commit, dispatch }, { data, stepName }) {
