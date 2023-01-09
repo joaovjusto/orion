@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button type="primary" class="mt-2 mb-2" @click="centerDialogVisible = true">Visualizar PROPOSTA</el-button>
     <el-form
       label-position="top"
       label-width="120px"
@@ -97,6 +98,17 @@
         />
       </el-form-item>
     </el-form>
+    <el-dialog
+      title="Template Proposta"
+      :visible.sync="centerDialogVisible"
+      width="100%"
+      top
+    >
+      <ProposalTemplate />
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">Cancelar</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -105,12 +117,17 @@ import { mapActions, mapGetters } from "vuex";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
+import ProposalTemplate from "@/components/ProposalTemplate.vue";
 
 export default {
   name: "ResumeData",
   mixins: [commonFormMixin],
+  components: {
+    ProposalTemplate,
+  },
   data() {
     return {
+      centerDialogVisible: false,
       canChangeInput: false,
       inputChangedTimes: 0,
       resumeForm: {
@@ -128,7 +145,7 @@ export default {
   mounted() {
     this.handleCanChangeInput();
     setTimeout(() => {
-      this.inputChanged()
+      this.inputChanged();
     }, 1000);
   },
   computed: {
