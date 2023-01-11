@@ -177,25 +177,28 @@ export default {
 
 <style lang="scss">
 @import url(//db.onlinewebfonts.com/c/066ce24dae3730ed6c648b09efaea93a?family=Acumin+Variable+Concept);
+@font-face {
+  font-family: "Acumin Variable Concept";
+  src: url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.eot");
+  src: url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.eot?#iefix")
+      format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.woff2")
+      format("woff2"),
+    url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.woff")
+      format("woff"),
+    url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.ttf")
+      format("truetype"),
+    url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.svg#Acumin Variable Concept")
+      format("svg");
+}
 
-* {
+#app {
   font-family: "Roboto", sans-serif;
 }
 .pdf {
-  @font-face {
-    font-family: "Acumin Variable Concept";
-    src: url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.eot");
-    src: url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.eot?#iefix")
-        format("embedded-opentype"),
-      url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.woff2")
-        format("woff2"),
-      url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.woff")
-        format("woff"),
-      url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.ttf")
-        format("truetype"),
-      url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.svg#Acumin Variable Concept")
-        format("svg");
-  }
+  font-family: "Acumin Variable Concept", sans-serif;
+  letter-spacing: -1px;
+  color: #7b7b7b;
 }
 #app {
   min-height: calc(100vh);
