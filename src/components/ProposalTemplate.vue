@@ -135,9 +135,6 @@ export default {
       return blob;
     },
     makeProposal() {
-      // let element = document.getElementById("proposal-template");
-      // console.log("proposal", element);
-
       // let opt = {
       //   enableLinks: true,
       //   pagebreak: {
@@ -161,12 +158,17 @@ export default {
       let that = this;
 
       let opt = {
+        pagebreak: {
+          before: ".beforeClass",
+          after: ["#after1", "#after2"],
+          avoid: "img",
+        },
         enableLinks: true,
         margin: 1,
         image: { type: "jpeg", quality: 1 },
         filename: "Proposta.pdf",
         html2canvas: { dpi: 100, scale: 2, letterRendering: true },
-        jsPDF: { unit: "px", format: [850, 3800] },
+        jsPDF: { unit: "px", format: [850, 5000] },
       };
 
       html2pdf()
