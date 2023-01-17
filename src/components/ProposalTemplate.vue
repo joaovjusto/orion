@@ -186,7 +186,16 @@ export default {
           var contentType = "application/pdf";
           const blob = that.b64toBlob(btoa(pdf), contentType);
 
-          FileSaver.saveAs(blob, "Proposta.PDF");
+          that.setLoadingState(false);
+          that.$notify({
+            title: "Sucesso",
+            message: "Proposta gerada com sucesso",
+            type: "success",
+          });
+
+          setTimeout(() => {
+            FileSaver.saveAs(blob, "Proposta.PDF");
+          }, 1500);
         })
         .toPdf();
       jQuery("#cs_pdf")
