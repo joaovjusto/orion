@@ -101,23 +101,38 @@ import html2pdf from "html2pdf.js";
 import jQuery from "jquery";
 import { mapActions } from "vuex";
 
+import FileSaver from "file-saver";
+
 export default {
+  data() {
+    return {
+      pdf: " ",
+    };
+  },
   methods: {
     ...mapActions(["setLoadingState"]),
-    downloadPDF(pdf) {
-      const linkSource = `data:application/pdf;base64,${pdf}`;
-      const downloadLink = document.createElement("a");
-      const fileName = "abc.pdf";
-      downloadLink.href = linkSource;
-      downloadLink.download = fileName;
-      downloadLink.click();
-      this.$emit("finishPDF", true);
-      this.setLoadingState(false);
-      this.$notify({
-        title: "Sucesso",
-        message: "Proposta gerada com sucesso",
-        type: "success",
-      });
+    b64toBlob(b64Data, contentType = "", sliceSize = 512) {
+      const byteCharacters = atob(b64Data);
+      const byteArrays = [];
+
+      for (
+        let offset = 0;
+        offset < byteCharacters.length;
+        offset += sliceSize
+      ) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+
+      const blob = new Blob(byteArrays, { type: contentType });
+      return blob;
     },
     makeProposal() {
       // let element = document.getElementById("proposal-template");
@@ -157,7 +172,7 @@ export default {
         margin: 1,
         pagebreak: { mode: "css", after: ".page2el" },
         image: { type: "jpeg", quality: 1 },
-        filename: "testfile.pdf",
+        filename: "Proposta.pdf",
         html2canvas: { dpi: 100, scale: 2, letterRendering: true },
         jsPDF: { unit: "pt", format: "letter", orientation: "p" },
       };
@@ -168,10 +183,10 @@ export default {
         .from(document.getElementById("proposal-template"))
         .outputPdf()
         .then(function (pdf) {
-          //This logs the right base64
-          console.log(btoa(pdf));
+          var contentType = "application/pdf";
+          const blob = that.b64toBlob(btoa(pdf), contentType);
 
-          that.downloadPDF(btoa(pdf));
+          FileSaver.saveAs(blob, "Proposta.PDF");
         })
         .toPdf();
       jQuery("#cs_pdf")
