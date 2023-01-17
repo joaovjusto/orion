@@ -174,7 +174,7 @@ export default {
         image: { type: "jpeg", quality: 1 },
         filename: "Proposta.pdf",
         html2canvas: { dpi: 100, scale: 2, letterRendering: true },
-        jsPDF: { unit: "pt", format: "letter", orientation: "p" },
+        jsPDF: { unit: "px", format: [850, 3800] },
       };
 
       let count = 1;
