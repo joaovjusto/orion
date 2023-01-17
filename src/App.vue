@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-loading="getLoadingState" element-loading-text="Trabalhando nisso..">
     <NavBar />
     <div class="body">
       <div class="container pt-5">
@@ -75,6 +75,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "getLoadingState",
       "getVehicleDataFromCache",
       "getCostDataFromCache",
       "getTributeDataFromCache",
@@ -108,9 +109,12 @@ export default {
       }
     });
 
+    this.setLoadingState(true)
+
     axios
       .get("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL")
       .then((result) => {
+        this.setLoadingState(false)
         const { EURBRL, USDBRL } = result.data;
 
         // Check if was selected a currency before
@@ -165,6 +169,7 @@ export default {
       "updateFormTreeData",
       "updateCurrencyData",
       "updateAllSteps",
+      "setLoadingState"
     ]),
     changeStep(stepIndex) {
       this.activeIndex = stepIndex - 1;

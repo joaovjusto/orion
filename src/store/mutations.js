@@ -6,6 +6,9 @@ import FinalStepBaseFileCalc from "@/utils/FinalStepBaseFileCalc";
 import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
 
 export default {
+  SET_LOADING(state, newValue) {
+    state.loading = newValue;
+  },
   SET_VEHICLE_DATA(state, newValue) {
     state.vehicleData = VehicleBaseFileCalc(newValue);
   },

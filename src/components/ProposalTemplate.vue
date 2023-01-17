@@ -1,5 +1,5 @@
 <template>
-  <div id="proposal">
+  <div id="proposal" class="page2el">
     <div
       id="proposal-template"
       style="
@@ -76,7 +76,7 @@
               style="display: block; font-weight: 600"
               >R$ 12.345.678,90</span
             >
-            <subtitle>VALOR ESTIMADO / ENTREGUE NO BRASIL</subtitle>
+            <h6>VALOR ESTIMADO / ENTREGUE NO BRASIL</h6>
           </div>
           <div class="text-center">
             <span
@@ -84,7 +84,7 @@
               style="display: block; font-weight: 600"
               >R$ 5,283</span
             >
-            <subtitle>US$ DÓLAR</subtitle>
+            <h6>US$ DÓLAR</h6>
           </div>
         </div>
       </div>
@@ -98,38 +98,138 @@
 </template>
 <script>
 import html2pdf from "html2pdf.js";
+import jQuery from "jquery";
+import { mapActions } from "vuex";
 
 export default {
   methods: {
+    ...mapActions(["setLoadingState"]),
+    downloadPDF(pdf) {
+      const linkSource = `data:application/pdf;base64,${pdf}`;
+      const downloadLink = document.createElement("a");
+      const fileName = "abc.pdf";
+      downloadLink.href = linkSource;
+      downloadLink.download = fileName;
+      downloadLink.click();
+      this.$emit("finishPDF", true);
+      this.setLoadingState(false);
+      this.$notify({
+        title: "Sucesso",
+        message: "Proposta gerada com sucesso",
+        type: "success",
+      });
+    },
     makeProposal() {
-      let element = document.getElementById("proposal-template");
-      console.log("proposal", element);
+      // let element = document.getElementById("proposal-template");
+      // console.log("proposal", element);
 
-      var opt = {
-        enableLinks: true,
-        pagebreak: {
-          before: ".beforeClass",
-          after: ["#after1", "#after2"],
-          avoid: "img",
-        },
-        // margin: 1,
-        filename: "Proposta.pdf",
+      // let opt = {
+      //   enableLinks: true,
+      //   pagebreak: {
+      //     before: ".beforeClass",
+      //     after: ["#after1", "#after2"],
+      //     avoid: "img",
+      //   },
+      //   // margin: 1,
+      //   filename: "Proposta.pdf",
+      //   image: { type: "jpeg", quality: 1 },
+      //   // html2canvas: { scale: 2 },
+      //   jsPDF: { format: [850, 3800], unit: "px" },
+      // };
+
+      // // New Promise-based usage:
+      // html2pdf()
+      //   .set(opt)
+      //   .from(element)
+      //   .save()
+      //   .then(() => {
+      //     console.log("terminei");
+      //   });
+      this.setLoadingState(true);
+      this.$notify({
+        title: "Atenção",
+        message: "Gerando Proposta, por favor aguarde...",
+        type: "warning",
+      });
+      let that = this;
+
+      let opt = {
+        margin: 1,
+        pagebreak: { mode: "css", after: ".page2el" },
         image: { type: "jpeg", quality: 1 },
-        // html2canvas: { scale: 2 },
-        jsPDF: { format: [850, 3800], unit: "px" },
+        filename: "testfile.pdf",
+        html2canvas: { dpi: 100, scale: 2, letterRendering: true },
+        jsPDF: { unit: "pt", format: "letter", orientation: "p" },
       };
 
-      // New Promise-based usage:
-      html2pdf()
+      let count = 1;
+      let doc = html2pdf()
         .set(opt)
-        .from(element)
-        .save()
-        .then(() => {
-          console.log("terminei");
-        });
+        .from(document.getElementById("proposal-template"))
+        .outputPdf()
+        .then(function (pdf) {
+          //This logs the right base64
+          console.log(btoa(pdf));
 
-      // // Old monolithic-style usage:
-      // html2pdf(element, opt);
+          that.downloadPDF(btoa(pdf));
+        })
+        .toPdf();
+      jQuery("#cs_pdf")
+        .find("div")
+        .each(function () {
+          // Filtering document each page with starting id with page2el
+          if (
+            jQuery(this).attr("id") &&
+            jQuery(this).attr("id").indexOf("page2el") != -1
+          ) {
+            if (count != 1) {
+              doc = doc
+                .get("pdf")
+                .then((pdf) => {
+                  pdf.addPage();
+                  let totalPages =
+                    jQuery("#cs_pdf").find(".page2el").length + 1;
+
+                  // Adding footer text and page number for each PDF page
+                  for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(60);
+                    if (i !== 1) {
+                      pdf.text(
+                        "Page " + i + " of " + totalPages,
+                        pdf.internal.pageSize.getWidth() - 100,
+                        pdf.internal.pageSize.getHeight() - 25
+                      );
+                    }
+                    if (i === 1) {
+                      pdf.text(
+                        "Confidential",
+                        pdf.internal.pageSize.getWidth() - 340,
+                        pdf.internal.pageSize.getHeight() - 35
+                      );
+                    } else {
+                      pdf.text(
+                        // consultant_company,
+                        pdf.internal.pageSize.getWidth() - 530,
+                        pdf.internal.pageSize.getHeight() - 25
+                      );
+                    }
+                  }
+                })
+                .from(document.getElementById(jQuery(this).attr("id")))
+                .toContainer()
+                .toCanvas()
+                .toPdf();
+            }
+            count++;
+          }
+          // On Jquery each loop completion executing save function on doc object to compile and download PDF file
+        })
+        .promise();
+      // .done(function () {
+      //   doc.save();
+      // });
     },
   },
 };
@@ -137,7 +237,7 @@ export default {
 
 <style scoped>
 .pdf {
-  font-family: "Acumin Variable Concept", sans-serif;
+  font-family: "Acumin letiable Concept", sans-serif;
   letter-spacing: -1px;
   color: #7b7b7b;
 }
@@ -169,7 +269,7 @@ p {
   padding: 0 15px;
   font-size: 50px;
   height: 75px;
-  border: .5px solid #f3f3f3;
+  border: 0.5px solid #f3f3f3;
   border-radius: 10px;
   background: rgb(255, 255, 255);
   background: linear-gradient(

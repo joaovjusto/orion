@@ -104,7 +104,7 @@
       width="100%"
       top
     >
-      <ProposalTemplate />
+      <ProposalTemplate @finishPDF="centerDialogVisible = false" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">Cancelar</el-button>
       </span>

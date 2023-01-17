@@ -1,6 +1,9 @@
 import Cookies from "js-cookie";
 
 export default {
+  getLoadingState(state) {
+    state.loading
+  },
   getCurrency(state) {
     return state.currency;
   },

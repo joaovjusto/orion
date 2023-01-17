@@ -36,4 +36,7 @@ export default {
     commit("SET_FINAL_STEP", getters.getFinalStepFromCache);
     commit("SET_RESUME_DATA", getters.getResumeDataFromCache);
   },
+  setLoadingState({ commit }, loading) { 
+    commit("SET_LOADING", loading);
+  }
 };
