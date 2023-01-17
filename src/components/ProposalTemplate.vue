@@ -10,6 +10,7 @@
       "
     >
       <div class="first-section text-center">
+        <a href="http://google.com">GOOGLEEEE TESTE LINK NO PDF</a>
         <img
           width="750"
           style="margin-top: 500px; margin-bottom: 500px"
@@ -98,7 +99,6 @@
 </template>
 <script>
 import html2pdf from "html2pdf.js";
-import jQuery from "jquery";
 import { mapActions } from "vuex";
 
 import FileSaver from "file-saver";
@@ -151,15 +151,7 @@ export default {
       //   // html2canvas: { scale: 2 },
       //   jsPDF: { format: [850, 3800], unit: "px" },
       // };
-
-      // // New Promise-based usage:
-      // html2pdf()
-      //   .set(opt)
-      //   .from(element)
-      //   .save()
-      //   .then(() => {
-      //     console.log("terminei");
-      //   });
+      
       this.setLoadingState(true);
       this.$notify({
         title: "Atenção",
@@ -169,16 +161,15 @@ export default {
       let that = this;
 
       let opt = {
+        enableLinks: true,
         margin: 1,
-        pagebreak: { mode: "css", after: ".page2el" },
         image: { type: "jpeg", quality: 1 },
         filename: "Proposta.pdf",
         html2canvas: { dpi: 100, scale: 2, letterRendering: true },
         jsPDF: { unit: "px", format: [850, 3800] },
       };
 
-      let count = 1;
-      let doc = html2pdf()
+      html2pdf()
         .set(opt)
         .from(document.getElementById("proposal-template"))
         .outputPdf()
@@ -198,62 +189,6 @@ export default {
           }, 1500);
         })
         .toPdf();
-      jQuery("#cs_pdf")
-        .find("div")
-        .each(function () {
-          // Filtering document each page with starting id with page2el
-          if (
-            jQuery(this).attr("id") &&
-            jQuery(this).attr("id").indexOf("page2el") != -1
-          ) {
-            if (count != 1) {
-              doc = doc
-                .get("pdf")
-                .then((pdf) => {
-                  pdf.addPage();
-                  let totalPages =
-                    jQuery("#cs_pdf").find(".page2el").length + 1;
-
-                  // Adding footer text and page number for each PDF page
-                  for (let i = 1; i <= totalPages; i++) {
-                    pdf.setPage(i);
-                    pdf.setFontSize(10);
-                    pdf.setTextColor(60);
-                    if (i !== 1) {
-                      pdf.text(
-                        "Page " + i + " of " + totalPages,
-                        pdf.internal.pageSize.getWidth() - 100,
-                        pdf.internal.pageSize.getHeight() - 25
-                      );
-                    }
-                    if (i === 1) {
-                      pdf.text(
-                        "Confidential",
-                        pdf.internal.pageSize.getWidth() - 340,
-                        pdf.internal.pageSize.getHeight() - 35
-                      );
-                    } else {
-                      pdf.text(
-                        // consultant_company,
-                        pdf.internal.pageSize.getWidth() - 530,
-                        pdf.internal.pageSize.getHeight() - 25
-                      );
-                    }
-                  }
-                })
-                .from(document.getElementById(jQuery(this).attr("id")))
-                .toContainer()
-                .toCanvas()
-                .toPdf();
-            }
-            count++;
-          }
-          // On Jquery each loop completion executing save function on doc object to compile and download PDF file
-        })
-        .promise();
-      // .done(function () {
-      //   doc.save();
-      // });
     },
   },
 };
