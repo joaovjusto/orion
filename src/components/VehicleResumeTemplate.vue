@@ -97,6 +97,7 @@ export default {
     border: 1px solid black;
     font-family: "Acumin letiable Concept", sans-serif;
     color: #7b7b7b;
+    letter-spacing: 0.8px;
     position: fixed;
     top: 0;
     left: 0;
