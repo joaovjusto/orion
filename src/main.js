@@ -10,7 +10,7 @@ import "material-icons/iconfont/material-icons.css";
 
 import VueTheMask from 'vue-the-mask'
 import money from 'v-money'
-
+import { format } from 'date-fns'
 
 import locale from "element-ui/lib/locale/lang/pt-br";
 
@@ -39,6 +39,12 @@ Vue.use(VueMq, {
     lg: Infinity,
   },
   defaultBreakpoint: 'sm' // customize this for SSR
+})
+
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return format(new Date(value), 'dd/MM/yyyy')
+  }
 })
 
 import App from "./App.vue";

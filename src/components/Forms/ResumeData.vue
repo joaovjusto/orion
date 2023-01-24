@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-button type="primary" class="mt-2 mb-2" @click="centerDialogVisible = true">Visualizar PROPOSTA</el-button>
+    <el-button type="primary" class="mt-2 mb-2" @click="printResume" v-loading="isLoadingDownloadImage">Visualizar RESUMO</el-button>
     <el-form
       label-position="top"
       label-width="120px"
@@ -109,21 +110,25 @@
         <el-button @click="centerDialogVisible = false">Cancelar</el-button>
       </span>
     </el-dialog>
+    <VehicleResumeTemplate />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
+import { toPng } from 'html-to-image';
 
 import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
 import ProposalTemplate from "@/components/ProposalTemplate.vue";
+import VehicleResumeTemplate from "@/components/VehicleResumeTemplate.vue";
 
 export default {
   name: "ResumeData",
   mixins: [commonFormMixin],
   components: {
     ProposalTemplate,
+    VehicleResumeTemplate,
   },
   data() {
     return {
@@ -140,6 +145,7 @@ export default {
         total: "R$ 0,00",
         totalCost: "R$ 0,00",
       },
+      isLoadingDownloadImage: false
     };
   },
   mounted() {
@@ -156,7 +162,7 @@ export default {
     ]),
   },
   methods: {
-    ...mapActions(["updateFormTreeData"]),
+    ...mapActions(["updateFormTreeData", "setLoadingState"]),
     handleUpdatedCalcValues() {
       setTimeout(() => {
         const { costUsaBrl, profit, homologation, total, totalCost } =
@@ -184,6 +190,46 @@ export default {
         this.handleUpdatedCalcValues();
       }
       this.inputChangedTimes += 1;
+    },
+    printResume() {
+      const element = document.getElementById('vehicle-resume-template')
+      this.setLoadingState(true);
+      this.isLoadingDownloadImage = true;
+      this.$notify({
+        title: "Atenção",
+        message: "Gerando imagem, por favor aguarde...",
+        type: "warning",
+      });
+      const that = this
+      toPng(element)
+        .then(function (dataUrl) {
+          var downloadLink = document.createElement("a");
+          downloadLink.href = dataUrl;
+          const date = that.$options.filters.formatDate(new Date().toISOString())
+          const imageName = `Cotação ${that.getVehicleDataFromCache.product} em ${ date }.png`
+          downloadLink.download = imageName;
+
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        })
+        .then(() => this.$notify({
+            title: "Sucesso",
+            message: "Imagem gerada com sucesso",
+            type: "success",
+          })
+        )
+        .catch(() =>
+          this.$notify({
+            title: "Erro",
+            message: "Não foi possível gerar a imagem",
+            type: "error",
+          })
+        )
+        .finally(() => {
+          this.isLoadingDownloadImage = false;
+          this.setLoadingState(false)
+        });
     },
   },
 };
