@@ -12,6 +12,9 @@ export default {
   SET_VEHICLE_DATA(state, newValue) {
     state.vehicleData = VehicleBaseFileCalc(newValue);
   },
+  SET_IMAGES_CAR_TEMPLATE(state, newValue) {
+    state.imagesCarTemplate.push(newValue);
+  },
   SET_COST_DATA(state, newValue) {
     state.costData = CostBaseFileCalc(newValue);
   },

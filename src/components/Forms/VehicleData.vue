@@ -1,6 +1,48 @@
 <template>
   <div>
     <el-form
+      label-position="top"
+      label-width="120px"
+      :inline="true"
+      class="demo-vehicleForm"
+    >
+      <el-form-item label="Galeria de mídia">
+        <el-upload
+          action="#"
+          multiple
+          :limit="4"
+          :on-change="fileInput"
+          v-loading="loadingUpload"
+          list-type="picture-card"
+          :auto-upload="false"
+          :on-exceed="handleExceed"
+        >
+          <i slot="default">
+            <i class="el-icon-upload2"></i>
+          </i>
+          <div slot="file" slot-scope="{ file }">
+            <img
+              class="el-upload-list__item-thumbnail"
+              :src="file.url"
+              alt=""
+            />
+            <span class="el-upload-list__item-actions">
+              <span
+                class="el-upload-list__item-preview"
+                @click="handlePictureCardPreview(file)"
+              >
+                <i class="el-icon-zoom-in"></i>
+              </span>
+            </span>
+          </div>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
+      </el-form-item>
+    </el-form>
+    <el-divider></el-divider>
+    <el-form
       :model="vehicleForm"
       label-position="top"
       ref="vehicleForm"
@@ -163,7 +205,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import StringToDouble from "@/utils/common/StringToDouble";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
@@ -172,6 +214,10 @@ export default {
   mixins: [commonFormMixin],
   data() {
     return {
+      dialogImageUrl: "",
+      dialogVisible: false,
+      disabled: false,
+      loadingUpload: false,
       inputChangedTimes: 0,
       currencyOptions: [
         {
@@ -212,23 +258,89 @@ export default {
     ...mapGetters(["getVehicleDataFromCache", "getCurrency"]),
   },
   methods: {
+    ...mapMutations(["SET_IMAGES_CAR_TEMPLATE"]),
     ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
+    handleExceed() {
+      this.$notify({
+        title: "Limite de imagens atingido!",
+        message: "Favor recarregar a página e tentar novamente.",
+        type: "warning",
+      });
+    },
+     handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    async toDataUrl(url) {
+      //Convert to base64
+      return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          var reader = new FileReader();
+          reader.onloadend = function () {
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.onerror = () => {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText,
+          });
+        };
+        xhr.open("GET", url);
+        xhr.responseType = "blob";
+        xhr.send();
+      });
+    },
+    async fileInput(file) {
+      try {
+        if (file && file.name) {
+          this.processing = true;
+          var url = file.url;
+          const imgData = new FormData();
+          imgData.append("image", file);
+          const metadata = { contentType: file.type };
+          const that = this;
+          that.loadingUpload = true;
+          fetch(url)
+            .then((res) => res.blob())
+            .then((blob) => {
+              that.toDataUrl(url).then((resp) => {
+                that.SET_IMAGES_CAR_TEMPLATE(resp);
+              });
+              console.log(blob, metadata, url);
+              that.loadingUpload = false;
+            });
+        }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.processing = false;
+      }
+    },
     handleModifierChange() {
       setTimeout(() => {
-        if (Object.keys(this.getCurrency).length > 0 && this.vehicleForm.currency) {
+        if (
+          Object.keys(this.getCurrency).length > 0 &&
+          this.vehicleForm.currency
+        ) {
           const currencyTaxResult = Object.keys(this.getCurrency).filter(
             (value) => value.includes(this.vehicleForm.currency)
           );
-  
+
           const total = parseFloat(
             this.getCurrency[currencyTaxResult].ask
           ).toFixed(2);
-  
-          this.vehicleForm.currencyTax = (parseFloat(total) + parseFloat(StringToDouble(this.vehicleForm.modifier))).toFixed(2);
-  
+
+          this.vehicleForm.currencyTax = (
+            parseFloat(total) +
+            parseFloat(StringToDouble(this.vehicleForm.modifier))
+          ).toFixed(2);
+
           this.inputChanged();
         }
-      }, 500)
+      }, 500);
     },
     handleCanChangeInput() {
       setTimeout(() => {
@@ -239,8 +351,8 @@ export default {
       }, 500);
     },
     updateLocalCurrencyData() {
-      if (Object.keys(this.getCurrency).length > 0) {        
-        this.handleModifierChange()
+      if (Object.keys(this.getCurrency).length > 0) {
+        this.handleModifierChange();
 
         this.updateCurrentCurrencyOption();
       }
@@ -284,4 +396,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped></style>
+<style lang="scss">
+.el-upload-list--picture-card .el-upload-list__item {
+  height: unset !important;
+}
+</style>

@@ -10,6 +10,9 @@ export default {
   getStepsRendered(state) {
     return state.stepsRendered;
   },
+  getImagesCarTemplate(state) {
+    return state.imagesCarTemplate;
+  },
   getVehicleDataFromCache(state) {
     if (Object.keys(state.vehicleData).length > 0) {
       return state.vehicleData;

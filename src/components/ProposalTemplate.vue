@@ -4,9 +4,7 @@
       id="proposal-template"
       style="
         width: 850px;
-        height: 3800px;
         margin: 0 auto;
-        border: 1px solid black;
       "
     >
       <div class="first-section text-center">
@@ -89,6 +87,15 @@
           </div>
         </div>
       </div>
+      <div id="images-custom" class="d-flex flex-wrap justify-content-center">
+        <img
+          v-for="(img, i) in getImagesCarTemplate"
+          :key="i"
+          :src="img"
+          width="500"
+          alt=""
+        />
+      </div>
     </div>
     <div class="text-center">
       <el-button class="mt-5" type="primary" @click="makeProposal"
@@ -99,18 +106,44 @@
 </template>
 <script>
 import html2pdf from "html2pdf.js";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import FileSaver from "file-saver";
 
 export default {
   data() {
     return {
-      pdf: " ",
+      loadingUpload: false,
+      pdf: "",
     };
+  },
+  computed: {
+    ...mapGetters(["getImagesCarTemplate"]),
   },
   methods: {
     ...mapActions(["setLoadingState"]),
+    async toDataUrl(url) {
+      //Convert to base64
+      return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          var reader = new FileReader();
+          reader.onloadend = function () {
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.onerror = () => {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText,
+          });
+        };
+        xhr.open("GET", url);
+        xhr.responseType = "blob";
+        xhr.send();
+      });
+    },
     b64toBlob(b64Data, contentType = "", sliceSize = 512) {
       const byteCharacters = atob(b64Data);
       const byteArrays = [];
@@ -134,21 +167,7 @@ export default {
       const blob = new Blob(byteArrays, { type: contentType });
       return blob;
     },
-    makeProposal() {
-      // let opt = {
-      //   enableLinks: true,
-      //   pagebreak: {
-      //     before: ".beforeClass",
-      //     after: ["#after1", "#after2"],
-      //     avoid: "img",
-      //   },
-      //   // margin: 1,
-      //   filename: "Proposta.pdf",
-      //   image: { type: "jpeg", quality: 1 },
-      //   // html2canvas: { scale: 2 },
-      //   jsPDF: { format: [850, 3800], unit: "px" },
-      // };
-      
+    async makeProposal() {
       this.setLoadingState(true);
       this.$notify({
         title: "Atenção",
@@ -156,6 +175,10 @@ export default {
         type: "warning",
       });
       let that = this;
+
+      const elm = document.getElementById("proposal-template")
+      const width = elm.offsetWidth;
+      const height = elm.offsetHeight;
 
       let opt = {
         pagebreak: {
@@ -167,13 +190,18 @@ export default {
         margin: 1,
         image: { type: "jpeg", quality: 1 },
         filename: "Proposta.pdf",
-        html2canvas: { dpi: 100, scale: 2, letterRendering: true },
-        jsPDF: { unit: "px", format: [850, 5000] },
+        html2canvas: {
+          dpi: 100,
+          scale: 2,
+          letterRendering: true,
+          useCORS: true,
+        },
+        jsPDF: { unit: "px", format: [width, height + 100] },
       };
 
       html2pdf()
         .set(opt)
-        .from(document.getElementById("proposal-template"))
+        .from(elm)
         .outputPdf()
         .then(function (pdf) {
           var contentType = "application/pdf";
@@ -197,6 +225,15 @@ export default {
 </script>
 
 <style scoped>
+#images-custom img {
+  display: block;
+  max-width: 420px;
+  max-height: 230px;
+  width: auto;
+  height: auto;
+  margin-right: 15px;
+  margin-top: 15px;
+}
 .pdf {
   font-family: "Acumin letiable Concept", sans-serif;
   letter-spacing: -1px;
