@@ -55,7 +55,7 @@
             <span
               class="value-displayer"
               style="display: block; font-weight: 550"
-              >R$ 12.345.678,90</span
+              >{{getResumeDataFromCache.totalCost}}</span
             >
             <h6>VALOR ESTIMADO / ENTREGUE NO BRASIL</h6>
           </div>
@@ -63,9 +63,9 @@
             <span
               class="value-displayer"
               style="display: block; font-weight: 550"
-              >R$ 5,283</span
+              >{{  getVehicleDataFromCache.currencyTax }}</span
             >
-            <h6>US$ DÓLAR</h6>
+            <h6>{{getVehicleDataFromCache.currency}} {{ getCurrencyText }}</h6>
           </div>
         </div>
       </div>
@@ -183,11 +183,19 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "getResumeDataFromCache",
       "getImagesCarTemplate",
       "getDescriptionData",
-      "getVehicleDataFromCache",
       "getVideoData",
+      "getVehicleDataFromCache",
     ]),
+    getCurrencyText() {
+      switch(this.getVehicleDataFromCache.currency) {
+        case 'USD': return 'Dólar'
+        case 'EUR': return 'Euro'
+        default: return ''
+      }
+    }
   },
   methods: {
     ...mapActions(["setLoadingState"]),
