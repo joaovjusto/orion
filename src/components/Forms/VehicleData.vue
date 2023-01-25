@@ -236,7 +236,7 @@ export default {
       editorData:
         "<p>Tesla Model 3 Performance, 2023/2023, com full auto-pilot, interior alpine white e preto, com 5 bancos, carregador rápido extra e também uma capa personalizada para ser usada em ambientes fechados.&nbsp;</p><ul><li>Motor V8 4.0 Biturbo + 3 Motores Elétricos&nbsp;</li><li>1.000 cv de Potência Combinada&nbsp;</li><li>81,5 Kgfm de Torque&nbsp;</li><li>Câmbio Automatizado de Dupla Embreagem de 8 Velocidades&nbsp;</li><li>Tração Integral&nbsp;</li><li>Aceleração de 0 a 100 km/k em 2,5 s&nbsp;</li><li>Aceleração de 0 a 200 km/h em 6,7 s&nbsp;</li><li>Velocidade Máxima de 340 km/h</li></ul>",
       editorConfig: {
-        // The configuration of the editor.
+        'width': '75%',
       },
       videoData: "",
       dialogImageUrl: "",
@@ -452,5 +452,10 @@ export default {
 <style lang="scss">
 .el-upload-list--picture-card .el-upload-list__item {
   height: unset !important;
+}
+@media screen and (max-width: 768px){
+  .ck.ck-editor {
+    max-width: 380px;
+  }
 }
 </style>
