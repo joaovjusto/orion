@@ -1,14 +1,7 @@
 <template>
   <div id="proposal" class="page2el">
-    <div
-      id="proposal-template"
-      style="
-        width: 850px;
-        margin: 0 auto;
-      "
-    >
+    <div id="proposal-template" style="width: 850px; margin: 0 auto">
       <div class="first-section text-center">
-        <a href="http://google.com">GOOGLEEEE TESTE LINK NO PDF</a>
         <img
           width="750"
           style="margin-top: 500px; margin-bottom: 500px"
@@ -16,18 +9,7 @@
           alt=""
         />
         <div>
-          <img
-            width="120"
-            style="
-              -webkit-transform: rotate(270deg);
-              -moz-transform: rotate(270deg);
-              -ms-transform: rotate(270deg);
-              -o-transform: rotate(270deg);
-              transform: rotate(270deg);
-            "
-            src="../assets/scroll-to-bottom.png"
-            alt=""
-          />
+          <img src="../assets/scroll-to-bottom.png" alt="" />
         </div>
       </div>
       <div style="margin-top: 300px" class="second-section pdf p-5">
@@ -63,7 +45,7 @@
         src="../assets/SILVERADO-BG.png"
         alt=""
       />
-      <div class="p-5">
+      <div class="p-5 pdf">
         <h1 class="xl mt-3">SUA COTAÇÃO</h1>
         <p class="mb-4">
           Valor estimado da sua operação de acordo com a cotação do dia.
@@ -72,7 +54,7 @@
           <div class="text-center">
             <span
               class="value-displayer"
-              style="display: block; font-weight: 600"
+              style="display: block; font-weight: 550"
               >R$ 12.345.678,90</span
             >
             <h6>VALOR ESTIMADO / ENTREGUE NO BRASIL</h6>
@@ -80,21 +62,103 @@
           <div class="text-center">
             <span
               class="value-displayer"
-              style="display: block; font-weight: 600"
+              style="display: block; font-weight: 550"
               >R$ 5,283</span
             >
             <h6>US$ DÓLAR</h6>
           </div>
         </div>
       </div>
-      <div id="images-custom" class="d-flex flex-wrap justify-content-center">
+      <div class="mb-3 pdf">
         <img
-          v-for="(img, i) in getImagesCarTemplate"
-          :key="i"
-          :src="img"
-          width="500"
+          style="
+            display: block;
+            max-width: 740px;
+            max-height: 440px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+          "
+          :src="getImagesCarTemplate[0]"
           alt=""
         />
+      </div>
+      <div class="mt-5 text-center pdf">
+        <p style="font-size: 16px">Descrição do Veículo</p>
+      </div>
+
+      <div class="background-grey-container" v-html="getDescriptionData"></div>
+      <div class="p-5 pdf">
+        <h1 class="xl mt-3">GALERIA DE MÍDIAS</h1>
+        <p class="mb-4">
+          Confira imagens do veículo que iremos importar para você.
+        </p>
+      </div>
+
+      <div
+        id="images-custom"
+        class="d-flex flex-wrap justify-content-center mb-3"
+      >
+        <div v-for="(img, i) in getImagesCarTemplate" :key="i">
+          <img v-if="i > 0" :src="img" width="500" alt="" />
+        </div>
+      </div>
+      <a :href="getVideoData.url">
+        <div class="text-center mb-5">
+          <img
+            style="
+              opacity: 0.7;
+              left: 50%;
+              margin-left: -150px;
+              position: absolute;
+            "
+            width="300px"
+            src="../assets/next_hires.png"
+            alt=""
+          />
+          <img :src="getVideoData.thumbBase64" width="600" alt="" />
+        </div>
+      </a>
+
+      <div class="social-media text-center">
+        <a href="http://youtube.com">
+          <img
+            src="../assets/youtube.png"
+            style="margin-right: 20px"
+            width="100"
+            alt=""
+          />
+        </a>
+        <a href="http://instagram.com">
+          <img
+            src="../assets/instagram.png"
+            style="margin-right: 20px"
+            width="100"
+            alt=""
+          />
+        </a>
+        <a href="http://whatsapp.com">
+          <img
+            src="../assets/whatsapp.png"
+            style="margin-right: 20px"
+            width="100"
+            alt=""
+          />
+        </a>
+        <a href="http://wordpress.com">
+          <img
+            src="../assets/wordpress.png"
+            style="margin-right: 20px"
+            width="100"
+            alt=""
+          />
+        </a>
+        <p class="mb-4 d-block mt-4">Link Úteis</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer mt-5">
+        <img src="../assets/logo-white.png" width="200" alt="" />
       </div>
     </div>
     <div class="text-center">
@@ -118,7 +182,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getImagesCarTemplate"]),
+    ...mapGetters([
+      "getImagesCarTemplate",
+      "getDescriptionData",
+      "getVideoData",
+    ]),
   },
   methods: {
     ...mapActions(["setLoadingState"]),
@@ -176,7 +244,7 @@ export default {
       });
       let that = this;
 
-      const elm = document.getElementById("proposal-template")
+      const elm = document.getElementById("proposal-template");
       const width = elm.offsetWidth;
       const height = elm.offsetHeight;
 
@@ -196,7 +264,7 @@ export default {
           letterRendering: true,
           useCORS: true,
         },
-        jsPDF: { unit: "px", format: [width, height + 100] },
+        jsPDF: { unit: "px", format: [width, height + 40] },
       };
 
       html2pdf()
@@ -225,6 +293,16 @@ export default {
 </script>
 
 <style scoped>
+.footer {
+  text-align: center;
+  background-color: #7b7b7b;
+  padding: 25px;
+}
+.background-grey-container {
+  background-color: #f1f1f1;
+  padding: 20px;
+  margin: 30px;
+}
 #images-custom img {
   display: block;
   max-width: 420px;
@@ -260,7 +338,7 @@ p.min {
 
 p {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
 }
 .value-displayer {
   color: #7b7b7b;
@@ -269,13 +347,9 @@ p {
   height: 75px;
   border: 0.5px solid #f3f3f3;
   border-radius: 10px;
-  background: rgb(255, 255, 255);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 1) 50%,
-    rgb(207, 207, 207) 85%,
-    rgb(156, 156, 156) 100%
-  );
+  background-image: url(../assets/valor-bg.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: auto;
 }
 </style>

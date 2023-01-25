@@ -6,6 +6,12 @@ import FinalStepBaseFileCalc from "@/utils/FinalStepBaseFileCalc";
 import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
 
 export default {
+  SET_VIDEO_DATA(state, newValue) {
+    state.videoData = newValue;
+  },
+  SET_DESCRIPTION_DATA(state, newValue) {
+    state.descriptionData = newValue;
+  },
   SET_LOADING(state, newValue) {
     state.loading = newValue;
   },

@@ -13,6 +13,12 @@ export default {
   getImagesCarTemplate(state) {
     return state.imagesCarTemplate;
   },
+  getVideoData(state) {
+    return state.videoData;
+  },
+  getDescriptionData(state) {
+    return state.descriptionData;
+  },
   getVehicleDataFromCache(state) {
     if (Object.keys(state.vehicleData).length > 0) {
       return state.vehicleData;

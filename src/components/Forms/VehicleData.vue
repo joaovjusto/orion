@@ -10,7 +10,7 @@
         <el-upload
           action="#"
           multiple
-          :limit="4"
+          :limit="5"
           :on-change="fileInput"
           v-loading="loadingUpload"
           list-type="picture-card"
@@ -39,6 +39,22 @@
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="" />
         </el-dialog>
+      </el-form-item>
+      <el-form-item class="w-100" label="Url Video">
+        <input
+          style="width: 50%"
+          class="el-input__inner w-100"
+          @keydown="updateVideoData($event)"
+          v-model="videoData"
+          placeholder="https://youtube/mmdsKJdsn"
+        />
+      </el-form-item>
+      <el-form-item label="Descrição Veículo">
+        <ckeditor
+          :editor="editor"
+          v-model="editorData"
+          :config="editorConfig"
+        ></ckeditor>
       </el-form-item>
     </el-form>
     <el-divider></el-divider>
@@ -206,6 +222,8 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from "vuex";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 import StringToDouble from "@/utils/common/StringToDouble";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
@@ -214,6 +232,13 @@ export default {
   mixins: [commonFormMixin],
   data() {
     return {
+      editor: ClassicEditor,
+      editorData:
+        "<p>Tesla Model 3 Performance, 2023/2023, com full auto-pilot, interior alpine white e preto, com 5 bancos, carregador rápido extra e também uma capa personalizada para ser usada em ambientes fechados.&nbsp;</p><ul><li>Motor V8 4.0 Biturbo + 3 Motores Elétricos&nbsp;</li><li>1.000 cv de Potência Combinada&nbsp;</li><li>81,5 Kgfm de Torque&nbsp;</li><li>Câmbio Automatizado de Dupla Embreagem de 8 Velocidades&nbsp;</li><li>Tração Integral&nbsp;</li><li>Aceleração de 0 a 100 km/k em 2,5 s&nbsp;</li><li>Aceleração de 0 a 200 km/h em 6,7 s&nbsp;</li><li>Velocidade Máxima de 340 km/h</li></ul>",
+      editorConfig: {
+        // The configuration of the editor.
+      },
+      videoData: "",
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
@@ -257,9 +282,37 @@ export default {
   computed: {
     ...mapGetters(["getVehicleDataFromCache", "getCurrency"]),
   },
+  watch: {
+    editorData(newValue) {
+      this.SET_DESCRIPTION_DATA(newValue);
+    },
+  },
   methods: {
-    ...mapMutations(["SET_IMAGES_CAR_TEMPLATE"]),
+    ...mapMutations([
+      "SET_IMAGES_CAR_TEMPLATE",
+      "SET_DESCRIPTION_DATA",
+      "SET_VIDEO_DATA",
+    ]),
     ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
+    youtubeParser(url) {
+      var regExp =
+        /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+      var match = url.match(regExp);
+      return match && match[7].length == 11 ? match[7] : false;
+    },
+    updateVideoData() {
+      setInterval(() => {
+        const videoId = this.youtubeParser(this.videoData);
+        this.toDataUrl(
+          `http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+        ).then((resp) => {
+          this.SET_VIDEO_DATA({
+            url: this.videoData,
+            thumbBase64: resp,
+          });
+        });
+      }, 1500);
+    },
     handleExceed() {
       this.$notify({
         title: "Limite de imagens atingido!",
@@ -267,7 +320,7 @@ export default {
         type: "warning",
       });
     },
-     handlePictureCardPreview(file) {
+    handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },

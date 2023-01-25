@@ -16,10 +16,13 @@ import locale from "element-ui/lib/locale/lang/pt-br";
 
 import store from "./store";
 
+import CKEditor from '@ckeditor/ckeditor5-vue2';
+
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
 Vue.use(ElementUI, { locale });
 Vue.use(VueTheMask)
+Vue.use( CKEditor );
 
 // register directive v-money and component <money>
 Vue.use(money, {
