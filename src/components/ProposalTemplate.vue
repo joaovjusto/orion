@@ -185,6 +185,7 @@ export default {
     ...mapGetters([
       "getImagesCarTemplate",
       "getDescriptionData",
+      "getVehicleDataFromCache",
       "getVideoData",
     ]),
   },
@@ -247,6 +248,7 @@ export default {
       const elm = document.getElementById("proposal-template");
       const width = elm.offsetWidth;
       const height = elm.offsetHeight;
+      const date = that.$options.filters.formatDate(new Date().toISOString());
 
       let opt = {
         pagebreak: {
@@ -257,7 +259,7 @@ export default {
         enableLinks: true,
         margin: 1,
         image: { type: "jpeg", quality: 1 },
-        filename: "Proposta.pdf",
+        filename: `Proposta ${that.getVehicleDataFromCache.product} em ${date}`,
         html2canvas: {
           dpi: 100,
           scale: 2,
@@ -283,7 +285,8 @@ export default {
           });
 
           setTimeout(() => {
-            FileSaver.saveAs(blob, "Proposta.PDF");
+            const date = that.$options.filters.formatDate(new Date().toISOString());
+            FileSaver.saveAs(blob, `Proposta ${that.getVehicleDataFromCache.product} em ${date}`);
           }, 1500);
         })
         .toPdf();
