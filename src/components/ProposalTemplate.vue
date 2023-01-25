@@ -264,7 +264,7 @@ export default {
           letterRendering: true,
           useCORS: true,
         },
-        jsPDF: { unit: "px", format: [width, height + 40] },
+        jsPDF: { unit: "px", format: [width, height + 50] },
       };
 
       html2pdf()
