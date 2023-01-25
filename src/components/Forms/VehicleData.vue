@@ -455,7 +455,7 @@ export default {
 }
 @media screen and (max-width: 768px){
   .ck.ck-editor {
-    max-width: 380px;
+    max-width: 300px;
   }
 }
 </style>
