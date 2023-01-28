@@ -117,7 +117,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
-import { toPng } from 'html-to-image';
+import html2canvas from 'html2canvas';
 
 import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
 import ProposalTemplate from "@/components/ProposalTemplate.vue";
@@ -201,35 +201,34 @@ export default {
         type: "warning",
       });
       const that = this
-      toPng(element)
-        .then(function (dataUrl) {
-          var downloadLink = document.createElement("a");
-          downloadLink.href = dataUrl;
-          const date = that.$options.filters.formatDate(new Date().toISOString())
-          const imageName = `Cotação ${that.getVehicleDataFromCache.product} em ${ date }.png`
-          downloadLink.download = imageName;
+      html2canvas(element).then(function(canvas) {
+        var downloadLink = document.createElement("a");
+        downloadLink.href = canvas.toDataURL()
+        const date = that.$options.filters.formatDate(new Date().toISOString())
+        const imageName = `Cotação ${that.getVehicleDataFromCache.product} em ${ date }.png`
+        downloadLink.download = imageName;
 
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          document.body.removeChild(downloadLink);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      })
+      .then(() => this.$notify({
+          title: "Sucesso",
+          message: "Imagem gerada com sucesso",
+          type: "success",
         })
-        .then(() => this.$notify({
-            title: "Sucesso",
-            message: "Imagem gerada com sucesso",
-            type: "success",
-          })
-        )
-        .catch(() =>
-          this.$notify({
-            title: "Erro",
-            message: "Não foi possível gerar a imagem",
-            type: "error",
-          })
-        )
-        .finally(() => {
-          this.isLoadingDownloadImage = false;
-          this.setLoadingState(false)
-        });
+      )
+      .catch(() =>
+        this.$notify({
+          title: "Erro",
+          message: "Não foi possível gerar a imagem",
+          type: "error",
+        })
+      )
+      .finally(() => {
+        this.isLoadingDownloadImage = false;
+        this.setLoadingState(false)
+      });
     },
   },
 };
