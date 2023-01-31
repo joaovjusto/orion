@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" class="mt-2 mb-2" @click="centerDialogVisible = true">Visualizar PROPOSTA</el-button>
-    <el-button type="primary" class="mt-2 mb-2" @click="printResume" v-loading="isLoadingDownloadImage">Visualizar RESUMO</el-button>
+    <el-button type="primary" class="mt-2 mb-2" @click="printResume" v-loading="isLoadingDownloadImage">Gerar RESUMO</el-button>
     <el-form
       label-position="top"
       label-width="120px"
