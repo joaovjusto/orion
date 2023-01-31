@@ -12,8 +12,8 @@
           alt=""
         />
         <img
-          width="500"
-          src="../assets/vehicles-temp.png"
+          width="550"
+          src="../assets/vehicles.png"
           alt=""
           class="template-images"
         />
@@ -22,7 +22,7 @@
             <img
               class="icon"
               height="30"
-              src="../assets/scroll-to-bottom.png"
+              src="../assets/currency.png"
               alt=""
             />
             <div>
@@ -34,7 +34,7 @@
             <img
               class="icon"
               height="30"
-              src="../assets/scroll-to-bottom.png"
+              src="../assets/car.png"
               alt=""
             />
             <div>
@@ -46,13 +46,13 @@
             <img
               class="icon"
               height="30"
-              src="../assets/scroll-to-bottom.png"
+              src="../assets/price-tag.png"
               alt=""
             />
             <div>
               <p>Valor Estimado</p>
-              <strong class="info">{{ resumeDataFromCache.totalCost }}</strong>
-            </div>
+              <strong class="info">{{ resumeDataFromCache.totalCost | formatCurrency }}</strong>
+            </div> 
           </div>
         </div>
         <div class="url">
@@ -93,7 +93,7 @@ export default {
     width: 550px;
     height: 550px;
     background-color: white;
-    padding: 10px 16px;
+    padding: 10px 0px;
     border: 1px solid black;
     font-family: "Acumin letiable Concept", sans-serif;
     color: #7b7b7b;
@@ -101,16 +101,16 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1;
+    // z-index: -1;
 }
 .template-images {
-  margin-bottom: 16px;
+  margin-top: -50px;
 }
 .resume {
   border-radius: 16px;
   background-color: #f3f3f3;
   padding: 0px 16px 16px;
-  margin: 16px;
+  margin: 32px;
 }
 .align-left {
     display: flex;
