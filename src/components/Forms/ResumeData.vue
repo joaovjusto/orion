@@ -45,7 +45,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly
+          readonly id="readonly"
           v-model="resumeForm.costUsaBrl"
         />
       </el-form-item>
@@ -60,6 +60,7 @@
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
           readonly
+          id="readonly"
           v-model="resumeForm.homologation"
         />
       </el-form-item>
