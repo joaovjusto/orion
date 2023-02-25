@@ -51,7 +51,7 @@
             />
             <div>
               <p>Valor Estimado</p>
-              <strong class="info">{{ resumeDataFromCache.totalCost | formatCurrency }}</strong>
+              <strong class="info">{{ getTotalValue }}</strong>
             </div> 
           </div>
         </div>
@@ -83,7 +83,13 @@ export default {
         case 'EUR': return 'Euro'
         default: return ''
       }
-    }
+    },
+    getTotalValue() {
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(this.resumeDataFromCache.totalCost);
+    },
   },
 }
 </script>
