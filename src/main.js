@@ -1,5 +1,7 @@
 import Vue from "vue";
+import router from './router'
 import ElementUI from "element-ui";
+import firebase from 'firebase/compat/app';
 import "./assets/scss/element-variables.scss";
 import BootstrapVue from "bootstrap-vue";
 
@@ -17,6 +19,9 @@ import locale from "element-ui/lib/locale/lang/pt-br";
 import store from "./store";
 
 import CKEditor from '@ckeditor/ckeditor5-vue2';
+
+import { crendential } from '../firebase-credential'
+firebase.initializeApp(crendential);
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue);
@@ -67,5 +72,6 @@ Vue.config.productionTip = false;
 
 new Vue({
   store,
+  router,
   render: (h) => h(App),
 }).$mount("#app");

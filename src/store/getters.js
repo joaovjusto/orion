@@ -67,4 +67,12 @@ export default {
       ? JSON.parse(Cookies.get("finalStep"))
       : {};
   },
+  getUserFromCache(state) {
+    if (Object.keys(state.user).length > 0) {
+      return state.user;
+    }
+    return Cookies.get("user")
+      ? JSON.parse(Cookies.get("user"))
+      : {};
+  },
 };

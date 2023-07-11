@@ -42,4 +42,7 @@ export default {
   SET_STEPS_RENDERED(state, stepsRendered) {
     state.stepsRendered = stepsRendered;
   },
+  SET_USER(state, user) {
+    state.user = user;
+  },
 };

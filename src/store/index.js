@@ -20,7 +20,8 @@ export default new Vuex.Store({
     finalStep: {},
     resumeData: {},
     currency: {},
-    imagesCarTemplate: []
+    imagesCarTemplate: [],
+    user: {}
   },
   actions,
   mutations,
