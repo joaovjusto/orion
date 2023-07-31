@@ -99,6 +99,25 @@
         />
       </el-form-item>
     </el-form>
+    <el-form ref="icms" label-position="top" :inline="true">
+      <el-form-item label="ICMS" prop="icms">
+        <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="tributeForm.icms"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Valor ICMS" prop="valueIcms">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          readonly id="readonly"
+          v-model="tributeForm.valueIcms"
+        />
+      </el-form-item>
+    </el-form>
     <el-form ref="tus" label-position="top" :inline="true">
       <el-form-item label="TUS" prop="tus">
         <el-input
@@ -171,6 +190,8 @@ export default {
         valuePis: "",
         cofins: "0%",
         valueCofins: "",
+        icms: "0%",
+        valueIcms: "",
         tus: "",
         valueTus: "R$ 0,00",
       },
@@ -188,6 +209,7 @@ export default {
           parseFloat(StringToDouble(this.tributeForm.valueIpi)) +
           parseFloat(StringToDouble(this.tributeForm.valuePis)) +
           parseFloat(StringToDouble(this.tributeForm.valueCofins)) +
+          parseFloat(StringToDouble(this.tributeForm.valueIcms)) +
           parseFloat(StringToDouble(this.tributeForm.valueTus))
         ).toFixed(2);
       },
@@ -204,13 +226,14 @@ export default {
       }
     },
     handleUpdatedCalcValues() {
-      const { valueIi, valueIpi, valuePis, valueCofins } = TributeBaseFileCalc(
+      const { valueIi, valueIpi, valuePis, valueCofins, valueIcms } = TributeBaseFileCalc(
         Object.assign({ ...this.tributeForm }, {})
       );
       this.tributeForm.valueIi = valueIi;
       this.tributeForm.valueIpi = valueIpi;
       this.tributeForm.valuePis = valuePis;
       this.tributeForm.valueCofins = valueCofins;
+      this.tributeForm.valueIcms = valueIcms;
     },
     handleCanChangeInput() {
       setTimeout(() => {

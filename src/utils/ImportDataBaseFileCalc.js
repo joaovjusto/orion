@@ -9,34 +9,44 @@ export default (data) => {
     (step) => step.name === "VehicleData"
   );
 
-  const totalCostData = (
-    parseFloat(StringToDouble(costFormData.fob)) +
-    parseFloat(StringToDouble(costFormData.shipping)) +
-    parseFloat(StringToDouble(costFormData.insurance)) +
-    parseFloat(StringToDouble(costFormData.thc))
+  // const totalCostData = (
+  //   parseFloat(StringToDouble(costFormData.fob)) +
+  //   parseFloat(StringToDouble(costFormData.shipping)) +
+  //   parseFloat(StringToDouble(costFormData.insurance)) +
+  //   parseFloat(StringToDouble(costFormData.thc))
+  // ).toFixed(2);
+
+  let { storage, afrmm, unloading, assurance, plataform } = data;
+
+  storage = handlePercentageCalc(0.60,  parseFloat(StringToDouble(costFormData.fob)));
+
+  afrmm = parseFloat(handlePercentageCalc(25, StringToDouble(costFormData.shipping)));
+
+  assurance = handlePercentageCalc(0.20,  parseFloat(StringToDouble(costFormData.fob)));
+
+  plataform = handlePercentageCalc(0.25,  parseFloat(StringToDouble(costFormData.fob)));
+
+  unloading = parseFloat(
+    parseFloat(StringToDouble("R$ 2250,00")) +
+      parseFloat(handlePercentageCalc(0.60, StringToDouble(costFormData.fob)))
   ).toFixed(2);
-
-  let { storage, afrmm } = data;
-
-  storage = handlePercentageCalc(0.65, totalCostData);
-
-  afrmm = (parseFloat(StringToDouble(costFormData.shipping)) / 4).toFixed(2);
 
   let baseDataRender = {};
   if (stepRendered) {
     if (
       stepRendered.count === 0 &&
-      !Object.keys(importFormData).includes("dtc")
+      !Object.keys(importFormData).includes("ctr")
     ) {
       baseDataRender = {
-        dtc: "1750,00",
+        // dtc: "1750,00",
+        blLiberation: "2590,15",
         ctr: "1950,00",
-        docs: "100,00",
-        sda: "1100,00",
+        docs: "250,00",
+        sda: "1320,00",
         dispatch: "2000,00",
       };
     }
   }
 
-  return { ...data, storage, afrmm, ...baseDataRender };
+  return { ...data, storage, afrmm, unloading, assurance, plataform, ...baseDataRender };
 };

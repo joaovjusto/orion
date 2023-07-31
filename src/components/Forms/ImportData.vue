@@ -8,12 +8,24 @@
       :inline="true"
       class="demo-importForm"
     >
-      <el-form-item label="Armazenagem (10 dias)" prop="storage">
+      <el-form-item label="Descarga no porto" prop="unloading">
         <input
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
-          readonly id="readonly"
+          readonly
+          id="readonly"
+          @input="inputChanged($event)"
+          v-model="importForm.unloading"
+        />
+      </el-form-item>
+      <el-form-item label="Armazenagem EADI" prop="storage">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          readonly
+          id="readonly"
           @input="inputChanged($event)"
           v-model="importForm.storage"
         />
@@ -22,13 +34,14 @@
         <input
           class="el-input__inner"
           v-money="money"
-          readonly id="readonly"
+          readonly
+          id="readonly"
           placeholder="Insira"
           @input="inputChanged($event)"
           v-model="importForm.afrmm"
         />
       </el-form-item>
-      <el-form-item label="DTC" prop="dtc">
+      <!-- <el-form-item label="DTC" prop="dtc">
         <input
           class="el-input__inner"
           v-money="money"
@@ -36,8 +49,8 @@
           @input="inputChanged($event)"
           v-model="importForm.dtc"
         />
-      </el-form-item>
-      <el-form-item label="DESOVA E DEVOLUÇÃO CTR" prop="ctr">
+      </el-form-item> -->
+      <el-form-item label="Desova e devolução CTR" prop="ctr">
         <input
           class="el-input__inner"
           v-money="money"
@@ -70,8 +83,40 @@
           v-money="money"
           placeholder="Insira"
           @input="inputChanged($event)"
-          readonly id="readonly"
+          readonly
+          id="readonly"
           v-model="importForm.sda"
+        />
+      </el-form-item>
+      <el-form-item label="Liberação de BL" prop="blLiberation">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.blLiberation"
+        />
+      </el-form-item>
+      <el-form-item label="Seguro" prop="assurance">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
+          id="readonly"
+          v-model="importForm.assurance"
+        />
+      </el-form-item>
+      <el-form-item label="Plataforma Até BC" prop="plataform">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
+          id="readonly"
+          v-model="importForm.plataform"
         />
       </el-form-item>
     </el-form>
@@ -95,7 +140,8 @@
               class="el-input__inner"
               v-money="money"
               @input="inputChanged($event)"
-              readonly id="readonly"
+              readonly
+              id="readonly"
               v-model="total"
             />
           </el-form-item>
@@ -118,12 +164,16 @@ export default {
       canChangeInput: false,
       inputChangedTimes: 0,
       importForm: {
+        unloading: "",
         storage: "",
         afrmm: "",
-        dtc: "",
+        // dtc: "",
+        plataform: "",
         ctr: "",
         docs: "",
         sda: "",
+        blLiberation: "",
+        assurance: "",
         dispatch: "",
       },
     };
@@ -136,12 +186,16 @@ export default {
     total: {
       get() {
         return (
+          parseFloat(StringToDouble(this.importForm.unloading)) +
           parseFloat(StringToDouble(this.importForm.storage)) +
           parseFloat(StringToDouble(this.importForm.afrmm)) +
-          parseFloat(StringToDouble(this.importForm.dtc)) +
+          // parseFloat(StringToDouble(this.importForm.dtc)) +
+          parseFloat(StringToDouble(this.importForm.plataform)) +
           parseFloat(StringToDouble(this.importForm.ctr)) +
           parseFloat(StringToDouble(this.importForm.docs)) +
           parseFloat(StringToDouble(this.importForm.sda)) +
+          parseFloat(StringToDouble(this.importForm.blLiberation)) +
+          parseFloat(StringToDouble(this.importForm.assurance)) +
           parseFloat(StringToDouble(this.importForm.dispatch))
         ).toFixed(2);
       },

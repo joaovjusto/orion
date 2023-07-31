@@ -21,10 +21,11 @@ export default (data) => {
     if (Object.keys(tributeFormData).length === 0) {
       baseDataRender = {
         ii: "35%",
-        ipi: "25%",
+        ipi: "18%",
         pis: "2.62%",
         cofins: "12.57%",
         valueTus: "R$ 214,50",
+        icms: "12%",
       };
     }
   }
@@ -33,12 +34,14 @@ export default (data) => {
   let valueIpi = 0
   let valuePis = 0
   let valueCofins = 0
+  let valueIcms = 0
 
   if (Object.keys(tributeFormData).length > 0) {
     valueIi = handlePercentageCalc(tributeFormData.ii.replace('%', ''), totalCostData);
     valueIpi = handlePercentageCalc(tributeFormData.ipi.replace('%', ''), (parseFloat(totalCostData) + parseFloat(valueIi)));
     valuePis = handlePercentageCalc(tributeFormData.pis.replace('%', ''), totalCostData);
     valueCofins = handlePercentageCalc(tributeFormData.cofins.replace('%', ''), totalCostData);
+    valueIcms = handlePercentageCalc(tributeFormData.icms.replace('%', ''), totalCostData);
   }
 
 
@@ -49,5 +52,6 @@ export default (data) => {
     valueIpi,
     valuePis,
     valueCofins,
+    valueIcms
   };
 };

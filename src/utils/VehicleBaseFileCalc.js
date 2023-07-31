@@ -11,17 +11,17 @@ export default (data) => {
     if (stepRendered.count === 0 && !Object.keys(vehicleFormData).includes('importer')) {
       baseDataRender = {
         importer: "LUXOR",
-        modifier: "0.03%",
+        modifier: "0.05%",
         billing: "SP",
         modal: "MARÍTIMO",
         cargoType: "CTN",
         purchaser: "PJ",
-        fob: "51.095,00",
-        shipping: "875,00",
+        fob: "25.000,00",
+        shipping: "2000.00,00",
         cntr: "1",
         origin: "USA",
         destination: "Santa Catarina",
-        icmsDestination: "4%",
+        icmsDestination: "12%",
         ncm: "8703",
       };
     }
