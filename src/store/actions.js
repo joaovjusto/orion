@@ -38,5 +38,9 @@ export default {
   },
   setLoadingState({ commit }, loading) { 
     commit("SET_LOADING", loading);
+  },
+  setUser({ commit }, user) { 
+    commit("SET_USER", user);
+    Cookies.set("user", JSON.stringify(user), { expires: 1 });
   }
 };
