@@ -59,14 +59,14 @@ export default {
       ? JSON.parse(Cookies.get("importData"))
       : {};
   },
-  getFinalStepFromCache(state) {
-    if (Object.keys(state.finalStep).length > 0) {
-      return state.finalStep;
-    }
-    return Cookies.get("finalStep")
-      ? JSON.parse(Cookies.get("finalStep"))
-      : {};
-  },
+  // getFinalStepFromCache(state) {
+  //   if (Object.keys(state.finalStep).length > 0) {
+  //     return state.finalStep;
+  //   }
+  //   return Cookies.get("finalStep")
+  //     ? JSON.parse(Cookies.get("finalStep"))
+  //     : {};
+  // },
   getUserFromCache(state) {
     if (Object.keys(state.user).length > 0) {
       return state.user;

@@ -31,6 +31,20 @@ export default (data) => {
       parseFloat(handlePercentageCalc(0.60, StringToDouble(costFormData.fob)))
   ).toFixed(2);
 
+  let totalSum = (
+    parseFloat(StringToDouble(importFormData.unloading)) +
+    parseFloat(StringToDouble(importFormData.storage)) +
+    parseFloat(StringToDouble(importFormData.afrmm)) +
+    // parseFloat(StringToDouble(importFormData.dtc)) +
+    parseFloat(StringToDouble(importFormData.plataform)) +
+    parseFloat(StringToDouble(importFormData.ctr)) +
+    parseFloat(StringToDouble(importFormData.docs)) +
+    parseFloat(StringToDouble(importFormData.sda)) +
+    parseFloat(StringToDouble(importFormData.blLiberation)) +
+    parseFloat(StringToDouble(importFormData.assurance)) +
+    parseFloat(StringToDouble(importFormData.dispatch))
+  ).toFixed(2);
+
   let baseDataRender = {};
   if (stepRendered) {
     if (
@@ -48,5 +62,5 @@ export default (data) => {
     }
   }
 
-  return { ...data, storage, afrmm, unloading, assurance, plataform, ...baseDataRender };
+  return { ...data, storage, afrmm, unloading, assurance, plataform, ...baseDataRender, totalSum };
 };

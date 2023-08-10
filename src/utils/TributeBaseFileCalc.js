@@ -44,6 +44,14 @@ export default (data) => {
     valueIcms = handlePercentageCalc(tributeFormData.icms.replace('%', ''), totalCostData);
   }
 
+  let totalSum = (
+    parseFloat(StringToDouble(tributeFormData.valueIi)) +
+    parseFloat(StringToDouble(tributeFormData.valueIpi)) +
+    parseFloat(StringToDouble(tributeFormData.valuePis)) +
+    parseFloat(StringToDouble(tributeFormData.valueCofins)) +
+    parseFloat(StringToDouble(tributeFormData.valueIcms)) +
+    parseFloat(StringToDouble(tributeFormData.valueTus))
+  ).toFixed(2);
 
   return {
     ...data,
@@ -52,6 +60,7 @@ export default (data) => {
     valueIpi,
     valuePis,
     valueCofins,
-    valueIcms
+    valueIcms,
+    totalSum
   };
 };

@@ -17,7 +17,7 @@ export default new Vuex.Store({
     costData: {},
     tributeData: {},
     importData: {},
-    finalStep: {},
+    // finalStep: {},
     resumeData: {},
     currency: {},
     imagesCarTemplate: [],

@@ -13,6 +13,13 @@ export default (data) => {
   fob = (StringToDouble(variablesToCalc.fob) * StringToDouble(variablesToCalc.currencyTax)).toFixed(2);
   shipping = (StringToDouble(variablesToCalc.shipping) * StringToDouble(variablesToCalc.currencyTax)).toFixed(2);
 
+  let totalSum = (
+    parseFloat(StringToDouble(costFormData.fob)) +
+    parseFloat(StringToDouble(costFormData.shipping)) +
+    // parseFloat(StringToDouble(costFormData.insurance)) +
+    parseFloat(StringToDouble(costFormData.thc))
+  ).toFixed(2);
+
   let baseDataRender = {};
   if (stepRendered) {
     if (stepRendered.count === 0 && !Object.keys(costFormData).includes('thc')) {
@@ -23,5 +30,5 @@ export default (data) => {
     }
   }
 
-  return { ...data, fob, shipping, ...baseDataRender };
+  return { ...data, fob, shipping, totalSum, ...baseDataRender };
 };

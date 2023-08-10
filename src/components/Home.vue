@@ -35,8 +35,8 @@ const steps = [
     { name: "CostData", title: "Despesas" },
     { name: "TributeData", title: "Tributos" },
     { name: "ImportData", title: "Aduaneira" },
-    { name: "FinalStep", title: "Finalização" },
-    { name: "ResumeData", title: "Revisão" },
+    // { name: "FinalStep", title: "Finalização" },
+    { name: "ResumeData", title: "Proposta" },
 ];
 
 export default {
@@ -71,35 +71,11 @@ export default {
             "getCostDataFromCache",
             "getTributeDataFromCache",
             "getImportDataFromCache",
-            "getFinalStepFromCache",
+            // "getFinalStepFromCache",
             "getResumeDataFromCache",
         ]),
     },
     mounted() {
-        // Updating vuex with values
-        const cachesCreated = Cookies.get();
-        const steps = {
-            vehicleData: this.getVehicleDataFromCache,
-            costData: this.getCostDataFromCache,
-            tributeData: this.getTributeDataFromCache,
-            importData: this.getImportDataFromCache,
-            finalStep: this.getFinalStepFromCache,
-            resumeData: this.getResumeDataFromCache,
-            default: (stepData) => {
-                return stepData;
-            },
-        };
-
-        // Updating only cached states
-        Object.keys(cachesCreated).forEach((cacheName) => {
-            if (Object.keys(steps).includes(cacheName)) {
-                this.updateFormTreeData({
-                    data: steps[cacheName],
-                    stepName: cacheName,
-                });
-            }
-        });
-
         this.setLoadingState(true)
 
         axios
@@ -152,6 +128,28 @@ export default {
                     type: "warning",
                 });
             });
+
+        // Updating vuex with values
+        const cachesCreated = Cookies.get();
+        const steps = {
+            vehicleData: this.getVehicleDataFromCache,
+            costData: this.getCostDataFromCache,
+            tributeData: this.getTributeDataFromCache,
+            importData: this.getImportDataFromCache,
+            // finalStep: this.getFinalStepFromCache,
+            resumeData: this.getResumeDataFromCache,
+            default: (stepData) => stepData,
+        };
+
+        // Updating only cached states
+        Object.keys(cachesCreated).forEach((cacheName) => {
+            if (Object.keys(steps).includes(cacheName)) {
+                this.updateFormTreeData({
+                    data: steps[cacheName],
+                    stepName: cacheName,
+                });
+            }
+        });
 
         this.updateAllSteps();
     },
