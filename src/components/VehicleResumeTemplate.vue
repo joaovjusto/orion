@@ -56,7 +56,7 @@
           </div>
         </div>
         <div class="url">
-          www.visionimp.com.br
+          www.visioncomex.com.br
         </div>
       </div>
     </div>
@@ -88,7 +88,9 @@ export default {
       return new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(this.resumeDataFromCache.totalCost);
+      }).format(0
+        // this.resumeDataFromCache.totalCost
+        );
     },
   },
 }

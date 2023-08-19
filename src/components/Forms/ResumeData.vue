@@ -23,7 +23,9 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
           v-model="resumeForm.exteriorComission"
         />
       </el-form-item>
@@ -31,7 +33,9 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
           v-model="resumeForm.carCollect"
         />
       </el-form-item>
@@ -39,7 +43,9 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
           v-model="resumeForm.agio"
         />
       </el-form-item>
@@ -50,7 +56,9 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
           v-model="resumeForm.alfandegaryValidation"
         />
       </el-form-item>
@@ -58,7 +66,9 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
           v-model="resumeForm.containerRentValue"
         />
       </el-form-item>
@@ -66,7 +76,9 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
           v-model="resumeForm.stuffing"
         />
       </el-form-item>
@@ -74,7 +86,9 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
           v-model="resumeForm.shippingFee"
         />
       </el-form-item>
@@ -82,7 +96,9 @@
         <input
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
-          @input="inputChanged($event)"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
           v-model="resumeForm.homologation"
         />
       </el-form-item>
