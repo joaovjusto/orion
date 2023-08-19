@@ -41,7 +41,7 @@
         </div>
       </div>
       <img
-        style="margin-top: 100px; width: 848px"
+        style="margin-top: 300px; width: 848px"
         src="../assets/SILVERADO-BG.png"
         alt=""
       />
@@ -55,7 +55,7 @@
             <span
               class="value-displayer"
               style="display: block; font-weight: 550"
-              >{{getResumeDataFromCache.totalCost}}</span
+              >{{parseFloat(getResumeDataFromCache.finalValue).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</span
             >
             <h6>VALOR ESTIMADO / ENTREGUE NO BRASIL</h6>
           </div>
