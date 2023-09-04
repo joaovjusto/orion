@@ -181,7 +181,8 @@
         <el-button
           type="secondary"
           class="mt-2 mb-2"
-          v-loading="isLoadingDownloadImage"
+          v-loading="isLoadingStorage"
+          @click="saveOrder"
           >Salvar Proposta em banco</el-button
         >
         <el-button
@@ -206,10 +207,16 @@
 import { mapActions, mapGetters } from "vuex";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 import html2canvas from "html2canvas";
+import firebase from 'firebase/compat/app';
+// import storage from "firebase/compat/storage";
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
 
 import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
 import ProposalTemplate from "@/components/ProposalTemplate.vue";
 import VehicleResumeTemplate from "@/components/VehicleResumeTemplate.vue";
+import { Proposal } from "@/models/Proposal.js";
 
 export default {
   name: "ResumeData",
@@ -241,6 +248,7 @@ export default {
         finalValue: "0,00",
       },
       isLoadingDownloadImage: false,
+      isLoadingStorage: false,
     };
   },
   mounted() {
@@ -254,6 +262,10 @@ export default {
       "getResumeDataFromCache",
       "getVehicleDataFromCache",
       "getCurrency",
+      "getCostDataFromCache",
+      "getTributeDataFromCache",
+      "getImportDataFromCache",
+      "getUserFromCache"
     ]),
   },
   methods: {
@@ -338,6 +350,44 @@ export default {
           this.setLoadingState(false);
         });
     },
+    async saveOrder() {
+      this.isLoadingStorage = true;
+      const firestoreApp = firebase.app()
+      const that = this;
+      await firestoreApp.firestore().runTransaction(async (transaction) => {
+          const proposal = new Proposal()
+          proposal.vehicle = that.getVehicleDataFromCache
+          proposal.currency = that.getCurrency
+          proposal.cost = that.getCostDataFromCache
+          proposal.tribute = that.getTributeDataFromCache
+          proposal.import = that.getImportDataFromCache
+          proposal.user = that.getUserFromCache.email
+          proposal.resume = that.getResumeDataFromCache
+          
+          const docRef = firestoreApp.firestore().collection('proposals').doc(proposal.id);
+          transaction.set(docRef, { ...proposal })
+
+          // await firestoreApp.storage("gs://orion-007.appspot.com")
+          //   .ref().child('proposals')
+          //   .child(`proposal-${document.id}`)
+          //   .put(new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21]))
+      }).then(() => {
+        this.$notify({
+          title: "Sucesso",
+          message: "Proposta salva com sucesso",
+          type: "success",
+        });
+      }).catch((error) => {  
+        console.error(error)
+        this.$notify({
+          title: "Erro",
+          message: "Ocorreu um erro ao tentar salvar a proposta",
+          type: "error",
+        });
+      }).finally(() => {
+        this.isLoadingStorage = false
+      })
+    }
   },
 };
 </script>

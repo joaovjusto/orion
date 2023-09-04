@@ -25,6 +25,12 @@ const routes = [
     name: 'home',
     component: () => import('../components/Home.vue'),
     meta: { requiresLogin: true }
+  },
+  {
+    path: '/propostas',
+    name: 'propostas',
+    component: () => import('../components/Proposals.vue'),
+    meta: { requiresLogin: true }
   }
 ]
 

@@ -1,15 +1,10 @@
 <template>
-    <div id="app" v-loading="getLoadingState" element-loading-text="Trabalhando nisso..">
-        <NavBar />
-        <div class="body">
-            <div class="container pt-5">
-                <StepDescription :activeStep="activeIndex" :steps="steps" @changeStep="changeStep" />
-                <FormContainer class="py-5" :steps="steps" :title="activeForm.title" :activeStep="activeIndex"
-                    @changeStep="changeStep">
-                    <component :is="activeForm.name" />
-                </FormContainer>
-            </div>
-        </div>
+    <div class="container pt-5">
+        <StepDescription :activeStep="activeIndex" :steps="steps" @changeStep="changeStep" />
+        <FormContainer class="py-5" :steps="steps" :title="activeForm.title" :activeStep="activeIndex"
+            @changeStep="changeStep">
+            <component :is="activeForm.name" />
+        </FormContainer>
     </div>
 </template>
 
@@ -40,7 +35,7 @@ const steps = [
 ];
 
 export default {
-    name: "App",
+    name: "HomeScreen",
     components: {
         NavBar,
         StepDescription,
@@ -87,7 +82,7 @@ export default {
                 // Check if was selected a currency before
                 if (Object.keys(this.getVehicleDataFromCache).length > 0) {
                     if (Object.keys(this.getVehicleDataFromCache).includes("currency")) {
-                        // Updating to all application the money config
+                        // Updating to all homelication the money config
                         const moneyConfigOptions = {
                             EUR: {
                                 decimal: ",",
@@ -182,7 +177,7 @@ export default {
         url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.svg#Acumin Variable Concept") format("svg");
 }
 
-#app {
+#home {
     font-family: "Roboto", sans-serif;
 }
 
@@ -192,7 +187,7 @@ export default {
     color: #7b7b7b;
 }
 
-#app {
+#home {
     min-height: calc(100vh);
     // background-color: #1A1A1A;
     background-image: linear-gradient(to right,
