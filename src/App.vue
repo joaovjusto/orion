@@ -18,14 +18,23 @@ export default {
   components: {
     NavBar,
   },
+  data() {
+    return {
+      isAuthenticated: false
+    }
+  },
+  beforeMount() {
+    const isAuthenticated = Object.keys(this.getUserFromCache).length > 0;
+    this.isAuthenticated = isAuthenticated
+    isAuthenticated
+  },
   computed: {
     ...mapGetters([
         "getUserFromCache",
       ]),
-    isAuthenticated() {
-      const isAuthenticated = Object.keys(this.getUserFromCache).length > 0;
-      return isAuthenticated
-    }
+    // isAuthenticated1() {
+      
+    // }
   },
 };
 </script>

@@ -21,7 +21,8 @@ export default new Vuex.Store({
     resumeData: {},
     currency: {},
     imagesCarTemplate: [],
-    user: {}
+    user: {},
+    proposal: null
   },
   actions,
   mutations,

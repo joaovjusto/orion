@@ -41,10 +41,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import firebase from 'firebase/compat/app';
-// import storage from "firebase/compat/storage";
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import { ProposalService } from "@/services";
 
 export default {
     name: "ProposalScreen",
@@ -58,38 +55,20 @@ export default {
     beforeMount() {
         this.getProposals()
     },
-    mounted() {
-        // this.handleCanChangeInput();
-    },
-    computed: {
-        // ...mapGetters(["getFinalStepFromCache"]),
-    },
     methods: {
         ...mapActions([
-            "updateCurrencyData",
             "updateFormTreeData",
             "updateAllSteps",
-            "setLoadingState"
+            "setProposal"
         ]),
         async getProposals() {
             this.isLoading = true;
-            const that = this;
-            const firestoreApp = firebase.app()
-            firestoreApp.firestore().collection('proposals').get()
-                .then(data => {
-                    data.docs.map(doc => that.tableData.push(doc.data()))
-                    console.log(that.tableData)
-                })
-                .catch(error => {
-                    console.error(error)
-                    this.$notify({
-                        title: "Erro",
-                        message: "Ocorreu um erro ao tentar salvar a proposta",
-                        type: "error",
-                    });
-                }).finally(() => {
-                    this.isLoading = false
-                })
+            try {
+                const proposals = await new ProposalService().findAll()
+                this.tableData = proposals
+            } finally {
+                this.isLoading = false
+            }
         },
         handleClick(data) {
             this.isLoadingHandleClick = true
@@ -112,8 +91,9 @@ export default {
                 }
 
                 this.updateAllSteps();
+                this.setProposal(data)
 
-                this.$router.push('/home')
+                this.$router.push({ path: `/home/${data.id}`, params: { proposal: data.id } });
             } finally {
                 this.isLoadingHandleClick = false
             }

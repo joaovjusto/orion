@@ -20,6 +20,7 @@ import TributeData from "./Forms/TributeData.vue";
 import ImportData from "./Forms/ImportData.vue";
 import FinalStep from "./Forms/FinalStep.vue";
 import ResumeData from "./Forms/ResumeData.vue";
+import { ProposalService } from "@/services";
 
 import Cookies from "js-cookie";
 
@@ -60,6 +61,9 @@ export default {
         },
     },
     computed: {
+        ...mapActions([
+            "setProposal",
+        ]),
         ...mapGetters([
             "getLoadingState",
             "getVehicleDataFromCache",
@@ -68,7 +72,18 @@ export default {
             "getImportDataFromCache",
             // "getFinalStepFromCache",
             "getResumeDataFromCache",
+            "getProposal"
         ]),
+    },
+    beforeMount() {
+        const proposalId = this.$route.params.proposal
+        if(proposalId) {
+            const proposal = this.getProposal
+            console.log('HOME', proposal)
+            if(!proposal) {
+                this.findProposalById(proposalId)
+            }
+        }
     },
     mounted() {
         this.setLoadingState(true)
@@ -155,6 +170,12 @@ export default {
             "updateAllSteps",
             "setLoadingState"
         ]),
+        async findProposalById(id) {
+            const proposal = await new ProposalService().findById(id)
+            if (proposal) {
+                this.setProposal(proposal)
+            }
+        },
         changeStep(stepIndex) {
             this.activeIndex = stepIndex - 1;
             this.activeForm = steps[stepIndex - 1];

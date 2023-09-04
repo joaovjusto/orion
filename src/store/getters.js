@@ -75,4 +75,7 @@ export default {
       ? JSON.parse(Cookies.get("user"))
       : {};
   },
+  getProposal(state) {
+    return state.proposal;
+  },
 };

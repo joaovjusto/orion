@@ -45,4 +45,7 @@ export default {
   SET_USER(state, user) {
     state.user = user;
   },
+  SET_PROPOSAL(state, proposal) {
+    state.proposal = proposal;
+  },
 };
