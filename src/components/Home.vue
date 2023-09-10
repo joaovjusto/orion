@@ -61,9 +61,6 @@ export default {
         },
     },
     computed: {
-        ...mapActions([
-            "setProposal",
-        ]),
         ...mapGetters([
             "getLoadingState",
             "getVehicleDataFromCache",
@@ -76,13 +73,14 @@ export default {
         ]),
     },
     beforeMount() {
-        const proposalId = this.$route.params.proposal
+        const proposalId = this.$route.params.id
         if(proposalId) {
             const proposal = this.getProposal
-            console.log('HOME', proposal)
             if(!proposal) {
                 this.findProposalById(proposalId)
             }
+        } else {
+            this.setProposal({})
         }
     },
     mounted() {
@@ -168,7 +166,8 @@ export default {
             "updateFormTreeData",
             "updateCurrencyData",
             "updateAllSteps",
-            "setLoadingState"
+            "setLoadingState",
+            "setProposal"
         ]),
         async findProposalById(id) {
             const proposal = await new ProposalService().findById(id)

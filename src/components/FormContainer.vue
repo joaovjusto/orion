@@ -5,15 +5,26 @@
     </div>
     <div class="form-body">
       <slot />
-      <div class="d-flex justify-content-end w-100">
-        <el-button v-if="activeStep > 0" @click="changeStep(activeStep)" class="mr-2">Voltar</el-button>
-        <el-button v-if="activeStep < steps.length -1" @click="changeStep(activeStep + 2)" type="primary">Avançar</el-button>
-      </div>
+
+      <el-row>
+        <el-col :span="12">
+          <el-button @click="handleCancel" class="mr-2">Cancelar</el-button>
+        </el-col>
+        <el-col :span="12">
+          <div class="d-flex justify-content-end w-100">
+            <el-button v-if="activeStep > 0" @click="changeStep(activeStep)" class="mr-2">Voltar</el-button>
+            <el-button v-if="activeStep < steps.length - 1" @click="changeStep(activeStep + 2)"
+              type="primary">Avançar</el-button>
+          </div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "FormContainer",
   props: {
@@ -31,8 +42,17 @@ export default {
     },
   },
   methods: {
+    ...mapActions([
+      "updateAllSteps",
+      "setProposal"
+    ]),
     changeStep(step) {
       this.$emit("changeStep", step);
+    },
+    handleCancel() {
+      this.updateAllSteps();
+      this.setProposal({})
+      this.$router.push('/propostas')
     }
   }
 };
@@ -40,16 +60,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-    .header {
-        text-align: center;
-        padding: 10px 15px;
-        background-color: #424242;
-        color: #fff;
-        border-radius: 4px 4px 0 0;
-    }
-    .form-body {
-        border-radius: 0 0 4px 4px;
-        padding: 10px 15px;
-        background-color: #f3f3f3;
-    }
+.header {
+  text-align: center;
+  padding: 10px 15px;
+  background-color: #424242;
+  color: #fff;
+  border-radius: 4px 4px 0 0;
+}
+
+.form-body {
+  border-radius: 0 0 4px 4px;
+  padding: 10px 15px;
+  background-color: #f3f3f3;
+}
 </style>

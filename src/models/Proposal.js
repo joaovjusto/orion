@@ -16,3 +16,15 @@ export class Proposal {
         this.createdAt = new Date().toISOString()
     }
 }
+
+export class Document {
+    id
+    proposalId
+    createdAt
+
+    constructor(id, proposalId) {
+        this.id = id ? id : uuidv4()
+        this.createdAt = new Date().toISOString()
+        this.proposalId = proposalId
+    }
+}

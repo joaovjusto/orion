@@ -158,7 +158,10 @@
 
       <!-- Footer -->
       <div class="footer mt-5">
-        <img src="../assets/logo-white.png" width="200" alt="" />
+        <img src="../assets/logo-white.png" width="200" alt="" style="margin-bottom: 8px" />
+        <div id="proposal-id" style="color:gainsboro">
+          <!-- Vai ser preenchido com o ID do PDF-->
+        </div>
       </div>
     </div>
     <div class="text-center">
@@ -171,6 +174,9 @@
 <script>
 import html2pdf from "html2pdf.js";
 import { mapActions, mapGetters } from "vuex";
+import { v4 as uuidv4 } from 'uuid';
+
+import { DocumentService } from "@/services";
 
 import FileSaver from "file-saver";
 
@@ -188,6 +194,7 @@ export default {
       "getDescriptionData",
       "getVideoData",
       "getVehicleDataFromCache",
+      "getProposal"
     ]),
     getCurrencyText() {
       switch(this.getVehicleDataFromCache.currency) {
@@ -253,6 +260,12 @@ export default {
       });
       let that = this;
 
+      const id = uuidv4()
+      if (this.getProposal && this.getProposal.id){
+        //Adicionar o ID da proposta no PDF
+        document.getElementById("proposal-id").innerHTML=`Proposta: ${id}`;
+      }
+
       const elm = document.getElementById("proposal-template");
       const width = elm.offsetWidth;
       const height = elm.offsetHeight;
@@ -281,7 +294,7 @@ export default {
         .set(opt)
         .from(elm)
         .outputPdf()
-        .then(function (pdf) {
+        .then(async function (pdf) {
           var contentType = "application/pdf";
           const blob = that.b64toBlob(btoa(pdf), contentType);
 
@@ -292,6 +305,9 @@ export default {
             type: "success",
           });
 
+          console.log('id', id)
+          that.savePdf(id, blob)
+
           setTimeout(() => {
             const date = that.$options.filters.formatDate(new Date().toISOString());
             FileSaver.saveAs(blob, `Proposta ${that.getVehicleDataFromCache.product} em ${date}`);
@@ -299,6 +315,12 @@ export default {
         })
         .toPdf();
     },
+    async savePdf(id, buffer) {
+      if (this.getProposal && this.getProposal.id){
+        console.log('from savePdf', id, this.getProposal)
+        new DocumentService().save(id, buffer, this.getProposal.id)
+      }
+    }
   },
 };
 </script>

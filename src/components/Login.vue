@@ -60,7 +60,7 @@ export default {
                     .then((data) => {
                         this.setUser(data.user)
                         Cookies.set("user", JSON.stringify(data.user));
-                        this.$router.push('/home')
+                        this.$router.push('/propostas')
                     })
                     .catch((error) => {
                         console.log(error)

@@ -228,7 +228,7 @@ export default {
       this.isLoadingStorage = true;
       try {
         let proposal = this.getProposal
-        if (!proposal) {
+        if (proposal != {}) {
           proposal = new Proposal()
         }
 
@@ -257,10 +257,6 @@ export default {
       } finally {
         this.isLoadingStorage = false
       }
-        // await firestoreApp.storage("gs://orion-007.appspot.com")
-        //   .ref().child('proposals')
-        //   .child(`proposal-${document.id}`)
-        //   .put(new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21]))
     }
   },
 };

@@ -12,11 +12,6 @@ export class ProposalService {
         await firestoreApp.firestore().runTransaction(async (transaction) => {    
             const docRef = firestoreApp.firestore().collection(this.#collection).doc(proposal.id);
             transaction.set(docRef, { ...proposal })
-
-            // await firestoreApp.storage("gs://orion-007.appspot.com")
-            //   .ref().child('proposals')
-            //   .child(`proposal-${document.id}`)
-            //   .put(new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21]))
         })
     }
 

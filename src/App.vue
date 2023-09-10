@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <NavBar v-if="isAuthenticated"/>,
+    <NavBar v-if="isAuthenticated" />,
     <div class="body">
-        <transition name="slide">
-          <router-view></router-view>
-        </transition>
+      <transition name="slide">
+        <router-view></router-view>
+      </transition>
     </div>
   </div>
 </template>
@@ -18,23 +18,14 @@ export default {
   components: {
     NavBar,
   },
-  data() {
-    return {
-      isAuthenticated: false
-    }
-  },
-  beforeMount() {
-    const isAuthenticated = Object.keys(this.getUserFromCache).length > 0;
-    this.isAuthenticated = isAuthenticated
-    isAuthenticated
-  },
   computed: {
     ...mapGetters([
-        "getUserFromCache",
-      ]),
-    // isAuthenticated1() {
-      
-    // }
+      "getUserFromCache",
+    ]),
+    isAuthenticated() {
+      const isAuthenticated = Object.keys(this.getUserFromCache).length > 0;
+      return isAuthenticated
+    }
   },
 };
 </script>

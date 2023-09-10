@@ -3,12 +3,11 @@
     <div id="navbar" class="d-flex container">
       <div style="display: flex;">
         <img class="logo" src="../assets/orion-white.png" alt="">
-        <el-menu class="menu" :default-active="activeIndex" mode="horizontal" background-color="#1A1A1A" text-color="#fff"
+        <!-- <el-menu class="menu" :default-active="activeIndex" mode="horizontal" background-color="#1A1A1A" text-color="#fff"
           active-text-color="#ff5f18">
-          <!-- @select="handleSelect" -->
           <el-menu-item index="1" @click="$router.push('/home')">Início</el-menu-item>
           <el-menu-item index="2" @click="$router.push('/propostas')">Propostas</el-menu-item>
-        </el-menu>
+        </el-menu> -->
       </div>
       <el-button type="text" @click="logOut">SAIR</el-button>
     </div>
@@ -24,27 +23,27 @@ import { mapActions } from "vuex";
 
 export default {
   name: 'NavBar',
-  data() {
-    return {
-      activeIndex: "1",
-    };
-  },
-  watch:{
-    $route (){
-      const currentRoute = this.$router.currentRoute
-      console.log('currentRoute', currentRoute)
-      switch (currentRoute.name) {
-        case 'home':
-          this.activeIndex = "1"
-          break
-        case 'propostas':
-          this.activeIndex = "2"
-          break
-        default:
-          this.activeIndex = "1"
-      }
-    }
-  },
+  // data() {
+  //   return {
+  //     activeIndex: "1",
+  //   };
+  // },
+  // watch:{
+  //   $route (){
+  //     const currentRoute = this.$router.currentRoute
+  //     console.log('currentRoute', currentRoute)
+  //     switch (currentRoute.name) {
+  //       case 'home':
+  //         this.activeIndex = "1"
+  //         break
+  //       case 'propostas':
+  //         this.activeIndex = "2"
+  //         break
+  //       default:
+  //         this.activeIndex = "1"
+  //     }
+  //   }
+  // },
   methods: {
     ...mapActions(["setUser"]),
     logOut() {
