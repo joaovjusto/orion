@@ -7,35 +7,48 @@
       class="demo-vehicleForm"
     >
       <el-form-item label="Galeria de mídia">
-        <el-upload
-          action="#"
-          multiple
-          :limit="5"
-          :on-change="fileInput"
-          v-loading="loadingUpload"
-          list-type="picture-card"
-          :auto-upload="false"
-          :on-exceed="handleExceed"
-        >
-          <i slot="default">
-            <i class="el-icon-upload2"></i>
-          </i>
-          <div slot="file" slot-scope="{ file }">
-            <img
-              class="el-upload-list__item-thumbnail"
-              :src="file.url"
-              alt=""
-            />
-            <span class="el-upload-list__item-actions">
-              <span
-                class="el-upload-list__item-preview"
-                @click="handlePictureCardPreview(file)"
-              >
-                <i class="el-icon-zoom-in"></i>
+        <div v-if="getImagesCarTemplate">
+          <el-upload
+            v-if="getImagesCarTemplate.length === 0"
+            action="#"
+            multiple
+            :limit="5"
+            :on-change="fileInput"
+            v-loading="loadingUpload"
+            list-type="picture-card"
+            :auto-upload="false"
+            :on-exceed="handleExceed"
+          >
+            <i slot="default">
+              <i class="el-icon-upload2"></i>
+            </i>
+            <div slot="file" slot-scope="{ file }">
+              <img
+                class="el-upload-list__item-thumbnail"
+                :src="file.url"
+                alt=""
+              />
+              <span class="el-upload-list__item-actions">
+                <span
+                  class="el-upload-list__item-preview"
+                  @click="handlePictureCardPreview(file)"
+                >
+                  <i class="el-icon-zoom-in"></i>
+                </span>
               </span>
+            </div>
+          </el-upload>
+          <div class="d-flex display-img" v-else>
+            <span
+              v-for="(img, index) in getImagesCarTemplate"
+              @click="handlePictureCardPreview({ url: img })"
+              :key="index"
+            >
+              <img :src="img" alt="" />
+              <i class="el-icon-zoom-in"></i>
             </span>
           </div>
-        </el-upload>
+        </div>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="" />
         </el-dialog>
@@ -236,7 +249,7 @@ export default {
       editorData:
         "<p>Tesla Model 3 Performance, 2023/2023, com full auto-pilot, interior alpine white e preto, com 5 bancos, carregador rápido extra e também uma capa personalizada para ser usada em ambientes fechados.&nbsp;</p><ul><li>Motor V8 4.0 Biturbo + 3 Motores Elétricos&nbsp;</li><li>1.000 cv de Potência Combinada&nbsp;</li><li>81,5 Kgfm de Torque&nbsp;</li><li>Câmbio Automatizado de Dupla Embreagem de 8 Velocidades&nbsp;</li><li>Tração Integral&nbsp;</li><li>Aceleração de 0 a 100 km/k em 2,5 s&nbsp;</li><li>Aceleração de 0 a 200 km/h em 6,7 s&nbsp;</li><li>Velocidade Máxima de 340 km/h</li></ul>",
       editorConfig: {
-        'width': '75%',
+        width: "75%",
       },
       videoData: "",
       dialogImageUrl: "",
@@ -280,7 +293,11 @@ export default {
     this.handleCanChangeInput();
   },
   computed: {
-    ...mapGetters(["getVehicleDataFromCache", "getCurrency"]),
+    ...mapGetters([
+      "getImagesCarTemplate",
+      "getVehicleDataFromCache",
+      "getCurrency",
+    ]),
   },
   watch: {
     editorData(newValue) {
@@ -293,7 +310,11 @@ export default {
       "SET_DESCRIPTION_DATA",
       "SET_VIDEO_DATA",
     ]),
-    ...mapActions(["updateFormTreeData", "updateCurrencyData"]),
+    ...mapActions([
+      "updateFormTreeData",
+      "updateCurrencyData",
+      "updateBrowserCache",
+    ]),
     youtubeParser(url) {
       var regExp =
         /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -361,6 +382,7 @@ export default {
             .then((blob) => {
               that.toDataUrl(url).then((resp) => {
                 that.SET_IMAGES_CAR_TEMPLATE(resp);
+                localStorage.setItem("carImages", JSON.stringify({images: that.getImagesCarTemplate}));
               });
               console.log(blob, metadata, url);
               that.loadingUpload = false;
@@ -450,10 +472,45 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+.display-img {
+  span {
+    position: relative;
+    cursor: pointer;
+    img {
+      transition: 0.3s;
+      display: block;
+      max-width: 230px;
+      max-height: 135px;
+      width: auto;
+      height: auto;
+      border-radius: 4px;
+      margin-left: 15px;
+    }
+    i {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: none;
+    }
+    &:first-child {
+      img {
+        margin-left: 0;
+      }
+    }
+    &:hover {
+      img {
+        opacity: 0.3;
+      }
+      i {
+        display: block;
+      }
+    }
+  }
+}
 .el-upload-list--picture-card .el-upload-list__item {
   height: unset !important;
 }
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
   .ck.ck-editor {
     max-width: 300px;
   }

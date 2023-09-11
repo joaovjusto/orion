@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { mapActions } from "vuex";
 
 export default {
@@ -48,11 +48,11 @@ export default {
   },
   mounted() {
     // Change to last step used if has it on cache
-    const lastActiveStep = parseFloat(Cookies.get("lastActiveStep"));
+    const lastActiveStep = parseFloat(localStorage.getItem("lastActiveStep"));
     if (lastActiveStep) {
       this.setActiveStep(lastActiveStep);
     } else {
-      Cookies.set("lastActiveStep", 1);
+      localStorage.setItem("lastActiveStep", 1);
     }
   },
   methods: {

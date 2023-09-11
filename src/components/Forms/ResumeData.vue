@@ -132,6 +132,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "getImagesCarTemplate",
       "getResumeDataFromCache",
       "getVehicleDataFromCache",
       "getCurrency",
@@ -240,6 +241,7 @@ export default {
         proposal.import = this.getImportDataFromCache
         proposal.user = this.getUserFromCache.email
         proposal.resume = this.getResumeDataFromCache
+        proposal.images = this.getImagesCarTemplate
         await new ProposalService().save(proposal)
 
         this.$notify({

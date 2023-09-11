@@ -32,7 +32,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 import { mapActions } from "vuex";
 
@@ -59,7 +59,7 @@ export default {
                     .signInWithEmailAndPassword(this.user.email, this.user.password)
                     .then((data) => {
                         this.setUser(data.user)
-                        Cookies.set("user", JSON.stringify(data.user));
+                        localStorage.setItem("user", JSON.stringify(data.user));
                         this.$router.push('/propostas')
                     })
                     .catch((error) => {

@@ -22,7 +22,7 @@ import FinalStep from "./Forms/FinalStep.vue";
 import ResumeData from "./Forms/ResumeData.vue";
 import { ProposalService } from "@/services";
 
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -138,7 +138,7 @@ export default {
             });
 
         // Updating vuex with values
-        const cachesCreated = Cookies.get();
+        const cachesCreated = { ...localStorage };
         const steps = {
             vehicleData: this.getVehicleDataFromCache,
             costData: this.getCostDataFromCache,
@@ -178,7 +178,7 @@ export default {
         changeStep(stepIndex) {
             this.activeIndex = stepIndex - 1;
             this.activeForm = steps[stepIndex - 1];
-            Cookies.set("lastActiveStep", stepIndex);
+            localStorage.setItem("lastActiveStep", stepIndex);
         },
     },
 };
