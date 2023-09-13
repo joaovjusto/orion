@@ -8,9 +8,8 @@ export class DocumentService {
 
     #collection = 'documents'
 
-    async save(id, buffer, proposalId) {
-        const document = new Document(id, proposalId)
-        console.log('from document save', document)
+    async save(id, buffer, proposalId, fileName) {
+        const document = new Document(id, proposalId, fileName)
 
         const firestoreApp = firebase.app()
         await firestoreApp.firestore().runTransaction(async (transaction) => {    
@@ -23,17 +22,13 @@ export class DocumentService {
 
     async findByProposalId(id) {
         const firestoreApp = firebase.app()
-        return firestoreApp.firestore().collection(this.#collection).doc(id).get()
+        return firestoreApp.firestore().collection(this.#collection).where("proposalId", "==", id).get()
             .then(data => {
-                return data.data()
+                return data.docs.map(doc => doc.data())
             })
             .catch(error => {
                 console.error(error)
-                this.$notify({
-                    title: "Erro",
-                    message: "Ocorreu um erro ao tentar salvar a proposta",
-                    type: "error",
-                });
+                throw error
             })
     }
 

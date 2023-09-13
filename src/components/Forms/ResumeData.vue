@@ -233,7 +233,6 @@ export default {
           proposal = new Proposal()
         }
 
-        console.log(proposal)
         proposal.vehicle = this.getVehicleDataFromCache
         proposal.currency = this.getCurrency
         proposal.cost = this.getCostDataFromCache

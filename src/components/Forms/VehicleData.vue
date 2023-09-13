@@ -374,17 +374,19 @@ export default {
           var url = file.url;
           const imgData = new FormData();
           imgData.append("image", file);
+          // eslint-disable-next-line no-unused-vars
           const metadata = { contentType: file.type };
           const that = this;
           that.loadingUpload = true;
           fetch(url)
             .then((res) => res.blob())
+            // eslint-disable-next-line no-unused-vars
             .then((blob) => {
               that.toDataUrl(url).then((resp) => {
                 that.SET_IMAGES_CAR_TEMPLATE(resp);
                 localStorage.setItem("carImages", JSON.stringify({images: that.getImagesCarTemplate}));
               });
-              console.log(blob, metadata, url);
+              // console.log(blob, metadata, url);
               that.loadingUpload = false;
             });
         }

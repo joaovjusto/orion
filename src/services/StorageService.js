@@ -9,11 +9,16 @@ export class StorageService {
     #child = "proposals"
 
     async save(buffer, id) {
-        console.log('from storage save', id)
         const firestoreApp = firebase.app()
         await firestoreApp.storage(this.#bucket)
             .ref().child(this.#child)
             .child(`${id}.pdf`)
             .put(buffer)
+    }
+
+    async download(id) {
+        const firestoreApp = firebase.app()
+        return await firestoreApp.storage(this.#bucket)
+            .ref(`${this.#child}/${id}.pdf`).getDownloadURL()
     }
 }

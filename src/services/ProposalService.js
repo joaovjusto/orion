@@ -23,11 +23,7 @@ export class ProposalService {
             })
             .catch(error => {
                 console.error(error)
-                this.$notify({
-                    title: "Erro",
-                    message: "Ocorreu um erro ao tentar salvar a proposta",
-                    type: "error",
-                });
+                throw error
             })
     }
 
@@ -39,11 +35,7 @@ export class ProposalService {
             })
             .catch(error => {
                 console.error(error)
-                this.$notify({
-                    title: "Erro",
-                    message: "Ocorreu um erro ao tentar salvar a proposta",
-                    type: "error",
-                });
+                throw error
             })
     }
 

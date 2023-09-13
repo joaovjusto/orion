@@ -271,6 +271,7 @@ export default {
       const height = elm.offsetHeight;
       const date = that.$options.filters.formatDate(new Date().toISOString());
 
+      const fileName = `Proposta ${that.getVehicleDataFromCache.product} em ${date}`
       let opt = {
         pagebreak: {
           before: ".beforeClass",
@@ -280,7 +281,7 @@ export default {
         enableLinks: true,
         margin: 1,
         image: { type: "jpeg", quality: 1 },
-        filename: `Proposta ${that.getVehicleDataFromCache.product} em ${date}`,
+        filename: fileName,
         html2canvas: {
           dpi: 100,
           scale: 2,
@@ -305,8 +306,7 @@ export default {
             type: "success",
           });
 
-          console.log('id', id)
-          that.savePdf(id, blob)
+          that.savePdf(id, blob, fileName)
 
           setTimeout(() => {
             const date = that.$options.filters.formatDate(new Date().toISOString());
@@ -315,10 +315,9 @@ export default {
         })
         .toPdf();
     },
-    async savePdf(id, buffer) {
+    async savePdf(id, buffer, fileName) {
       if (this.getProposal && this.getProposal.id){
-        console.log('from savePdf', id, this.getProposal)
-        new DocumentService().save(id, buffer, this.getProposal.id)
+        new DocumentService().save(id, buffer, this.getProposal.id, fileName)
       }
     }
   },

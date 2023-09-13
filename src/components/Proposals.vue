@@ -12,11 +12,27 @@
                 </div>
             </el-col>
         </el-row>
-        <el-table :data="tableData" :default-sort="{ prop: 'date', order: 'descending' }" :stripe="true"
-            v-loading="isLoading" style="width: 100%; border-radius: 4px;">
+        <el-table :data="proposals" :default-sort="{ prop: 'date', order: 'descending' }" :stripe="true"
+            v-loading="isLoading" style="width: 100%; border-radius: 4px;" @expand-change="loadDocuments">
             <el-table-column type="expand" width="45">
                 <template slot-scope="props">
-                    Listar PDFs salvos
+                    <el-table :data="getDocuments(props.row.id)" style="width: 100%"
+                        v-loading="isLoadingDocuments(props.row.id)">
+                        <el-table-column label="Data de criação" sortable width="150">
+                            <template slot-scope="scope">
+                                {{ new Date(props.row.createdAt) | formatDate }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="id" label="id" width="288" />
+                        <el-table-column prop="name" label="Nome" />
+                        <el-table-column fixed="right" label="" width="200">
+                            <template slot-scope="scope">
+                                <el-button icon="el-icon-printer" v-loading="isLoadingDownload" size="small" circle
+                                    @click="printDocument(scope.row.id)" />
+                                <!-- <el-button icon="el-icon-download" v-loading="isLoadingDownload" type="primary" size="small" circle @click="downloadDocument(scope.row.id)" /> -->
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </template>
             </el-table-column>
             <el-table-column label="Data de criação" sortable width="150">
@@ -46,12 +62,12 @@
                     }}
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" label="">
-                <template slot="header" slot-scope="scope">
+            <el-table-column label="">
+                <!-- <template slot="header" slot-scope="scope">
                     <el-input v-model="search" size="mini" placeholder="Digite para buscar" clearable />
-                </template>
+                </template> -->
                 <template slot-scope="scope">
-                    <el-button v-loading="isLoadingHandleClick" type="primary" size="small"
+                    <el-button v-loading="isLoadingHandleClick" type="primary" size="small" i
                         @click="handleDetails(scope.row)">Detalhes</el-button>
                 </template>
             </el-table-column>
@@ -61,7 +77,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import { ProposalService } from "@/services";
+import { ProposalService, DocumentService, StorageService } from "@/services";
 
 export default {
     name: "ProposalScreen",
@@ -69,8 +85,11 @@ export default {
         return {
             isLoading: true,
             isLoadingHandleClick: false,
-            tableData: [],
-            search: ''
+            isLoadingDownload: false,
+            proposals: [],
+            documents: [],
+            search: '',
+            loadingMap: []
         }
     },
     beforeMount() {
@@ -82,11 +101,32 @@ export default {
             "updateAllSteps",
             "setProposal"
         ]),
+        isLoadingDocuments(id) {
+            const element = this.loadingMap.find(i => i.id == id)
+            if (!element) {
+                return false
+            }
+            return element.state
+        },
+        getDocuments(id) {
+            const element = this.documents.find(i => i.id == id)
+            if (!element) {
+                return []
+            }
+            return element.documents
+        },
         async getProposals() {
             this.isLoading = true;
             try {
                 const proposals = await new ProposalService().findAll()
-                this.tableData = proposals
+                this.proposals = proposals
+            } catch (error) {
+                console.error(error)
+                this.$notify({
+                    title: "Erro",
+                    message: "Ocorreu um erro ao carregar as propostas",
+                    type: "error",
+                });
             } finally {
                 this.isLoading = false
             }
@@ -115,8 +155,86 @@ export default {
                 this.setProposal(data)
 
                 this.$router.push({ path: `/propostas/${data.id}`, params: { proposal: data.id } });
+            } catch (error) {
+                console.error(error)
+                this.$notify({
+                    title: "Erro",
+                    message: "Ocorreu um erro ao carregar os detalhes",
+                    type: "error",
+                });
             } finally {
                 this.isLoadingHandleClick = false
+            }
+        },
+        async loadDocuments(row) {
+            this.setLoadingState(row.id, true)
+            try {
+                const documents = await new DocumentService().findByProposalId(row.id)
+                this.setDocumentsState(row.id, documents)
+            } catch (error) {
+                console.error(error)
+                this.$notify({
+                    title: "Erro",
+                    message: "Ocorreu um erro ao carregar os documentos",
+                    type: "error",
+                });
+            } finally {
+                this.setLoadingState(row.id, false)
+            }
+        },
+        async printDocument(id) {
+            this.isLoadingDownload = true
+            try {
+                const url = await new StorageService().download(id)
+                window.open(url)
+            } catch (error) {
+                console.error(error)
+                this.$notify({
+                    title: "Erro",
+                    message: "Ocorreu um erro ao tentar buscar documento",
+                    type: "error",
+                });
+            } finally {
+                this.isLoadingDownload = false
+            }
+        },
+
+        //Cors errors
+        // async downloadDocument(id) {
+        //     this.isLoadingDownload = true
+        //     try {
+        //         const url = await new StorageService().download(id)
+        //         const xhr = new XMLHttpRequest();
+        //         xhr.responseType = 'blob';
+        //         // eslint-disable-next-line no-unused-vars
+        //         xhr.onload = (event) => {
+        //         // eslint-disable-next-line no-unused-vars
+        //         const blob = xhr.response;
+        //         };
+        //         xhr.open('GET', url);
+        //         xhr.send();
+        //     } catch (error) {
+        //         console.error(error)
+        //     } finally {
+        //         this.isLoadingDownload = false
+        //     }
+        // },
+        setDocumentsState(id, documents) {
+            const index = this.documents.findIndex(i => i.id == id)
+
+            if (index !== -1) {
+                this.documents[index].documents = documents ?? []
+            } else {
+                this.documents.push({ id: id, documents: documents ?? [] })
+            }
+        },
+        setLoadingState(id, value) {
+            const index = this.loadingMap.findIndex(i => i.id == id)
+
+            if (index !== -1) {
+                this.loadingMap[index].state = value ?? false
+            } else {
+                this.loadingMap.push({ id: id, state: value ?? false })
             }
         }
     },
