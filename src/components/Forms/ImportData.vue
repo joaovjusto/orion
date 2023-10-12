@@ -97,7 +97,7 @@
           v-model="importForm.blLiberation"
         />
       </el-form-item>
-      <el-form-item label="Seguro" prop="assurance">
+      <!-- <el-form-item label="Seguro" prop="assurance">
         <input
           class="el-input__inner"
           v-money="money"
@@ -107,7 +107,7 @@
           id="readonly"
           v-model="importForm.assurance"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="Plataforma Até BC" prop="plataform">
         <input
           class="el-input__inner"
@@ -173,7 +173,7 @@ export default {
         docs: "",
         sda: "",
         blLiberation: "",
-        assurance: "",
+        // assurance: "",
         dispatch: "",
       },
     };
@@ -194,8 +194,10 @@ export default {
           parseFloat(StringToDouble(this.importForm.ctr)) +
           parseFloat(StringToDouble(this.importForm.docs)) +
           parseFloat(StringToDouble(this.importForm.sda)) +
-          parseFloat(StringToDouble(this.importForm.blLiberation)) +
-          parseFloat(StringToDouble(this.importForm.assurance)) +
+          parseFloat(StringToDouble(this.importForm.blLiberation)) 
+          // +
+          // parseFloat(StringToDouble(this.importForm.assurance)) 
+          +
           parseFloat(StringToDouble(this.importForm.dispatch))
         ).toFixed(2);
       },

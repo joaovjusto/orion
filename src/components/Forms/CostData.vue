@@ -26,7 +26,7 @@
           v-model="costForm.shipping"
         />
       </el-form-item>
-      <!-- <el-form-item label="Seguro" prop="insurance">
+      <el-form-item label="Seguro" prop="insurance">
         <input
           class="el-input__inner"
           v-money="money"
@@ -34,7 +34,7 @@
           placeholder="Insira"
           v-model="costForm.insurance"
         />
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="THC (Capatazia)" prop="thc">
         <input
           class="el-input__inner"
@@ -86,7 +86,7 @@ export default {
       costForm: {
         fob: "0",
         shipping: "0",
-        // insurance: "0",
+        insurance: "0",
         thc: "0",
       },
     };
@@ -101,7 +101,7 @@ export default {
         return (
           parseFloat(StringToDouble(this.costForm.fob)) +
           parseFloat(StringToDouble(this.costForm.shipping)) +
-          // parseFloat(StringToDouble(this.costForm.insurance)) +
+          parseFloat(StringToDouble(this.costForm.insurance)) +
           parseFloat(StringToDouble(this.costForm.thc))
         ).toFixed(2);
       },

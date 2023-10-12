@@ -16,13 +16,15 @@ export default (data) => {
   //   parseFloat(StringToDouble(costFormData.thc))
   // ).toFixed(2);
 
-  let { storage, afrmm, unloading, assurance, plataform } = data;
+  let { storage, afrmm, unloading, 
+    // assurance, 
+    plataform } = data;
 
   storage = handlePercentageCalc(0.60,  parseFloat(StringToDouble(costFormData.fob)));
 
   afrmm = parseFloat(handlePercentageCalc(25, StringToDouble(costFormData.shipping)));
 
-  assurance = handlePercentageCalc(0.20,  parseFloat(StringToDouble(costFormData.fob)));
+  // assurance = handlePercentageCalc(0.20,  parseFloat(StringToDouble(costFormData.fob)));
 
   plataform = handlePercentageCalc(0.25,  parseFloat(StringToDouble(costFormData.fob)));
 
@@ -40,8 +42,10 @@ export default (data) => {
     parseFloat(StringToDouble(importFormData.ctr)) +
     parseFloat(StringToDouble(importFormData.docs)) +
     parseFloat(StringToDouble(importFormData.sda)) +
-    parseFloat(StringToDouble(importFormData.blLiberation)) +
-    parseFloat(StringToDouble(importFormData.assurance)) +
+    parseFloat(StringToDouble(importFormData.blLiberation)) 
+    // +
+    // parseFloat(StringToDouble(importFormData.assurance)) 
+    +
     parseFloat(StringToDouble(importFormData.dispatch))
   ).toFixed(2);
 
@@ -62,5 +66,7 @@ export default (data) => {
     }
   }
 
-  return { ...data, storage, afrmm, unloading, assurance, plataform, ...baseDataRender, totalSum };
+  return { ...data, storage, afrmm, unloading, 
+    // assurance,
+     plataform, ...baseDataRender, totalSum };
 };

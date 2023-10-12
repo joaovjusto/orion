@@ -16,7 +16,7 @@ export default (data) => {
   let totalSum = (
     parseFloat(StringToDouble(costFormData.fob)) +
     parseFloat(StringToDouble(costFormData.shipping)) +
-    // parseFloat(StringToDouble(costFormData.insurance)) +
+    parseFloat(StringToDouble(costFormData.insurance)) +
     parseFloat(StringToDouble(costFormData.thc))
   ).toFixed(2);
 

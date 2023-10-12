@@ -118,7 +118,7 @@
         />
       </el-form-item>
     </el-form>
-    <el-form ref="tus" label-position="top" :inline="true">
+    <!-- <el-form ref="tus" label-position="top" :inline="true">
       <el-form-item label="TUS" prop="tus">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
@@ -136,7 +136,7 @@
           v-model="tributeForm.valueTus"
         />
       </el-form-item>
-    </el-form>
+    </el-form> -->
 
     <el-divider />
 
@@ -192,8 +192,8 @@ export default {
         valueCofins: "",
         icms: "0%",
         valueIcms: "",
-        tus: "",
-        valueTus: "R$ 0,00",
+        // tus: "",
+        // valueTus: "R$ 0,00",
       },
     };
   },
@@ -209,8 +209,9 @@ export default {
           parseFloat(StringToDouble(this.tributeForm.valueIpi)) +
           parseFloat(StringToDouble(this.tributeForm.valuePis)) +
           parseFloat(StringToDouble(this.tributeForm.valueCofins)) +
-          parseFloat(StringToDouble(this.tributeForm.valueIcms)) +
-          parseFloat(StringToDouble(this.tributeForm.valueTus))
+          parseFloat(StringToDouble(this.tributeForm.valueIcms)) 
+          // +
+          // parseFloat(StringToDouble(this.tributeForm.valueTus))
         ).toFixed(2);
       },
       set() {},
@@ -219,12 +220,12 @@ export default {
   methods: {
     ...mapActions(["updateFormTreeData", "updateAllSteps", "updateBrowserCache"]),
     ...mapMutations(["SET_TRIBUTE_DATA"]),
-    handleUpdateTusValue() {
-      if (this.inputChangedTimes >= 1 && this.canChangeInput) {
-        this.SET_TRIBUTE_DATA(this.tributeForm);
-        this.updateBrowserCache({ name: 'tributeData', data: this.tributeForm })
-      }
-    },
+    // handleUpdateTusValue() {
+    //   if (this.inputChangedTimes >= 1 && this.canChangeInput) {
+    //     this.SET_TRIBUTE_DATA(this.tributeForm);
+    //     this.updateBrowserCache({ name: 'tributeData', data: this.tributeForm })
+    //   }
+    // },
     handleUpdatedCalcValues() {
       const { valueIi, valueIpi, valuePis, valueCofins, valueIcms } = TributeBaseFileCalc(
         Object.assign({ ...this.tributeForm }, {})
