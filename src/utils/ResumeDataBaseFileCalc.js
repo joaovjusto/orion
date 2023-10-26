@@ -35,8 +35,10 @@ export default (data) => {
 
   const salesTax = handlePercentageCalc(
     7,
-    parseFloat(StringToDouble(costFormData.fob))
+    parseFloat(StringToDouble(vehicleFormData.fob))
   );
+
+  console.log(vehicleFormData.fob);
 
   const totalExteriorCosts = (
     parseFloat(StringToDouble(resumeDataFormData.salesTax)) +

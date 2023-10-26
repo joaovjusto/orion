@@ -8,7 +8,16 @@
       :inline="true"
       class="demo-importForm"
     >
-      <el-form-item label="Descarga no porto" prop="unloading">
+      <el-form-item label="Taxa Siscomex" prop="siscomex">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.siscomex"
+        />
+      </el-form-item>
+      <el-form-item label="Marinha Mercante" prop="marineMerchant">
         <input
           class="el-input__inner"
           v-money="money"
@@ -16,65 +25,16 @@
           readonly
           id="readonly"
           @input="inputChanged($event)"
-          v-model="importForm.unloading"
+          v-model="importForm.marineMerchant"
         />
       </el-form-item>
-      <el-form-item label="Armazenagem EADI" prop="storage">
-        <input
-          class="el-input__inner"
-          v-money="money"
-          placeholder="Insira"
-          readonly
-          id="readonly"
-          @input="inputChanged($event)"
-          v-model="importForm.storage"
-        />
-      </el-form-item>
-      <el-form-item label="AFRMM" prop="afrmm">
-        <input
-          class="el-input__inner"
-          v-money="money"
-          readonly
-          id="readonly"
-          placeholder="Insira"
-          @input="inputChanged($event)"
-          v-model="importForm.afrmm"
-        />
-      </el-form-item>
-      <!-- <el-form-item label="DTC" prop="dtc">
+      <el-form-item label="DTC/DTA remoção EADI" prop="DTC">
         <input
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
           @input="inputChanged($event)"
-          v-model="importForm.dtc"
-        />
-      </el-form-item> -->
-      <el-form-item label="Desova e devolução CTR" prop="ctr">
-        <input
-          class="el-input__inner"
-          v-money="money"
-          placeholder="Insira"
-          @input="inputChanged($event)"
-          v-model="importForm.ctr"
-        />
-      </el-form-item>
-      <el-form-item label="Despacho" prop="dispatch">
-        <input
-          class="el-input__inner"
-          v-money="money"
-          placeholder="Insira"
-          @input="inputChanged($event)"
-          v-model="importForm.dispatch"
-        />
-      </el-form-item>
-      <el-form-item label="Documentos" prop="docs">
-        <input
-          class="el-input__inner"
-          v-money="money"
-          placeholder="Insira"
-          @input="inputChanged($event)"
-          v-model="importForm.docs"
+          v-model="importForm.DTC"
         />
       </el-form-item>
       <el-form-item label="S.D.A" prop="sda">
@@ -83,32 +43,46 @@
           v-money="money"
           placeholder="Insira"
           @input="inputChanged($event)"
-          readonly
-          id="readonly"
           v-model="importForm.sda"
         />
       </el-form-item>
-      <el-form-item label="Liberação de BL" prop="blLiberation">
+      <el-form-item label="Armazenagem 1 Período" prop="storageOne">
         <input
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
           @input="inputChanged($event)"
-          v-model="importForm.blLiberation"
+          v-model="importForm.storageOne"
         />
       </el-form-item>
-      <!-- <el-form-item label="Seguro" prop="assurance">
+      <el-form-item label="Emissão de LI" prop="li">
         <input
           class="el-input__inner"
           v-money="money"
           placeholder="Insira"
           @input="inputChanged($event)"
-          readonly
-          id="readonly"
-          v-model="importForm.assurance"
+          v-model="importForm.li"
         />
-      </el-form-item> -->
-      <el-form-item label="Plataforma Até BC" prop="plataform">
+      </el-form-item>
+      <el-form-item label="Capatazia" prop="capatazia">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.capatazia"
+        />
+      </el-form-item>
+      <el-form-item label="Armazenagem Porto Seco" prop="storageSeco">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.storageSeco"
+        />
+      </el-form-item>
+      <el-form-item label="Levante Container" prop="levant">
         <input
           class="el-input__inner"
           v-money="money"
@@ -116,7 +90,54 @@
           @input="inputChanged($event)"
           readonly
           id="readonly"
-          v-model="importForm.plataform"
+          v-model="importForm.levant"
+        />
+      </el-form-item>
+      <el-form-item label="Pesagem Container" prop="containerWeight">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          readonly
+          id="readonly"
+          v-model="importForm.containerWeight"
+        />
+      </el-form-item>
+      <el-form-item label="L.I Ibama" prop="ibamaLi">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.ibamaLi"
+        />
+      </el-form-item>
+      <el-form-item label="Taxa ADM" prop="admTax">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.admTax"
+        />
+      </el-form-item>
+      <el-form-item label="Desembaraço" prop="desembaraco">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.desembaraco"
+        />
+      </el-form-item>
+      <el-form-item label="Prestação de serviço" prop="serviceCost">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          @input="inputChanged($event)"
+          v-model="importForm.serviceCost"
         />
       </el-form-item>
     </el-form>
@@ -132,7 +153,7 @@
           class="demo-importForm"
         >
           <el-form-item
-            label="TOTAL DESPESAS ADUANEIRAS"
+            label="TOTAL DESPESAS COM DESEMBARAÇO"
             class="text-left"
             prop="thc"
           >
@@ -143,6 +164,20 @@
               readonly
               id="readonly"
               v-model="total"
+            />
+          </el-form-item>
+          <el-form-item
+            label="TOTAL DOS CUSTOS DE IMPORTAÇÃO EM D.I. + TAXAS PORTUÁRIAS + TAXAS ADM."
+            class="text-left"
+            prop="totalCostImp"
+          >
+            <input
+              class="el-input__inner"
+              v-money="money"
+              @input="inputChanged($event)"
+              readonly
+              id="readonly"
+              v-model="importForm.totalCostImp"
             />
           </el-form-item>
         </el-form>
@@ -164,17 +199,21 @@ export default {
       canChangeInput: false,
       inputChangedTimes: 0,
       importForm: {
-        unloading: "",
-        storage: "",
-        afrmm: "",
-        // dtc: "",
-        plataform: "",
-        ctr: "",
-        docs: "",
+        totalCostImp: "",
+        siscomex: "",
+        marineMerchant: "",
+        DTC: "",
         sda: "",
-        blLiberation: "",
-        // assurance: "",
-        dispatch: "",
+        storageOne: "",
+        li: "",
+        capatazia: "",
+        storageSeco: "",
+        levant: "",
+        containerWeight: "",
+        ibamaLi: "",
+        admTax: "",
+        desembaraco: "",
+        serviceCost: "",
       },
     };
   },
@@ -186,19 +225,20 @@ export default {
     total: {
       get() {
         return (
-          parseFloat(StringToDouble(this.importForm.unloading)) +
-          parseFloat(StringToDouble(this.importForm.storage)) +
-          parseFloat(StringToDouble(this.importForm.afrmm)) +
-          // parseFloat(StringToDouble(this.importForm.dtc)) +
-          parseFloat(StringToDouble(this.importForm.plataform)) +
-          parseFloat(StringToDouble(this.importForm.ctr)) +
-          parseFloat(StringToDouble(this.importForm.docs)) +
+          parseFloat(StringToDouble(this.importForm.siscomex)) +
+          parseFloat(StringToDouble(this.importForm.marineMerchant)) +
+          parseFloat(StringToDouble(this.importForm.DTC)) +
           parseFloat(StringToDouble(this.importForm.sda)) +
-          parseFloat(StringToDouble(this.importForm.blLiberation)) 
-          // +
-          // parseFloat(StringToDouble(this.importForm.assurance)) 
-          +
-          parseFloat(StringToDouble(this.importForm.dispatch))
+          parseFloat(StringToDouble(this.importForm.storageOne)) +
+          parseFloat(StringToDouble(this.importForm.li)) +
+          parseFloat(StringToDouble(this.importForm.capatazia)) +
+          parseFloat(StringToDouble(this.importForm.storageSeco)) +
+          parseFloat(StringToDouble(this.importForm.levant)) +
+          parseFloat(StringToDouble(this.importForm.containerWeight)) +
+          parseFloat(StringToDouble(this.importForm.ibamaLi)) +
+          parseFloat(StringToDouble(this.importForm.admTax)) +
+          parseFloat(StringToDouble(this.importForm.desembaraco)) +
+          parseFloat(StringToDouble(this.importForm.serviceCost))
         ).toFixed(2);
       },
       set() {},

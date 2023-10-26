@@ -27,12 +27,13 @@ import { ProposalService } from "@/services";
 import { mapActions, mapGetters } from "vuex";
 
 const steps = [
+    { name: "VehicleData", title: "Dados Importação" },
     { name: "VehicleData", title: "Veículo" },
-    { name: "CostData", title: "Despesas" },
-    { name: "TributeData", title: "Tributos" },
-    { name: "ImportData", title: "Aduaneira" },
+    { name: "CostData", title: "Custos Importação" },
+    { name: "TributeData", title: "Impostos Nacionalização" },
+    { name: "ImportData", title: "Despesas Operacionais" },
     // { name: "FinalStep", title: "Finalização" },
-    { name: "ResumeData", title: "Proposta" },
+    { name: "ResumeData", title: "Resumo" },
 ];
 
 export default {

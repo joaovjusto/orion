@@ -26,6 +26,14 @@
           v-model="costForm.shipping"
         />
       </el-form-item>
+      <el-form-item label="Qtde de Containers" prop="qtdeContainers">
+        <input
+          class="el-input__inner"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="costForm.qtdeContainers"
+        />
+      </el-form-item>
       <el-form-item label="Seguro" prop="insurance">
         <input
           class="el-input__inner"
@@ -87,6 +95,7 @@ export default {
         fob: "0",
         shipping: "0",
         insurance: "0",
+        qtdeContainers: "1",
         thc: "0",
       },
     };

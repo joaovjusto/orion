@@ -26,6 +26,7 @@ export default (data) => {
       baseDataRender = {
         thc: "547,00",
         insurance: "0",
+        qtdeContainers: "1",
       };
     }
   }
