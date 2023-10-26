@@ -39,7 +39,7 @@
             </div>
           </div>
         </div>
-        <div class="url">www.visioncomex.com.br</div>
+        <div class="url">www.visioncomex.com</div>
       </div>
     </div>
   </div>
