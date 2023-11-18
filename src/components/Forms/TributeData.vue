@@ -118,6 +118,26 @@
         />
       </el-form-item>
     </el-form>
+    <strong>BASE DE CALCULO DO ICMS</strong>
+    <el-form ref="icmsBaseCalc" label-position="top" :inline="true">
+      <el-form-item label="BASE DE CALCULO DO ICMS" prop="icmsBaseCalc">
+        <el-input
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="tributeForm.icmsBaseCalc"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Valor ICMS Final" prop="valueIcmsFinal">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          placeholder="Insira"
+          readonly id="readonly"
+          v-model="tributeForm.valueIcmsFinal"
+        />
+      </el-form-item>
+    </el-form>
     <!-- <el-form ref="tus" label-position="top" :inline="true">
       <el-form-item label="TUS" prop="tus">
         <el-input
@@ -182,6 +202,8 @@ export default {
       vehicleBaseData,
       tributeForm: {
         vehicleType: "",
+        valueIcmsFinal: "",
+        icmsBaseCalc: "0%",
         ii: "0%",
         valueIi: "",
         ipi: "0%",
@@ -245,6 +267,7 @@ export default {
       }, 500);
     },
     inputChanged() {
+      console.log('dasdas');
       if (this.inputChangedTimes >= 1 && this.canChangeInput) {
         let dataToUpdate = { ...this.tributeForm };
         this.updateFormTreeData({
