@@ -11,7 +11,7 @@ export class ProposalService {
         const firestoreApp = firebase.app()
         await firestoreApp.firestore().runTransaction(async (transaction) => {    
             const docRef = firestoreApp.firestore().collection(this.#collection).doc(proposal.id);
-            transaction.set(docRef, { ...proposal })
+            transaction.set(docRef, JSON.parse(JSON.stringify(proposal)))
         })
     }
 

@@ -232,7 +232,7 @@ export default {
         if (proposal != {}) {
           proposal = new Proposal()
         }
-
+        
         proposal.vehicle = this.getVehicleDataFromCache
         proposal.currency = this.getCurrency
         proposal.cost = this.getCostDataFromCache
