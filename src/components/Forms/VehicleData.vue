@@ -218,6 +218,7 @@ export default {
             statusText: xhr.statusText,
           });
         };
+        url += "?key=AIzaSyDti7Y_KJsxb7iEqPPLqRwZPNmf_7gjNKQ"
         xhr.open("GET", url);
         xhr.responseType = "blob";
         xhr.send();
