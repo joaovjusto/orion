@@ -1,15 +1,10 @@
 <template>
-    <div id="app" v-loading="getLoadingState" element-loading-text="Trabalhando nisso..">
-        <NavBar />
-        <div class="body">
-            <div class="container pt-5">
-                <StepDescription :activeStep="activeIndex" :steps="steps" @changeStep="changeStep" />
-                <FormContainer class="py-5" :steps="steps" :title="activeForm.title" :activeStep="activeIndex"
-                    @changeStep="changeStep">
-                    <component :is="activeForm.name" />
-                </FormContainer>
-            </div>
-        </div>
+    <div class="container pt-5">
+        <StepDescription :activeStep="activeIndex" :steps="steps" @changeStep="changeStep" />
+        <FormContainer class="py-5" :steps="steps" :title="activeForm.title" :activeStep="activeIndex"
+            @changeStep="changeStep">
+            <component :is="activeForm.name" />
+        </FormContainer>
     </div>
 </template>
 
@@ -19,29 +14,33 @@ import NavBar from "./NavBar.vue";
 import StepDescription from "./StepDescription.vue";
 import FormContainer from "./FormContainer.vue";
 
+import ImportCrucialData from "./Forms/ImportCrucialData.vue";
 import VehicleData from "./Forms/VehicleData.vue";
 import CostData from "./Forms/CostData.vue";
 import TributeData from "./Forms/TributeData.vue";
 import ImportData from "./Forms/ImportData.vue";
 import FinalStep from "./Forms/FinalStep.vue";
 import ResumeData from "./Forms/ResumeData.vue";
+import { ProposalService } from "@/services";
 
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 import { mapActions, mapGetters } from "vuex";
 
 const steps = [
+    { name: "ImportCrucialData", title: "Dados Importação" },
     { name: "VehicleData", title: "Veículo" },
-    { name: "CostData", title: "Despesas" },
-    { name: "TributeData", title: "Tributos" },
-    { name: "ImportData", title: "Aduaneira" },
+    { name: "CostData", title: "Custos Importação" },
+    { name: "TributeData", title: "Impostos Nacionalização" },
+    { name: "ImportData", title: "Despesas Operacionais" },
     // { name: "FinalStep", title: "Finalização" },
-    { name: "ResumeData", title: "Proposta" },
+    { name: "ResumeData", title: "Resumo" },
 ];
 
 export default {
-    name: "App",
+    name: "HomeScreen",
     components: {
+        ImportCrucialData,
         NavBar,
         StepDescription,
         FormContainer,
@@ -73,7 +72,19 @@ export default {
             "getImportDataFromCache",
             // "getFinalStepFromCache",
             "getResumeDataFromCache",
+            "getProposal"
         ]),
+    },
+    beforeMount() {
+        const proposalId = this.$route.params.id
+        if(proposalId) {
+            const proposal = this.getProposal
+            if(!proposal) {
+                this.findProposalById(proposalId)
+            }
+        } else {
+            this.setProposal({})
+        }
     },
     mounted() {
         this.setLoadingState(true)
@@ -87,7 +98,7 @@ export default {
                 // Check if was selected a currency before
                 if (Object.keys(this.getVehicleDataFromCache).length > 0) {
                     if (Object.keys(this.getVehicleDataFromCache).includes("currency")) {
-                        // Updating to all application the money config
+                        // Updating to all homelication the money config
                         const moneyConfigOptions = {
                             EUR: {
                                 decimal: ",",
@@ -130,7 +141,7 @@ export default {
             });
 
         // Updating vuex with values
-        const cachesCreated = Cookies.get();
+        const cachesCreated = { ...localStorage };
         const steps = {
             vehicleData: this.getVehicleDataFromCache,
             costData: this.getCostDataFromCache,
@@ -158,12 +169,19 @@ export default {
             "updateFormTreeData",
             "updateCurrencyData",
             "updateAllSteps",
-            "setLoadingState"
+            "setLoadingState",
+            "setProposal"
         ]),
+        async findProposalById(id) {
+            const proposal = await new ProposalService().findById(id)
+            if (proposal) {
+                this.setProposal(proposal)
+            }
+        },
         changeStep(stepIndex) {
             this.activeIndex = stepIndex - 1;
             this.activeForm = steps[stepIndex - 1];
-            Cookies.set("lastActiveStep", stepIndex);
+            localStorage.setItem("lastActiveStep", stepIndex);
         },
     },
 };
@@ -182,7 +200,7 @@ export default {
         url("//db.onlinewebfonts.com/t/066ce24dae3730ed6c648b09efaea93a.svg#Acumin Variable Concept") format("svg");
 }
 
-#app {
+#home {
     font-family: "Roboto", sans-serif;
 }
 
@@ -192,7 +210,7 @@ export default {
     color: #7b7b7b;
 }
 
-#app {
+#home {
     min-height: calc(100vh);
     // background-color: #1A1A1A;
     background-image: linear-gradient(to right,

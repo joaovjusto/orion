@@ -1,4 +1,4 @@
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 export default {
   updateCurrencyData({ commit }, currency) {
@@ -6,7 +6,7 @@ export default {
   },
   updateBrowserCache(_, cache) {
     if (cache.name && cache.data) {
-      Cookies.set(cache.name, JSON.stringify(cache.data), { expires: 1 });
+      localStorage.setItem(cache.name, JSON.stringify(cache.data), { expires: 1 });
     }
   },
   updateFormTreeData({ commit, dispatch }, { data, stepName }) {
@@ -36,11 +36,14 @@ export default {
     // commit("SET_FINAL_STEP", getters.getFinalStepFromCache);
     commit("SET_RESUME_DATA", getters.getResumeDataFromCache);
   },
-  setLoadingState({ commit }, loading) { 
+  setLoadingState({ commit }, loading) {
     commit("SET_LOADING", loading);
   },
-  setUser({ commit }, user) { 
+  setUser({ commit }, user) {
     commit("SET_USER", user);
-    Cookies.set("user", JSON.stringify(user), { expires: 1 });
-  }
+    localStorage.setItem("user", JSON.stringify(user), { expires: 1 });
+  },
+  setProposal({ commit }, proposal) {
+    commit("SET_PROPOSAL", proposal);
+  },
 };

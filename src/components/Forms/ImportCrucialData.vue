@@ -8,82 +8,155 @@
       :inline="true"
       class="demo-vehicleForm"
     >
-    <el-form-item label="Veículo" prop="product">
-        <el-input
+      <el-form-item label="Moeda" prop="currency">
+        <el-select
+          @change="updateLocalCurrencyData()"
+          v-model="vehicleForm.currency"
+          placeholder="Selecione"
+        >
+          <el-option
+            v-for="(item, i) in currencyOptions"
+            :key="i"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Modificador" prop="modifier">
+        <input
+          class="el-input__inner"
+          v-money="money"
+          @keydown="handleModifierChange($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.modifier"
+        />
+      </el-form-item>
+      <el-form-item label="Taxa Fiscal" prop="currencyTax">
+        <input
+          class="el-input__inner"
+          v-money="money"
           @input="inputChanged($event)"
-          placeholder="Insira o nome"
-          v-model="vehicleForm.product"
-        ></el-input>
+          placeholder="Insira"
+          v-model="vehicleForm.currencyTax"
+        />
       </el-form-item>
     </el-form>
     <el-form
+      :model="vehicleForm"
       label-position="top"
+      ref="vehicleForm"
       label-width="120px"
       :inline="true"
       class="demo-vehicleForm"
     >
-      <el-form-item label="Galeria de mídia">
-        <div v-if="getImagesCarTemplate">
-          <el-upload
-            v-if="getImagesCarTemplate.length === 0"
-            action="#"
-            multiple
-            :limit="5"
-            :on-change="fileInput"
-            v-loading="loadingUpload"
-            list-type="picture-card"
-            :auto-upload="false"
-            :on-exceed="handleExceed"
-          >
-            <i slot="default">
-              <i class="el-icon-upload2"></i>
-            </i>
-            <div slot="file" slot-scope="{ file }">
-              <img
-                class="el-upload-list__item-thumbnail"
-                :src="file.url"
-                alt=""
-              />
-              <span class="el-upload-list__item-actions">
-                <span
-                  class="el-upload-list__item-preview"
-                  @click="handlePictureCardPreview(file)"
-                >
-                  <i class="el-icon-zoom-in"></i>
-                </span>
-              </span>
-            </div>
-          </el-upload>
-          <div class="d-flex display-img" v-else>
-            <span
-              v-for="(img, index) in getImagesCarTemplate"
-              @click="handlePictureCardPreview({ url: img })"
-              :key="index"
-            >
-              <img :src="img" alt="" />
-              <i class="el-icon-zoom-in"></i>
-            </span>
-          </div>
-        </div>
-        <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="dialogImageUrl" alt="" />
-        </el-dialog>
+      <el-form-item label="Importador" prop="importer">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.importer"
+        ></el-input>
       </el-form-item>
-      <el-form-item class="w-100" label="Url Video">
+      <el-form-item label="Faturamento" prop="billing">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.billing"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Data" prop="date">
+        <el-date-picker
+          format="dd/MM/yyyy"
+          v-model="vehicleForm.date"
+          type="date"
+          @input="inputChanged($event)"
+          placeholder="Selecione uma data"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="Modal" prop="modal">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.modal"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Tipo de Carga" prop="cargoType">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.cargoType"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Adquirente" prop="purchaser">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.purchaser"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="FOB" prop="fob">
         <input
-          style="width: 50%"
-          class="el-input__inner w-100"
-          @keydown="updateVideoData($event)"
-          v-model="videoData"
-          placeholder="https://youtube/mmdsKJdsn"
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @blur="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.fob"
         />
       </el-form-item>
-      <el-form-item label="Descrição Veículo">
-        <ckeditor
-          :editor="editor"
-          v-model="editorData"
-          :config="editorConfig"
-        ></ckeditor>
+      <el-form-item label="Frete" prop="shipping">
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @blur="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.shipping"
+        />
+      </el-form-item>
+      <el-form-item label="Produto" prop="product">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.product"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Qtde. CNTR" prop="cntr">
+        <el-input
+          type="number"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.cntr"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Origem" prop="origin">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.origin"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Destino" prop="destination">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.destination"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="ICMS Destino" prop="icmsDestination">
+        <el-input
+          @input="inputChanged($event)"
+          v-mask="['#%', '##%', '###%']"
+          placeholder="Insira"
+          v-model="vehicleForm.icmsDestination"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="NCM" prop="ncm">
+        <el-input
+          type="number"
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-model="vehicleForm.ncm"
+        ></el-input>
       </el-form-item>
     </el-form>
   </div>

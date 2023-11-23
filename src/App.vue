@@ -1,15 +1,32 @@
 <template>
   <div id="app">
-    <transition name="slide">
-      <router-view></router-view>
-    </transition>
+    <NavBar v-if="isAuthenticated" />,
+    <div class="body">
+      <transition name="slide">
+        <router-view></router-view>
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
+import NavBar from "@/components/NavBar.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
+  components: {
+    NavBar,
+  },
+  computed: {
+    ...mapGetters([
+      "getUserFromCache",
+    ]),
+    isAuthenticated() {
+      const isAuthenticated = Object.keys(this.getUserFromCache).length > 0;
+      return isAuthenticated
+    }
+  },
 };
 </script>
 

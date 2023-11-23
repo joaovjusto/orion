@@ -1,12 +1,30 @@
 <template>
   <div>
-    <el-form
-      label-position="top"
-      label-width="120px"
-      :inline="true"
-      ref="resumeForm"
-      class="demo-resumeForm"
+    <strong
+      >Despesas com a VISION COMEX que não incidem na NF da CAPITAL
+      TRADE</strong
     >
+    <hr />
+    <el-form label-position="top" label-width="120px" :inline="true">
+      <el-form-item label="Dólar Paralelo" prop="parallelCurrency">
+        <input
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          v-model="resumeForm.parallelCurrency"
+        />
+      </el-form-item>
+      <hr />
+      <el-form-item label="Modificador Sales Tax" prop="salesTaxModifier">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          v-model="resumeForm.salesTaxModifier"
+        ></el-input>
+      </el-form-item>
       <el-form-item label="Sales Tax ou IVA" prop="salesTax">
         <input
           class="el-input__inner"
@@ -16,6 +34,7 @@
           v-model="resumeForm.salesTax"
         />
       </el-form-item>
+      <hr />
       <el-form-item
         label="Comissão AG compras exterior"
         prop="exteriorComission"
@@ -37,6 +56,19 @@
           @keydown="inputChanged($event)"
           @keyup="inputChanged($event)"
           v-model="resumeForm.carCollect"
+        />
+      </el-form-item>
+      <el-form-item
+        label="Acessórios por fora + taxa do Dealer:"
+        prop="acessoryDealer"
+      >
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.acessoryDealer"
         />
       </el-form-item>
       <el-form-item label="Ágio sobre o preço de site" prop="agio">
@@ -126,6 +158,21 @@
           v-model="resumeForm.totalCostReais"
         />
       </el-form-item>
+      <hr />
+      <el-form-item
+        label="Percentagem VISION COMEX"
+        prop="visionLeadValuePercent"
+      >
+        <input
+          class="el-input__inner"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          placeholder="Insira"
+          v-model="resumeForm.visionLeadValuePercent"
+        />
+      </el-form-item>
       <el-form-item label="Gestão completa VISION COMEX" prop="visionLeadValue">
         <input
           class="el-input__inner"
@@ -135,6 +182,7 @@
           v-model="resumeForm.visionLeadValue"
         />
       </el-form-item>
+      <hr />
       <el-form-item label="Custo Total da importação" prop="totalImportCost">
         <input
           class="el-input__inner"
@@ -181,7 +229,8 @@
         <el-button
           type="secondary"
           class="mt-2 mb-2"
-          v-loading="isLoadingDownloadImage"
+          v-loading="isLoadingStorage"
+          @click="saveOrder"
           >Salvar Proposta em banco</el-button
         >
         <el-button
@@ -210,6 +259,8 @@ import html2canvas from "html2canvas";
 import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
 import ProposalTemplate from "@/components/ProposalTemplate.vue";
 import VehicleResumeTemplate from "@/components/VehicleResumeTemplate.vue";
+import { Proposal } from "@/models";
+import { ProposalService } from "@/services";
 
 export default {
   name: "ResumeData",
@@ -224,6 +275,10 @@ export default {
       canChangeInput: false,
       inputChangedTimes: 0,
       resumeForm: {
+        acessoryDealer: "0,00",
+        parallelCurrency: "0,00",
+        salesTaxModifier: "0%",
+        visionLeadValuePercent: "0%",
         salesTax: "0,00",
         exteriorComission: "0,00",
         carCollect: "0,00",
@@ -241,6 +296,7 @@ export default {
         finalValue: "0,00",
       },
       isLoadingDownloadImage: false,
+      isLoadingStorage: false,
     };
   },
   mounted() {
@@ -251,9 +307,15 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "getImagesCarTemplate",
       "getResumeDataFromCache",
       "getVehicleDataFromCache",
       "getCurrency",
+      "getCostDataFromCache",
+      "getTributeDataFromCache",
+      "getImportDataFromCache",
+      "getUserFromCache",
+      "getProposal",
     ]),
   },
   methods: {
@@ -337,6 +399,40 @@ export default {
           this.isLoadingDownloadImage = false;
           this.setLoadingState(false);
         });
+    },
+    async saveOrder() {
+      this.isLoadingStorage = true;
+      try {
+        let proposal = this.getProposal;
+        if (proposal != {}) {
+          proposal = new Proposal();
+        }
+
+        proposal.vehicle = this.getVehicleDataFromCache;
+        proposal.currency = this.getCurrency;
+        proposal.cost = this.getCostDataFromCache;
+        proposal.tribute = this.getTributeDataFromCache;
+        proposal.import = this.getImportDataFromCache;
+        proposal.user = this.getUserFromCache.email;
+        proposal.resume = this.getResumeDataFromCache;
+        proposal.images = this.getImagesCarTemplate;
+        await new ProposalService().save(proposal);
+
+        this.$notify({
+          title: "Sucesso",
+          message: "Proposta salva com sucesso",
+          type: "success",
+        });
+      } catch (error) {
+        console.error(error);
+        this.$notify({
+          title: "Erro",
+          message: "Ocorreu um erro ao tentar salvar a proposta",
+          type: "error",
+        });
+      } finally {
+        this.isLoadingStorage = false;
+      }
     },
   },
 };

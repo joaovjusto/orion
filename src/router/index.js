@@ -24,7 +24,21 @@ const routes = [
     path: '/home',
     name: 'home',
     component: () => import('../components/Home.vue'),
-    meta: { requiresLogin: true }
+    meta: { requiresLogin: true }, 
+    children: [
+      {
+          path: '/propostas/:id',
+          name: "proposta",
+          component: () => import('../components/Home.vue'),
+          meta: { requiresLogin: true }
+      }
+    ] 
+  },
+  {
+    path: '/propostas',
+    name: 'propostas',
+    component: () => import('../components/Proposals.vue'),
+    meta: { requiresLogin: true },
   }
 ]
 
