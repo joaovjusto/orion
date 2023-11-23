@@ -1,66 +1,222 @@
 <template>
   <div>
-    <el-form label-position="top" label-width="120px" :inline="true" ref="resumeForm" class="demo-resumeForm">
-      <el-form-item label="Sales Tax ou IVA" prop="salesTax">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" id="readonly" readonly
-          v-model="resumeForm.salesTax" />
+    <strong
+      >Despesas com a VISION COMEX que não incidem na NF da CAPITAL
+      TRADE</strong
+    >
+    <hr />
+    <el-form label-position="top" label-width="120px" :inline="true">
+      <el-form-item label="Dólar Paralelo" prop="parallelCurrency">
+        <input
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          v-model="resumeForm.parallelCurrency"
+        />
       </el-form-item>
-      <el-form-item label="Comissão AG compras exterior" prop="exteriorComission">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" @input.once="inputChanged($event)"
-          @keydown="inputChanged($event)" @keyup="inputChanged($event)" v-model="resumeForm.exteriorComission" />
+      <hr />
+      <el-form-item label="Modificador Sales Tax" prop="salesTaxModifier">
+        <el-input
+          @input="inputChanged($event)"
+          placeholder="Insira"
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          v-model="resumeForm.salesTaxModifier"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="Sales Tax ou IVA" prop="salesTax">
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          id="readonly"
+          readonly
+          v-model="resumeForm.salesTax"
+        />
+      </el-form-item>
+      <hr />
+      <el-form-item
+        label="Comissão AG compras exterior"
+        prop="exteriorComission"
+      >
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.exteriorComission"
+        />
       </el-form-item>
       <el-form-item label="Coleta do carro no exterior" prop="carCollect">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" @input.once="inputChanged($event)"
-          @keydown="inputChanged($event)" @keyup="inputChanged($event)" v-model="resumeForm.carCollect" />
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.carCollect"
+        />
+      </el-form-item>
+      <el-form-item
+        label="Acessórios por fora + taxa do Dealer:"
+        prop="acessoryDealer"
+      >
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.acessoryDealer"
+        />
       </el-form-item>
       <el-form-item label="Ágio sobre o preço de site" prop="agio">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" @input.once="inputChanged($event)"
-          @keydown="inputChanged($event)" @keyup="inputChanged($event)" v-model="resumeForm.agio" />
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.agio"
+        />
       </el-form-item>
-      <el-form-item label="Validação na alfândega no exterior" prop="alfandegaryValidation">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" @input.once="inputChanged($event)"
-          @keydown="inputChanged($event)" @keyup="inputChanged($event)" v-model="resumeForm.alfandegaryValidation" />
+      <el-form-item
+        label="Validação na alfândega no exterior"
+        prop="alfandegaryValidation"
+      >
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.alfandegaryValidation"
+        />
       </el-form-item>
       <el-form-item label="Aluguel do Container" prop="containerRentValue">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" @input.once="inputChanged($event)"
-          @keydown="inputChanged($event)" @keyup="inputChanged($event)" v-model="resumeForm.containerRentValue" />
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.containerRentValue"
+        />
       </el-form-item>
       <el-form-item label="Estufagem do Container" prop="stuffing">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" @input.once="inputChanged($event)"
-          @keydown="inputChanged($event)" @keyup="inputChanged($event)" v-model="resumeForm.stuffing" />
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.stuffing"
+        />
       </el-form-item>
       <el-form-item label="Frete Exterior (Porto)" prop="shippingFee">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" @input.once="inputChanged($event)"
-          @keydown="inputChanged($event)" @keyup="inputChanged($event)" v-model="resumeForm.shippingFee" />
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.shippingFee"
+        />
       </el-form-item>
       <el-form-item label="Homologações" prop="homologation">
-        <input class="el-input__inner" v-money="getCurrency.moneyConfig" @input.once="inputChanged($event)"
-          @keydown="inputChanged($event)" @keyup="inputChanged($event)" v-model="resumeForm.homologation" />
+        <input
+          class="el-input__inner"
+          v-money="getCurrency.moneyConfig"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-model="resumeForm.homologation"
+        />
       </el-form-item>
 
       <el-divider />
 
-      <el-form-item label="Total de despesas no exterior" prop="totalExteriorCosts">
-        <input class="el-input__inner" id="readonly" readonly v-money="getCurrency.moneyConfig"
-          v-model="resumeForm.totalExteriorCosts" />
+      <el-form-item
+        label="Total de despesas no exterior"
+        prop="totalExteriorCosts"
+      >
+        <input
+          class="el-input__inner"
+          id="readonly"
+          readonly
+          v-money="getCurrency.moneyConfig"
+          v-model="resumeForm.totalExteriorCosts"
+        />
       </el-form-item>
       <el-form-item label="Total em reais" prop="totalCostReais">
-        <input class="el-input__inner" id="readonly" readonly v-money="money" v-model="resumeForm.totalCostReais" />
+        <input
+          class="el-input__inner"
+          id="readonly"
+          readonly
+          v-money="money"
+          v-model="resumeForm.totalCostReais"
+        />
+      </el-form-item>
+      <hr />
+      <el-form-item
+        label="Percentagem VISION COMEX"
+        prop="visionLeadValuePercent"
+      >
+        <input
+          class="el-input__inner"
+          @input.once="inputChanged($event)"
+          @keydown="inputChanged($event)"
+          @keyup="inputChanged($event)"
+          v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
+          placeholder="Insira"
+          v-model="resumeForm.visionLeadValuePercent"
+        />
       </el-form-item>
       <el-form-item label="Gestão completa VISION COMEX" prop="visionLeadValue">
-        <input class="el-input__inner" id="readonly" readonly v-money="money" v-model="resumeForm.visionLeadValue" />
+        <input
+          class="el-input__inner"
+          id="readonly"
+          readonly
+          v-money="money"
+          v-model="resumeForm.visionLeadValue"
+        />
       </el-form-item>
+      <hr />
       <el-form-item label="Custo Total da importação" prop="totalImportCost">
-        <input class="el-input__inner" id="readonly" readonly v-money="money" v-model="resumeForm.totalImportCost" />
+        <input
+          class="el-input__inner"
+          id="readonly"
+          readonly
+          v-money="money"
+          v-model="resumeForm.totalImportCost"
+        />
       </el-form-item>
       <el-form-item label="Recuperação do IVA" prop="iva">
-        <input class="el-input__inner" id="readonly" readonly v-money="money" v-model="resumeForm.iva" />
+        <input
+          class="el-input__inner"
+          id="readonly"
+          readonly
+          v-money="money"
+          v-model="resumeForm.iva"
+        />
       </el-form-item>
       <el-form-item label="Saldo Final" prop="finalValue">
-        <input class="el-input__inner" id="readonly" readonly v-money="money" v-model="resumeForm.finalValue" />
+        <input
+          class="el-input__inner"
+          id="readonly"
+          readonly
+          v-money="money"
+          v-model="resumeForm.finalValue"
+        />
       </el-form-item>
     </el-form>
-    <el-dialog title="Template Proposta" :visible.sync="centerDialogVisible" width="100%" top>
+    <el-dialog
+      title="Template Proposta"
+      :visible.sync="centerDialogVisible"
+      width="100%"
+      top
+    >
       <ProposalTemplate @finishPDF="centerDialogVisible = false" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">Cancelar</el-button>
@@ -70,11 +226,26 @@
     <el-divider />
     <div class="row">
       <div class="col-12 text-right">
-        <el-button type="secondary" class="mt-2 mb-2" v-loading="isLoadingStorage" @click="saveOrder">Salvar Proposta em
-          banco</el-button>
-        <el-button type="primary" class="mt-2 mb-2" @click="centerDialogVisible = true">Visualizar PROPOSTA</el-button>
-        <el-button type="primary" class="mt-2 mb-2" @click="printResume" v-loading="isLoadingDownloadImage">Gerar
-          RESUMO</el-button>
+        <el-button
+          type="secondary"
+          class="mt-2 mb-2"
+          v-loading="isLoadingStorage"
+          @click="saveOrder"
+          >Salvar Proposta em banco</el-button
+        >
+        <el-button
+          type="primary"
+          class="mt-2 mb-2"
+          @click="centerDialogVisible = true"
+          >Visualizar PROPOSTA</el-button
+        >
+        <el-button
+          type="primary"
+          class="mt-2 mb-2"
+          @click="printResume"
+          v-loading="isLoadingDownloadImage"
+          >Gerar RESUMO</el-button
+        >
       </div>
     </div>
   </div>
@@ -104,6 +275,10 @@ export default {
       canChangeInput: false,
       inputChangedTimes: 0,
       resumeForm: {
+        acessoryDealer: "0,00",
+        parallelCurrency: "0,00",
+        salesTaxModifier: "0%",
+        visionLeadValuePercent: "0%",
         salesTax: "0,00",
         exteriorComission: "0,00",
         carCollect: "0,00",
@@ -140,7 +315,7 @@ export default {
       "getTributeDataFromCache",
       "getImportDataFromCache",
       "getUserFromCache",
-      "getProposal"
+      "getProposal",
     ]),
   },
   methods: {
@@ -228,20 +403,20 @@ export default {
     async saveOrder() {
       this.isLoadingStorage = true;
       try {
-        let proposal = this.getProposal
+        let proposal = this.getProposal;
         if (proposal != {}) {
-          proposal = new Proposal()
+          proposal = new Proposal();
         }
-        
-        proposal.vehicle = this.getVehicleDataFromCache
-        proposal.currency = this.getCurrency
-        proposal.cost = this.getCostDataFromCache
-        proposal.tribute = this.getTributeDataFromCache
-        proposal.import = this.getImportDataFromCache
-        proposal.user = this.getUserFromCache.email
-        proposal.resume = this.getResumeDataFromCache
-        proposal.images = this.getImagesCarTemplate
-        await new ProposalService().save(proposal)
+
+        proposal.vehicle = this.getVehicleDataFromCache;
+        proposal.currency = this.getCurrency;
+        proposal.cost = this.getCostDataFromCache;
+        proposal.tribute = this.getTributeDataFromCache;
+        proposal.import = this.getImportDataFromCache;
+        proposal.user = this.getUserFromCache.email;
+        proposal.resume = this.getResumeDataFromCache;
+        proposal.images = this.getImagesCarTemplate;
+        await new ProposalService().save(proposal);
 
         this.$notify({
           title: "Sucesso",
@@ -249,16 +424,16 @@ export default {
           type: "success",
         });
       } catch (error) {
-        console.error(error)
+        console.error(error);
         this.$notify({
           title: "Erro",
           message: "Ocorreu um erro ao tentar salvar a proposta",
           type: "error",
         });
       } finally {
-        this.isLoadingStorage = false
+        this.isLoadingStorage = false;
       }
-    }
+    },
   },
 };
 </script>

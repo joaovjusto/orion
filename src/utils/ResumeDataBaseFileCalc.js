@@ -21,9 +21,13 @@ export default (data) => {
   if (!stepRendered) {
     if (!Object.keys(resumeDataFormData).includes("alfandegaryValidation")) {
       baseDataRender = {
+        parallelCurrency: "5,05",
+        visionLeadValuePercent: "9%",
+        salesTaxModifier: "7%",
         exteriorComission: "2500,00",
         carCollect: "1500,00",
         agio: "0,00",
+        acessoryDealer: "25000,00",
         alfandegaryValidation: "500,00",
         containerRentValue: "1000,00",
         stuffing: "350,00",
@@ -33,12 +37,20 @@ export default (data) => {
     }
   }
 
-  const salesTax = handlePercentageCalc(
-    7,
-    parseFloat(StringToDouble(vehicleFormData.fob))
-  );
+  let salesTax = 0
 
-  console.log(vehicleFormData.fob);
+  if (resumeDataFormData.salesTaxModifier) {
+    console.log('teste');
+    console.log(resumeDataFormData);
+    console.log(resumeDataFormData.salesTaxModifier);
+    console.log(resumeDataFormData.salesTaxModifier.replace("%", ""));
+  
+    salesTax = handlePercentageCalc(
+      parseFloat(resumeDataFormData.salesTaxModifier.replace("%", "")),
+      parseFloat(StringToDouble(vehicleFormData.fob))
+    );
+  }
+
 
   const totalExteriorCosts = (
     parseFloat(StringToDouble(resumeDataFormData.salesTax)) +
@@ -49,7 +61,8 @@ export default (data) => {
     parseFloat(StringToDouble(resumeDataFormData.containerRentValue)) +
     parseFloat(StringToDouble(resumeDataFormData.stuffing)) +
     parseFloat(StringToDouble(resumeDataFormData.shippingFee)) +
-    parseFloat(StringToDouble(resumeDataFormData.homologation))
+    parseFloat(StringToDouble(resumeDataFormData.homologation)) +
+    parseFloat(StringToDouble(resumeDataFormData.acessoryDealer))
   ).toFixed(2);
 
   let totalCotation = 0;
@@ -68,7 +81,14 @@ export default (data) => {
     parseFloat(costFormData.totalSum)
   ).toFixed(2);
 
-  let visionLeadValue = handlePercentageCalc(11, totalSum);
+  let visionLeadValue = 0
+
+  if (resumeDataFormData.visionLeadValuePercent) {
+    console.log(resumeDataFormData.visionLeadValuePercent);
+  
+    visionLeadValue = handlePercentageCalc(parseFloat(resumeDataFormData.visionLeadValuePercent.replace("%", "")), totalSum);
+  }
+
 
   let totalImportCost = (
     parseFloat(totalSum) +
