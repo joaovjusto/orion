@@ -12,8 +12,14 @@
                 </div>
             </el-col>
         </el-row>
-        <el-table :data="proposals" :default-sort="{ prop: 'date', order: 'descending' }" :stripe="true"
-            v-loading="isLoading" style="width: 100%; border-radius: 4px;" @expand-change="loadDocuments">
+        <el-table
+            :data="proposals"
+            :default-sort="{ prop: 'date', order: 'descending' }"
+            :stripe="true"
+            v-loading="isLoading"
+            style="width: 100%; border-radius: 4px;"
+            @expand-change="loadDocuments"
+        >
             <el-table-column type="expand" width="45">
                 <template slot-scope="props">
                     <el-table :data="getDocuments(props.row.id)" style="width: 100%"
@@ -47,7 +53,7 @@
             </el-table-column>
             <el-table-column prop="id" label="Proposta">
             </el-table-column>
-            <el-table-column prop="name" label="Nome">
+            <el-table-column prop="user" label="Usuário">
             </el-table-column>
             <el-table-column label="Carro">
                 <template slot-scope="scope">
@@ -76,7 +82,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { ProposalService, DocumentService, StorageService } from "@/services";
 
 export default {
@@ -94,6 +100,11 @@ export default {
     },
     beforeMount() {
         this.getProposals()
+    },
+    computed: {
+        ...mapGetters([
+            "getUserFromCache",
+        ]),
     },
     methods: {
         ...mapActions([
@@ -118,7 +129,9 @@ export default {
         async getProposals() {
             this.isLoading = true;
             try {
-                const proposals = await new ProposalService().findAll()
+                const user = this.getUserFromCache;
+                const email = user && "daniel@visioncomex.com" !== user.email ? user.email : undefined;
+                const proposals = await new ProposalService().findAllByUser(email)
                 this.proposals = proposals
             } catch (error) {
                 console.error(error)

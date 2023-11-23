@@ -27,9 +27,16 @@ export class ProposalService {
             })
     }
 
-    async findAll() {
+    async findAllByUser(userEmail) {
         const firestoreApp = firebase.app()
-        return firestoreApp.firestore().collection(this.#collection).get()
+
+        let collection = firestoreApp.firestore().collection(this.#collection)
+        
+        if(userEmail) {
+            collection = collection.where('user', "==", userEmail)
+        }
+
+        return collection.get()
             .then(data => {
                 return data.docs.map(doc => doc.data())
             })

@@ -39,19 +39,19 @@ export default (data) => {
 
   if (Object.keys(tributeFormData).length > 0) {
     valueIi = handlePercentageCalc(
-      tributeFormData.ii.replace("%", ""),
+      tributeFormData.ii?.replace("%", ""),
       totalCostData
     );
     valueIpi = handlePercentageCalc(
-      tributeFormData.ipi.replace("%", ""),
+      tributeFormData.ipi?.replace("%", ""),
       parseFloat(totalCostData) + parseFloat(valueIi)
     );
     valuePis = handlePercentageCalc(
-      tributeFormData.pis.replace("%", ""),
+      tributeFormData.pis?.replace("%", ""),
       totalCostData
     );
     valueCofins = handlePercentageCalc(
-      tributeFormData.cofins.replace("%", ""),
+      tributeFormData.cofins?.replace("%", ""),
       totalCostData
     );
   }
@@ -81,7 +81,7 @@ export default (data) => {
   console.log(parseFloat(tributeFormData.icmsBaseCalc) / 100);
 
   let valueIcms = handlePercentageCalc(
-    tributeFormData.icms.replace("%", ""),
+    tributeFormData.icms?.replace("%", ""),
     valueIcmsFinal
   );
 

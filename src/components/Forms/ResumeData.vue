@@ -404,7 +404,7 @@ export default {
       this.isLoadingStorage = true;
       try {
         let proposal = this.getProposal;
-        if (proposal != {}) {
+        if (!proposal.id) {
           proposal = new Proposal();
         }
 
