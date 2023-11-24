@@ -3,17 +3,11 @@ import handlePercentageCalc from "@/utils/common/PercentageTotalCalc";
 import StringToDouble from "./common/StringToDouble";
 
 export default (data) => {
-  const getCurrency = store.getters.getCurrency;
   const resumeDataFormData = { ...store.getters.getResumeDataFromCache };
-  const costFormData = { ...store.getters.getCostDataFromCache };
   const vehicleFormData = { ...store.getters.getVehicleDataFromCache };
   const importFormData = { ...store.getters.getImportDataFromCache };
-  const tributeFormData = { ...store.getters.getTributeDataFromCache };
   const stepRendered = store.getters.getStepsRendered.find(
     (step) => step.name === "ResumeData"
-  );
-  const currencyTaxResult = Object.keys(getCurrency).filter((value) =>
-    value.includes(vehicleFormData.currency)
   );
 
   let baseDataRender = {};
@@ -40,11 +34,6 @@ export default (data) => {
   let salesTax = 0
 
   if (resumeDataFormData.salesTaxModifier) {
-    console.log('teste');
-    console.log(resumeDataFormData);
-    console.log(resumeDataFormData.salesTaxModifier);
-    console.log(resumeDataFormData.salesTaxModifier.replace("%", ""));
-  
     salesTax = handlePercentageCalc(
       parseFloat(resumeDataFormData.salesTaxModifier.replace("%", "")),
       parseFloat(StringToDouble(vehicleFormData.fob))
@@ -66,42 +55,35 @@ export default (data) => {
   ).toFixed(2);
 
   let totalCotation = 0;
-  if (getCurrency[currencyTaxResult]) {
-    totalCotation = parseFloat(getCurrency[currencyTaxResult].ask).toFixed(2);
-  }
+  totalCotation = parseFloat(StringToDouble(resumeDataFormData.parallelCurrency))
 
   const totalCostReais = parseFloat(
-    parseFloat(StringToDouble(totalCotation)) *
+    totalCotation *
       parseFloat(StringToDouble(totalExteriorCosts))
   ).toFixed(2);
 
   let totalSum = (
-    parseFloat(importFormData.totalSum) +
-    parseFloat(tributeFormData.totalSum) +
-    parseFloat(costFormData.totalSum)
+    parseFloat(importFormData.totalCostImp) +
+    parseFloat(resumeDataFormData.totalCostReais)
   ).toFixed(2);
 
   let visionLeadValue = 0
 
   if (resumeDataFormData.visionLeadValuePercent) {
-    console.log(resumeDataFormData.visionLeadValuePercent);
-  
     visionLeadValue = handlePercentageCalc(parseFloat(resumeDataFormData.visionLeadValuePercent.replace("%", "")), totalSum);
   }
 
-
   let totalImportCost = (
     parseFloat(totalSum) +
-    parseFloat(totalCostReais) +
     parseFloat(visionLeadValue)
   ).toFixed(2);
 
-  let iva = parseFloat(
-    parseFloat(StringToDouble(totalCotation)) *
-      parseFloat(StringToDouble(salesTax))
-  ).toFixed(2);
+  // let iva = parseFloat(
+  //   parseFloat(StringToDouble(totalCotation)) *
+  //     parseFloat(StringToDouble(salesTax))
+  // ).toFixed(2);
 
-  let finalValue = (parseFloat(totalImportCost) - parseFloat(iva)).toFixed(2);
+  // let finalValue = (parseFloat(totalImportCost) - parseFloat(iva)).toFixed(2);
 
   return {
     ...data,
@@ -111,7 +93,7 @@ export default (data) => {
     totalCostReais,
     visionLeadValue,
     totalImportCost,
-    iva,
-    finalValue,
+    // iva,
+    // finalValue,
   };
 };

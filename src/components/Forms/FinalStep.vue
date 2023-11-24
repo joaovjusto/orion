@@ -7,7 +7,7 @@
       class="demo-finalStepForm"
     >
       <el-form-item
-        label="CUSTO LIQUIDO DE IMPORTAÇÃO - LUXOR"
+        label="CUSTO LIQUIDO DE IMPORTAÇÃO - VISION"
         class="text-left"
         prop="thc"
       >

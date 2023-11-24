@@ -55,7 +55,7 @@
             <span
               class="value-displayer"
               style="display: block; font-weight: 550"
-              >{{parseFloat(getResumeDataFromCache.finalValue).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</span
+              >{{data.totalImportCost}}</span
             >
             <h6>VALOR ESTIMADO / ENTREGUE NO BRASIL</h6>
           </div>
@@ -181,6 +181,13 @@ import { DocumentService } from "@/services";
 import FileSaver from "file-saver";
 
 export default {
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {}
+    }
+  },
   data() {
     return {
       loadingUpload: false,
@@ -189,7 +196,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "getResumeDataFromCache",
       "getImagesCarTemplate",
       "getDescriptionData",
       "getVideoData",

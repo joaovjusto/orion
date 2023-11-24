@@ -10,7 +10,7 @@ export default (data) => {
   if (stepRendered) {
     if (stepRendered.count === 0 && !Object.keys(vehicleFormData).includes('importer')) {
       baseDataRender = {
-        importer: "LUXOR",
+        importer: "VISION",
         modifier: "0.05%",
         billing: "SP",
         modal: "MARÍTIMO",

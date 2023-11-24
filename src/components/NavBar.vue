@@ -23,27 +23,6 @@ import { mapActions } from "vuex";
 
 export default {
   name: 'NavBar',
-  // data() {
-  //   return {
-  //     activeIndex: "1",
-  //   };
-  // },
-  // watch:{
-  //   $route (){
-  //     const currentRoute = this.$router.currentRoute
-  //     console.log('currentRoute', currentRoute)
-  //     switch (currentRoute.name) {
-  //       case 'home':
-  //         this.activeIndex = "1"
-  //         break
-  //       case 'propostas':
-  //         this.activeIndex = "2"
-  //         break
-  //       default:
-  //         this.activeIndex = "1"
-  //     }
-  //   }
-  // },
   methods: {
     ...mapActions(["setUser"]),
     logOut() {

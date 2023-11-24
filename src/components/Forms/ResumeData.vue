@@ -1,8 +1,7 @@
 <template>
   <div>
     <strong
-      >Despesas com a VISION COMEX que não incidem na NF da CAPITAL
-      TRADE</strong
+      >Despesas que não incidem na Nota Fiscal</strong
     >
     <hr />
     <el-form label-position="top" label-width="120px" :inline="true">
@@ -192,7 +191,7 @@
           v-model="resumeForm.totalImportCost"
         />
       </el-form-item>
-      <el-form-item label="Recuperação do IVA" prop="iva">
+      <!-- <el-form-item label="Recuperação do IVA" prop="iva">
         <input
           class="el-input__inner"
           id="readonly"
@@ -209,7 +208,7 @@
           v-money="money"
           v-model="resumeForm.finalValue"
         />
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <el-dialog
       title="Template Proposta"
@@ -217,7 +216,7 @@
       width="100%"
       top
     >
-      <ProposalTemplate @finishPDF="centerDialogVisible = false" />
+      <ProposalTemplate :data="resumeForm" @finishPDF="centerDialogVisible = false" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">Cancelar</el-button>
       </span>

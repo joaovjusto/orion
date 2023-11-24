@@ -243,7 +243,6 @@ export default {
                 that.SET_IMAGES_CAR_TEMPLATE(resp);
                 localStorage.setItem("carImages", JSON.stringify({images: that.getImagesCarTemplate}));
               });
-              // console.log(blob, metadata, url);
               that.loadingUpload = false;
             });
         }

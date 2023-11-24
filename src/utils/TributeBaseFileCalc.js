@@ -22,7 +22,7 @@ export default (data) => {
     if (Object.keys(tributeFormData).length === 0) {
       baseDataRender = {
         ii: "35%",
-        ipi: "18%",
+        ipi: "18.81%",
         pis: "2.62%",
         cofins: "12.57%",
         // valueTus: "R$ 214,50",
@@ -78,7 +78,6 @@ export default (data) => {
     parseFloat(StringToDouble(baseValueIcmsFinal)) /
     parseFloat(parseFloat(tributeFormData.icmsBaseCalc) / 100)
   ).toFixed(2);
-  console.log(parseFloat(tributeFormData.icmsBaseCalc) / 100);
 
   let valueIcms = handlePercentageCalc(
     tributeFormData.icms?.replace("%", ""),
