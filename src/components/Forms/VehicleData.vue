@@ -8,7 +8,7 @@
       :inline="true"
       class="demo-vehicleForm"
     >
-    <el-form-item label="Veículo" prop="product">
+      <el-form-item label="Veículo" prop="product">
         <el-input
           @input="inputChanged($event)"
           placeholder="Insira o nome"
@@ -28,7 +28,7 @@
             v-if="getImagesCarTemplate.length === 0"
             action="#"
             multiple
-            :limit="5"
+            :limit="8"
             :on-change="fileInput"
             v-loading="loadingUpload"
             list-type="picture-card"
@@ -92,8 +92,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-import StringToDouble from "@/utils/common/StringToDouble";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
@@ -218,7 +216,7 @@ export default {
             statusText: xhr.statusText,
           });
         };
-        url += "?key=AIzaSyDti7Y_KJsxb7iEqPPLqRwZPNmf_7gjNKQ"
+        url += "?key=AIzaSyDti7Y_KJsxb7iEqPPLqRwZPNmf_7gjNKQ";
         xhr.open("GET", url);
         xhr.responseType = "blob";
         xhr.send();
@@ -239,9 +237,12 @@ export default {
             .then((res) => res.blob())
             // eslint-disable-next-line no-unused-vars
             .then((blob) => {
-              that.toDataUrl(url).then((resp) => {
+              that.blobToBase64(blob).then((resp) => {
                 that.SET_IMAGES_CAR_TEMPLATE(resp);
-                localStorage.setItem("carImages", JSON.stringify({images: that.getImagesCarTemplate}));
+                localStorage.setItem(
+                  "carImages",
+                  JSON.stringify({ images: that.getImagesCarTemplate })
+                );
               });
               that.loadingUpload = false;
             });
@@ -252,28 +253,12 @@ export default {
         this.processing = false;
       }
     },
-    handleModifierChange() {
-      setTimeout(() => {
-        if (
-          Object.keys(this.getCurrency).length > 0 &&
-          this.vehicleForm.currency
-        ) {
-          const currencyTaxResult = Object.keys(this.getCurrency).filter(
-            (value) => value.includes(this.vehicleForm.currency)
-          );
-
-          const total = parseFloat(
-            this.getCurrency[currencyTaxResult].ask
-          ).toFixed(2);
-
-          this.vehicleForm.currencyTax = (
-            parseFloat(total) +
-            parseFloat(StringToDouble(this.vehicleForm.modifier))
-          ).toFixed(2);
-
-          this.inputChanged();
-        }
-      }, 500);
+    async blobToBase64(blob) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
     },
     handleCanChangeInput() {
       setTimeout(() => {
@@ -282,37 +267,6 @@ export default {
           this.vehicleForm = this.getVehicleDataFromCache;
         }
       }, 500);
-    },
-    updateLocalCurrencyData() {
-      if (Object.keys(this.getCurrency).length > 0) {
-        this.handleModifierChange();
-
-        this.updateCurrentCurrencyOption();
-      }
-    },
-    updateCurrentCurrencyOption() {
-      // Updating to all application the money config
-      const moneyConfigOptions = {
-        EUR: {
-          decimal: ",",
-          thousands: ".",
-          prefix: "€ ",
-          precision: 2,
-          masked: false /* doesn't work with directive */,
-        },
-        USD: {
-          decimal: ",",
-          thousands: ".",
-          prefix: "$ ",
-          precision: 2,
-          masked: false /* doesn't work with directive */,
-        },
-      };
-
-      this.updateCurrencyData({
-        ...this.getCurrency,
-        moneyConfig: moneyConfigOptions[this.vehicleForm.currency],
-      });
     },
     inputChanged() {
       if (this.inputChangedTimes >= 1 && this.canChangeInput) {

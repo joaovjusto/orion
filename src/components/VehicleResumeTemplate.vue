@@ -47,9 +47,17 @@
 
 <script>
 import { mapGetters } from "vuex";
+import StringToDouble from "@/utils/common/StringToDouble";
 
 export default {
   name: "VehicleResumeTemplate",
+  props: {
+    customData: {
+      type: Object,
+      required: true,
+      default: () => {}
+    } 
+  },
   data() {
     return {};
   },
@@ -73,7 +81,7 @@ export default {
       return new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(this.resumeDataFromCache.finalValue);
+      }).format(parseFloat(StringToDouble(this.customData.totalImportCost)));
     },
   },
 };

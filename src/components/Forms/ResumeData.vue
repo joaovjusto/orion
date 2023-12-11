@@ -221,7 +221,7 @@
         <el-button @click="centerDialogVisible = false">Cancelar</el-button>
       </span>
     </el-dialog>
-    <VehicleResumeTemplate />
+    <VehicleResumeTemplate :customData="resumeForm" />
     <el-divider />
     <div class="row">
       <div class="col-12 text-right">
@@ -413,8 +413,11 @@ export default {
         proposal.tribute = this.getTributeDataFromCache;
         proposal.import = this.getImportDataFromCache;
         proposal.user = this.getUserFromCache.email;
-        proposal.resume = this.getResumeDataFromCache;
+        proposal.resume = this.resumeForm;
         proposal.images = this.getImagesCarTemplate;
+
+        console.log(proposal)
+
         await new ProposalService().save(proposal);
 
         this.$notify({

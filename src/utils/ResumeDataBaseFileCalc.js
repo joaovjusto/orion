@@ -62,10 +62,14 @@ export default (data) => {
       parseFloat(StringToDouble(totalExteriorCosts))
   ).toFixed(2);
 
-  let totalSum = (
-    parseFloat(importFormData.totalCostImp) +
-    parseFloat(resumeDataFormData.totalCostReais)
-  ).toFixed(2);
+  let totalSum = 0;
+
+  if (importFormData.totalCostImp && resumeDataFormData.totalCostReais) {
+    totalSum = (
+      parseFloat(importFormData.totalCostImp) +
+      parseFloat(resumeDataFormData.totalCostReais)
+    ).toFixed(2);
+  }
 
   let visionLeadValue = 0
 
@@ -84,6 +88,17 @@ export default (data) => {
   // ).toFixed(2);
 
   // let finalValue = (parseFloat(totalImportCost) - parseFloat(iva)).toFixed(2);
+
+  console.log(totalSum,
+    visionLeadValue,totalImportCost);
+
+  console.log({...data,
+    ...baseDataRender,
+    salesTax,
+    totalExteriorCosts,
+    totalCostReais,
+    visionLeadValue,
+    totalImportCost,});
 
   return {
     ...data,

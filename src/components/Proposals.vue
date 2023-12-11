@@ -62,7 +62,7 @@
             </el-table-column>
             <el-table-column label="Valor">
                 <template slot-scope="scope">
-                    {{ parseFloat(scope.row.resume.finalValue).toLocaleString('pt-br', {
+                    {{ parseFloat(StringToDouble(scope.row.resume.finalValue)).toLocaleString('pt-br', {
                         style: 'currency', currency: 'BRL'
                     })
                     }}
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import StringToDouble from "@/utils/common/StringToDouble";
 import { mapActions, mapGetters } from "vuex";
 import { ProposalService, DocumentService, StorageService } from "@/services";
 
@@ -89,6 +90,7 @@ export default {
     name: "ProposalScreen",
     data() {
         return {
+            StringToDouble,
             isLoading: true,
             isLoadingHandleClick: false,
             isLoadingDownload: false,

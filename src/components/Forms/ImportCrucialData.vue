@@ -27,6 +27,7 @@
         <input
           class="el-input__inner"
           v-money="money"
+          @input="handleModifierChange($event)"
           @keydown="handleModifierChange($event)"
           placeholder="Insira"
           v-model="vehicleForm.modifier"
@@ -170,7 +171,7 @@ import StringToDouble from "@/utils/common/StringToDouble";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 
 export default {
-  name: "VehicleData",
+  name: "ImportCrucialData",
   mixins: [commonFormMixin],
   data() {
     return {
