@@ -1,6 +1,32 @@
 <template>
   <div>
     <el-form
+      label-position="top"
+      label-width="120px"
+      :inline="true"
+    >
+      <el-form-item label="Selecione de um template" prop="template">
+        <el-select 
+          v-model="selectedVehicleTemplate" 
+          placeholder="Selecione"
+          :loading="isLoadingVehicleTemplate"
+          @change="onChangeSelectedVehicle"
+        >
+          <el-option
+            v-for="template in vehicleTemplates"
+            :key="template.id"
+            :label="template.model"
+            :value="template.id"
+          >
+            <div class="select-template-content">
+              <span>{{ template.model }} </span>
+              <span class="description" style="color: #8492a6; font-size: 13px" v-html="parseHtml(template.description.substring(0, 180))"></span>
+            </div>
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <el-form
       :model="vehicleForm"
       label-position="top"
       ref="vehicleForm"
@@ -8,6 +34,7 @@
       :inline="true"
       class="demo-vehicleForm"
     >
+
       <el-form-item label="Veículo" prop="product">
         <el-input
           @input="inputChanged($event)"
@@ -86,6 +113,24 @@
         ></ckeditor>
       </el-form-item>
     </el-form>
+    <div class="vehicle-template-actions">
+      <el-tooltip class="item" effect="dark" content="Salva todas as informações do veículo para serem usadas posteriomente através da seleção no início do formulário" placement="top-start">
+        <el-button 
+          @click="saveVehicleTemplate"
+          :loading="isLoadingVehicleTemplate"
+        >
+          Salvar como template
+        </el-button>
+      </el-tooltip>
+      <el-button 
+        v-if="selectedVehicleTemplate != ''" 
+        type="danger"
+        icon="el-icon-delete"
+        circle
+        :loading="isLoadingVehicleTemplate"
+        @click="deleteVehicleTemplate"
+      ></el-button>
+    </div>
   </div>
 </template>
 
@@ -93,6 +138,8 @@
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
+import { VehicleTemplateService } from "@/services";
+import { VehicleTemplate } from "@/models";
 
 export default {
   name: "VehicleData",
@@ -110,6 +157,7 @@ export default {
       dialogVisible: false,
       disabled: false,
       loadingUpload: false,
+      isLoadingVehicleTemplate: false,
       inputChangedTimes: 0,
       currencyOptions: [
         {
@@ -141,10 +189,12 @@ export default {
         icmsDestination: "",
         ncm: "",
       },
+      vehicleTemplates: [],
+      selectedVehicleTemplate: ""
     };
   },
   mounted() {
-    this.handleCanChangeInput();
+    this.initVehicleDataData();
   },
   computed: {
     ...mapGetters([
@@ -169,6 +219,13 @@ export default {
       "updateCurrencyData",
       "updateBrowserCache",
     ]),
+    async initVehicleDataData() {
+      this.handleCanChangeInput();
+
+      if (this.vehicleTemplates.length == 0) {
+        this.getVehicleTemplates()
+      }
+    },
     youtubeParser(url) {
       var regExp =
         /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -278,6 +335,105 @@ export default {
       }
       this.inputChangedTimes += 1;
     },
+    async getVehicleTemplates(){
+      this.isLoadingVehicleTemplate = true;
+
+      try {
+        this.vehicleTemplates = await new VehicleTemplateService().getAll()
+      } catch (error) {
+        console.error(error);
+        this.$notify({
+          title: "Erro",
+          message: "Ocorreu um erro ao buscar templates dos veículos",
+          type: "error",
+        });
+      } finally {
+        this.isLoadingVehicleTemplate = false;
+      }
+    },
+    parseHtml (html) {
+        const parser = new DOMParser();
+        const elem = parser.parseFromString(html, 'text/html');
+
+        return elem.body.innerText;
+    },
+    onChangeSelectedVehicle(id) {
+      const template = this.vehicleTemplates.find(t => t.id == id)
+      this.vehicleForm.product = template.model
+      this.editorData = template.description
+      if (template.videos.length > 0) {
+        this.videoData = template.videos[0]
+      }
+      if (template.images.length > 0) {
+        localStorage.setItem(
+          "carImages",
+          JSON.stringify({ images: template.images })
+        );
+      }
+    },
+    async saveVehicleTemplate() {
+      this.isLoadingVehicleTemplate = true;
+
+      try {
+        const template = new VehicleTemplate()
+
+        if (this.selectedVehicleTemplate) {
+          template.id = this.selectedVehicleTemplate
+        }
+
+        template.description = this.editorData
+        // template.manufacturer = this.
+        // template.color = this.
+        // template.year = this.
+        // template.currency = this.
+        template.model = this.vehicleForm.product
+        template.images = this.getImagesCarTemplate
+        template.videos = this.videoData.length > 0 ? [this.videoData] : []
+
+        await new VehicleTemplateService().save(template);
+
+        this.$notify({
+          title: "Sucesso",
+          message: "Template salvo com sucesso",
+          type: "success",
+        });
+
+      } catch (error) {
+        console.error(error);
+        this.$notify({
+          title: "Erro",
+          message: "Ocorreu um erro ao tentar salvar o template",
+          type: "error",
+        });
+      } finally {
+        this.isLoadingVehicleTemplate = false;
+      }
+    },
+    async deleteVehicleTemplate() {
+      this.isLoadingVehicleTemplate = true;
+
+      try {
+        await new VehicleTemplateService().delete(this.selectedVehicleTemplate);
+        this.selectedVehicleTemplate = ""
+
+        await this.getVehicleTemplates()
+
+        this.$notify({
+          title: "Sucesso",
+          message: "Template deletado com sucesso",
+          type: "success",
+        });
+      } catch(error){
+        console.error(error);
+        this.$notify({
+          title: "Erro",
+          message: "Ocorreu um erro ao deletar o template",
+          type: "error",
+        });
+      } finally {
+        this.isLoadingVehicleTemplate = false;
+      }
+    }
   },
 };
 </script>
@@ -326,5 +482,21 @@ export default {
   .ck.ck-editor {
     max-width: 300px;
   }
+}
+
+.vehicle-template-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.select-template-content {
+  // padding: 25px 0;
+  // background-color: #1A1A1A;
+
+  .description {
+    max-width: 300px;
+  }
+
 }
 </style>
