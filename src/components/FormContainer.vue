@@ -1,10 +1,13 @@
 <template>
   <div>
-    <div class="header">
-      {{ title }}
+    <div class="header d-flex">
+      <el-button @click="consolidateValues()" class="mr-2">Voltar</el-button>
+      <span>
+        {{ title }}
+      </span>
     </div>
-    <div class="form-body">
-      <slot />
+    <div ref="test" class="form-body">
+      <slot ref="childComponent" />
 
       <el-row>
         <el-col :span="12">
@@ -46,6 +49,9 @@ export default {
       "updateAllSteps",
       "setProposal"
     ]),
+    consolidateValues() {
+      console.log(this.$refs,this.$refs.childComponent);
+    },  
     changeStep(step) {
       this.$emit("changeStep", step);
     },
