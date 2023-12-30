@@ -26,7 +26,6 @@
     >
       <el-form-item label="II" prop="ii">
         <el-input
-          @input="inputChanged($event)"
           placeholder="Insira"
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
           v-model="tributeForm.ii"
@@ -46,7 +45,6 @@
       <el-form-item label="IPI" prop="ipi">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
           placeholder="Insira"
           v-model="tributeForm.ipi"
         ></el-input>
@@ -65,7 +63,6 @@
       <el-form-item label="PIS" prop="pis">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
           placeholder="Insira"
           v-model="tributeForm.pis"
         ></el-input>
@@ -84,7 +81,6 @@
       <el-form-item label="COFINS" prop="cofins">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
           placeholder="Insira"
           v-model="tributeForm.cofins"
         ></el-input>
@@ -103,7 +99,6 @@
       <el-form-item label="ICMS" prop="icms">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
           placeholder="Insira"
           v-model="tributeForm.icms"
         ></el-input>
@@ -123,7 +118,6 @@
       <el-form-item label="BASE DE CALCULO DO ICMS" prop="icmsBaseCalc">
         <el-input
           v-mask="['#%', '##%', '###%', '#.##%', '##.##%', '###.##%']"
-          @input="inputChanged($event)"
           placeholder="Insira"
           v-model="tributeForm.icmsBaseCalc"
         ></el-input>
@@ -267,7 +261,6 @@ export default {
       }, 500);
     },
     inputChanged() {
-      console.log('dasdas');
       if (this.inputChangedTimes >= 1 && this.canChangeInput) {
         let dataToUpdate = { ...this.tributeForm };
         this.updateFormTreeData({

@@ -21,6 +21,9 @@ export default {
   SET_IMAGES_CAR_TEMPLATE(state, newValue) {
     state.imagesCarTemplate.push(newValue);
   },
+  REMOVE_IMAGES_CAR_TEMPLATE(state, newValue) {
+    state.imagesCarTemplate = newValue;
+  },
   SET_COST_DATA(state, newValue) {
     state.costData = CostBaseFileCalc(newValue);
   },

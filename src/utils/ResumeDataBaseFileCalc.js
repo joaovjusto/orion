@@ -89,17 +89,6 @@ export default (data) => {
 
   // let finalValue = (parseFloat(totalImportCost) - parseFloat(iva)).toFixed(2);
 
-  console.log(totalSum,
-    visionLeadValue,totalImportCost);
-
-  console.log({...data,
-    ...baseDataRender,
-    salesTax,
-    totalExteriorCosts,
-    totalCostReais,
-    visionLeadValue,
-    totalImportCost,});
-
   return {
     ...data,
     ...baseDataRender,

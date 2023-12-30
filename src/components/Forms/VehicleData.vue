@@ -51,8 +51,8 @@
     >
       <el-form-item label="Galeria de mídia">
         <div v-if="getImagesCarTemplate">
+          <!-- v-if="getImagesCarTemplate.length === 0" -->
           <el-upload
-            v-if="getImagesCarTemplate.length === 0"
             action="#"
             multiple
             :limit="8"
@@ -81,16 +81,20 @@
               </span>
             </div>
           </el-upload>
-          <div class="d-flex display-img" v-else>
-            <span
-              v-for="(img, index) in getImagesCarTemplate"
-              @click="handlePictureCardPreview({ url: img })"
-              :key="index"
-            >
-              <img :src="img" alt="" />
-              <i class="el-icon-zoom-in"></i>
+          <!-- v-else -->
+        </div>
+        <div class="d-flex display-img" 
+        >
+          <span
+          v-for="(img, index) in getImagesCarTemplate"
+          :key="index"
+          >
+            <span @click="removeImg(img, index)" class="material-icons icon">
+              close
             </span>
-          </div>
+            <img @click="handlePictureCardPreview({ url: img })" :src="img" alt="" />
+            <i @click="handlePictureCardPreview({ url: img })" class="el-icon-zoom-in"></i>
+          </span>
         </div>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="" />
@@ -213,12 +217,31 @@ export default {
       "SET_IMAGES_CAR_TEMPLATE",
       "SET_DESCRIPTION_DATA",
       "SET_VIDEO_DATA",
+      "REMOVE_IMAGES_CAR_TEMPLATE"
     ]),
     ...mapActions([
       "updateFormTreeData",
       "updateCurrencyData",
       "updateBrowserCache",
     ]),
+    removeImg(img, index) {
+      // console.log(img, index, this.getImagesCarTemplate);
+
+      let filteredArr = []
+      //  = this.getImagesCarTemplate.splice(index, 1)
+      this.getImagesCarTemplate.map((item, i) => {
+        if (i != index) {
+          filteredArr.push(item)
+        }
+      })
+
+      this.REMOVE_IMAGES_CAR_TEMPLATE(filteredArr);
+
+      localStorage.setItem(
+                  "carImages",
+                  JSON.stringify({ images: filteredArr })
+                );
+    },
     async initVehicleDataData() {
       this.handleCanChangeInput();
 
@@ -440,7 +463,34 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+.el-upload-list--picture-card {
+  display: none;
+}
+.el-upload--picture-card {
+  display: block;
+  min-width: 300px;
+  width: 100% !important;
+  margin-bottom: 15px;
+}
+.el-upload-list .el-upload-list--picture-card {
+  display: none !important;
+}
+.icon {
+  z-index: 5;
+  display: none;
+  cursor: pointer;
+  position: absolute !important;
+  top: -12px;
+  right: -12px;
+  color: white;
+  background-color: orangered;
+  border-radius: 50%;
+  padding: 2px 2px;
+}
 .display-img {
+  flex-wrap: wrap;
+  margin-top: 8px;
+  margin-left: 10px;
   span {
     position: relative;
     cursor: pointer;
@@ -472,6 +522,9 @@ export default {
       i {
         display: block;
       }
+      .icon {
+       display: block;
+      } 
     }
   }
 }
@@ -495,6 +548,7 @@ export default {
   // background-color: #1A1A1A;
 
   .description {
+    display: block;
     max-width: 300px;
   }
 

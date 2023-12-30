@@ -8,5 +8,8 @@ export default (value) => {
     }
     return Number(parsedValue.replace(/[^0-9.-]+/g, "")).toFixed(2);
   }
+  if (!value) {
+    return 0;
+  }
   return value;
 };

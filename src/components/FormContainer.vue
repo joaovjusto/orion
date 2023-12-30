@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="header d-flex">
-      <el-button @click="consolidateValues()" class="mr-2">Voltar</el-button>
-      <span>
+      <span class="pl-2">
         {{ title }}
       </span>
+      <el-button type="primary" @click="consolidateValues()" class="mr-2">Consolidar</el-button>
     </div>
     <div ref="test" class="form-body">
-      <slot ref="childComponent" />
+      <slot />
 
       <el-row>
         <el-col :span="12">
@@ -50,7 +50,9 @@ export default {
       "setProposal"
     ]),
     consolidateValues() {
-      console.log(this.$refs,this.$refs.childComponent);
+      for (let index = 0; index < 3; index++) {
+        this.$slots.default[0].componentInstance.inputChanged()
+      }
     },  
     changeStep(step) {
       this.$emit("changeStep", step);
@@ -68,10 +70,14 @@ export default {
 <style lang="scss" scoped>
 .header {
   text-align: center;
+  justify-content: space-between;
   padding: 10px 15px;
   background-color: #424242;
   color: #fff;
   border-radius: 4px 4px 0 0;
+  span {
+    margin-top: 8px;
+  }
 }
 
 .form-body {
