@@ -91,6 +91,17 @@ export default (data) => {
     }
   }
 
+  console.log({
+    ...data,
+    ...baseDataRender,
+    marineMerchant,
+    totalCostImp,
+    levant,
+    containerWeight,
+    totalSum,
+    totalImportCost,
+  });
+
   return {
     ...data,
     ...baseDataRender,

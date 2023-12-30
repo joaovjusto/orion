@@ -63,7 +63,7 @@
             <span
               class="value-displayer"
               style="display: block; font-weight: 550"
-              >{{  getVehicleDataFromCache.currencyTax }}</span
+              >{{  getCurrency.moneyConfig.prefix + getVehicleDataFromCache.currencyTax }}</span
             >
             <h6>{{getVehicleDataFromCache.currency}} {{ getCurrencyText }}</h6>
           </div>
@@ -200,6 +200,7 @@ export default {
       "getDescriptionData",
       "getVideoData",
       "getVehicleDataFromCache",
+      "getCurrency",
       "getProposal"
     ]),
     getCurrencyText() {

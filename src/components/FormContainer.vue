@@ -52,6 +52,9 @@ export default {
     consolidateValues() {
       for (let index = 0; index < 3; index++) {
         this.$slots.default[0].componentInstance.inputChanged()
+        if (this.$slots.default[0].componentInstance.handleCanChangeInput) {
+          this.$slots.default[0].componentInstance.handleCanChangeInput()
+        }
       }
     },  
     changeStep(step) {
