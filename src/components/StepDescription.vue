@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="stepper-container d-flex justify-content-between" v-if="$mq !== 'sm'">
+    <div class="stepper-container d-flex justify-content-between" v-if="$mq === 'lg'">
       <template v-for="(step, i) in steps">
         <span
           @click="setActiveStep(i + 1)"
@@ -66,6 +66,7 @@ export default {
 
 <style lang="scss" scoped>
 .stepper-container {
+  flex-wrap: wrap;
   padding: 13px 8%;
   border-radius: 4px;
   background: #424242;

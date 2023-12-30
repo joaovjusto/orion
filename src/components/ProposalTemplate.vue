@@ -2,12 +2,8 @@
   <div id="proposal" class="page2el">
     <div id="proposal-template" style="width: 850px; margin: 0 auto">
       <div class="first-section text-center">
-        <img
-          width="750"
-          style="margin-top: 500px; margin-bottom: 500px"
-          src="../assets/logo-proposal.png"
-          alt=""
-        />
+        <img width="750" style="margin-top: 500px; margin-bottom: 500px"
+          src="../assets/logo-proposal.png" alt="" />
         <div>
           <img src="../assets/scroll-to-bottom.png" alt="" />
         </div>
@@ -40,11 +36,8 @@
           </p>
         </div>
       </div>
-      <img
-        style="margin-top: 300px; width: 848px"
-        src="../assets/SILVERADO-BG.png"
-        alt=""
-      />
+      <img style="margin-top: 300px; width: 848px"
+        src="../assets/SILVERADO-BG.png" alt="" />
       <div class="p-5 pdf">
         <h1 class="xl mt-3">SUA COTAÇÃO</h1>
         <p class="mb-4">
@@ -52,36 +45,28 @@
         </p>
         <div class="d-flex justify-content-between">
           <div class="text-center">
-            <span
-              class="value-displayer"
-              style="display: block; font-weight: 550"
-              >{{data.totalImportCost}}</span
-            >
+            <span class="value-displayer"
+              style="display: block; font-weight: 550">{{ data.totalImportCost }}</span>
             <h6>VALOR ESTIMADO / ENTREGUE NO BRASIL</h6>
           </div>
           <div class="text-center">
-            <span
-              class="value-displayer"
-              style="display: block; font-weight: 550"
-              >{{  getCurrency.moneyConfig.prefix + getVehicleDataFromCache.currencyTax }}</span
-            >
-            <h6>{{getVehicleDataFromCache.currency}} {{ getCurrencyText }}</h6>
+            <span class="value-displayer"
+              style="display: block; font-weight: 550">{{
+                getCurrency.moneyConfig.prefix + getVehicleDataFromCache.currencyTax
+              }}</span>
+            <h6>{{ getVehicleDataFromCache.currency }} {{ getCurrencyText }}</h6>
           </div>
         </div>
       </div>
       <div class="mb-3 pdf">
-        <img
-          style="
+        <img style="
             display: block;
             max-width: 740px;
             max-height: 440px;
             width: auto;
             height: auto;
             margin: 0 auto;
-          "
-          :src="getImagesCarTemplate[0]"
-          alt=""
-        />
+          " :src="getImagesCarTemplate[0]" alt="" />
       </div>
       <div class="mt-5 text-center pdf">
         <p style="font-size: 16px">Descrição do Veículo</p>
@@ -95,79 +80,59 @@
         </p>
       </div>
 
-      <div
-        id="images-custom"
-        class="d-flex flex-wrap justify-content-center mb-3"
-      >
+      <div id="images-custom"
+        class="d-flex flex-wrap justify-content-center mb-3">
         <div v-for="(img, i) in getImagesCarTemplate" :key="i">
           <img v-if="i > 0" :src="img" width="500" alt="" />
         </div>
       </div>
       <a :href="getVehicleDataFromCache.videoData.url">
-        <div class="text-center mb-5">
-          <img
-            style="
-              opacity: 0.7;
-              left: 50%;
-              margin-left: -150px;
-              position: absolute;
-            "
-            width="300px"
-            src="../assets/next_hires.png"
-            alt=""
-          />
-          <img :src="getVehicleDataFromCache.videoData.thumbBase64" width="600" alt="" />
+        <div class="text-center mb-5" style="position: relative;">
+          <img style="
+                  opacity: 0.7;
+                  left: 50%;
+                  bottom: 50%;
+                  margin-bottom: -125px;
+                  margin-left: -150px;
+                  position: absolute;
+            " width="300px" src="../assets/next_hires.png" alt="" />
+          <img :src="getVehicleDataFromCache.videoData.thumbBase64" width="600"
+            alt="" />
         </div>
       </a>
 
       <div class="social-media text-center">
         <a href="http://youtube.com">
-          <img
-            src="../assets/youtube.png"
-            style="margin-right: 20px"
-            width="100"
-            alt=""
-          />
+          <img src="../assets/youtube.png" style="margin-right: 20px" width="100"
+            alt="" />
         </a>
         <a href="http://instagram.com">
-          <img
-            src="../assets/instagram.png"
-            style="margin-right: 20px"
-            width="100"
-            alt=""
-          />
+          <img src="../assets/instagram.png" style="margin-right: 20px"
+            width="100" alt="" />
         </a>
         <a href="http://whatsapp.com">
-          <img
-            src="../assets/whatsapp.png"
-            style="margin-right: 20px"
-            width="100"
-            alt=""
-          />
+          <img src="../assets/whatsapp.png" style="margin-right: 20px" width="100"
+            alt="" />
         </a>
         <a href="http://wordpress.com">
-          <img
-            src="../assets/wordpress.png"
-            style="margin-right: 20px"
-            width="100"
-            alt=""
-          />
+          <img src="../assets/wordpress.png" style="margin-right: 20px"
+            width="100" alt="" />
         </a>
         <p class="mb-4 d-block mt-4">Link Úteis</p>
       </div>
 
       <!-- Footer -->
       <div class="footer mt-5">
-        <img src="../assets/logo-white.png" width="200" alt="" style="margin-bottom: 8px" />
+        <img src="../assets/logo-white.png" width="200" alt=""
+          style="margin-bottom: 8px" />
         <div id="proposal-id" style="color:gainsboro">
           <!-- Vai ser preenchido com o ID do PDF-->
         </div>
       </div>
     </div>
     <div class="text-center">
-      <el-button class="mt-5" type="primary" @click="makeProposal"
-        >Download Proposta</el-button
-      >
+      <el-button class="mt-5" type="primary" @click="makeProposal">Download
+        Proposta</el-button>
     </div>
   </div>
 </template>
@@ -185,7 +150,7 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {}
+      default: () => { }
     }
   },
   data() {
@@ -204,7 +169,7 @@ export default {
       "getProposal"
     ]),
     getCurrencyText() {
-      switch(this.getVehicleDataFromCache.currency) {
+      switch (this.getVehicleDataFromCache.currency) {
         case 'USD': return 'Dólar'
         case 'EUR': return 'Euro'
         default: return ''
@@ -268,9 +233,9 @@ export default {
       let that = this;
 
       const id = uuidv4()
-      if (this.getProposal && this.getProposal.id){
+      if (this.getProposal && this.getProposal.id) {
         //Adicionar o ID da proposta no PDF
-        document.getElementById("proposal-id").innerHTML=`Proposta: ${id}`;
+        document.getElementById("proposal-id").innerHTML = `Proposta: ${id}`;
       }
 
       const elm = document.getElementById("proposal-template");
@@ -323,7 +288,7 @@ export default {
         .toPdf();
     },
     async savePdf(id, buffer, fileName) {
-      if (this.getProposal && this.getProposal.id){
+      if (this.getProposal && this.getProposal.id) {
         new DocumentService().save(id, buffer, this.getProposal.id, fileName)
       }
     }
@@ -337,11 +302,13 @@ export default {
   background-color: #7b7b7b;
   padding: 25px;
 }
+
 .background-grey-container {
   background-color: #f1f1f1;
   padding: 20px;
   margin: 30px;
 }
+
 #images-custom img {
   display: block;
   max-width: 420px;
@@ -351,6 +318,7 @@ export default {
   margin-right: 15px;
   margin-top: 15px;
 }
+
 .pdf {
   font-family: "Acumin letiable Concept", sans-serif;
   letter-spacing: -1px;
@@ -379,6 +347,7 @@ p {
   margin: 0;
   font-size: 22px;
 }
+
 .value-displayer {
   color: #7b7b7b;
   padding: 0 15px;
