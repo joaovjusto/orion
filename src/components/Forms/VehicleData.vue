@@ -158,7 +158,7 @@ export default {
                 this.videoData = this.vehicleForm.videoData.url;
             }
             this.inputChanged();
-        }, 3000);
+        }, 1500);
     },
     computed: {
         ...mapGetters([
