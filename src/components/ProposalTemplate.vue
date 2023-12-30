@@ -103,7 +103,7 @@
           <img v-if="i > 0" :src="img" width="500" alt="" />
         </div>
       </div>
-      <a :href="getVideoData.url">
+      <a :href="getVehicleDataFromCache.videoData.url">
         <div class="text-center mb-5">
           <img
             style="
@@ -116,7 +116,7 @@
             src="../assets/next_hires.png"
             alt=""
           />
-          <img :src="getVideoData.thumbBase64" width="600" alt="" />
+          <img :src="getVehicleDataFromCache.videoData.thumbBase64" width="600" alt="" />
         </div>
       </a>
 

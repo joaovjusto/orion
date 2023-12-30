@@ -245,36 +245,6 @@ export default {
       "updateCurrencyData",
       "updateBrowserCache",
     ]),
-    youtubeParser(url) {
-      var regExp =
-        /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-      var match = url.match(regExp);
-      return match && match[7].length == 11 ? match[7] : false;
-    },
-    updateVideoData() {
-      setInterval(() => {
-        const videoId = this.youtubeParser(this.videoData);
-        this.toDataUrl(
-          `http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-        ).then((resp) => {
-          this.SET_VIDEO_DATA({
-            url: this.videoData,
-            thumbBase64: resp,
-          });
-        });
-      }, 1500);
-    },
-    handleExceed() {
-      this.$notify({
-        title: "Limite de imagens atingido!",
-        message: "Favor recarregar a página e tentar novamente.",
-        type: "warning",
-      });
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
     async toDataUrl(url) {
       //Convert to base64
       return new Promise((resolve, reject) => {
