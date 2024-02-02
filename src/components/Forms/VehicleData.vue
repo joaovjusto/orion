@@ -199,6 +199,9 @@ export default {
   },
   mounted() {
     this.initVehicleDataData();
+    setInterval(() => {
+      console.log(this.editorData);
+    }, 5000);
   },
   computed: {
     ...mapGetters([
@@ -259,7 +262,7 @@ export default {
       setInterval(() => {
         const videoId = this.youtubeParser(this.videoData);
         this.toDataUrl(
-          `http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+          `http://cors-anywhere.herokuapp.com/http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
         ).then((resp) => {
           this.SET_VIDEO_DATA({
             url: this.videoData,
@@ -296,7 +299,8 @@ export default {
             statusText: xhr.statusText,
           });
         };
-        url += "?key=AIzaSyDti7Y_KJsxb7iEqPPLqRwZPNmf_7gjNKQ";
+        url;
+        xhr.crossOrigin = 'Anonymous';
         xhr.open("GET", url);
         xhr.responseType = "blob";
         xhr.send();

@@ -28,6 +28,14 @@ export default {
   getDescriptionData(state) {
     return state.descriptionData;
   },
+  getClientDataFromCache(state) {
+    if (Object.keys(state.clientData).length > 0) {
+      return state.clientData;
+    }
+    return localStorage.getItem("clientData")
+      ? JSON.parse(localStorage.getItem("clientData"))
+      : {};
+  },
   getVehicleDataFromCache(state) {
     if (Object.keys(state.vehicleData).length > 0) {
       return state.vehicleData;

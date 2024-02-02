@@ -27,7 +27,7 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="handleModifierChange($event)"
+          @blur="handleModifierChange($event)"
           @keydown="handleModifierChange($event)"
           placeholder="Insira"
           v-model="vehicleForm.modifier"
@@ -37,7 +37,8 @@
         <input
           class="el-input__inner"
           v-money="money"
-          @input="inputChanged($event)"
+          @blur="inputChanged($event)"
+          @keydown="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.currencyTax"
         />
@@ -101,6 +102,7 @@
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
           @blur="inputChanged($event)"
+          @keydown="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.fob"
         />
@@ -110,6 +112,7 @@
           class="el-input__inner"
           v-money="getCurrency.moneyConfig"
           @blur="inputChanged($event)"
+          @keydown="inputChanged($event)"
           placeholder="Insira"
           v-model="vehicleForm.shipping"
         />
@@ -221,6 +224,14 @@ export default {
   },
   mounted() {
     this.handleCanChangeInput();
+    setTimeout(() => {
+      if (!this.vehicleForm.date) {
+        this.vehicleForm.date = new Date();
+        for (let index = 0; index < 3; index++) {
+          this.inputChanged();
+        }
+      }
+    }, 2500);
   },
   computed: {
     ...mapGetters([
@@ -314,7 +325,10 @@ export default {
             .then((blob) => {
               that.toDataUrl(url).then((resp) => {
                 that.SET_IMAGES_CAR_TEMPLATE(resp);
-                localStorage.setItem("carImages", JSON.stringify({images: that.getImagesCarTemplate}));
+                localStorage.setItem(
+                  "carImages",
+                  JSON.stringify({ images: that.getImagesCarTemplate })
+                );
               });
               that.loadingUpload = false;
             });
@@ -351,8 +365,10 @@ export default {
     handleCanChangeInput() {
       setTimeout(() => {
         this.canChangeInput = true;
-        if (this.getVehicleDataFromCache) {
-          this.vehicleForm = this.getVehicleDataFromCache;
+        if (Object.keys(this.getVehicleDataFromCache).length > 0) {
+          this.vehicleForm = JSON.parse(
+            JSON.stringify(this.getVehicleDataFromCache)
+          );
         }
       }, 500);
     },
@@ -381,6 +397,8 @@ export default {
           masked: false /* doesn't work with directive */,
         },
       };
+
+      console.log(this.vehicleForm.currency);
 
       this.updateCurrencyData({
         ...this.getCurrency,

@@ -5,11 +5,13 @@ export default {
     commit("SET_CURRENCY", currency);
   },
   updateBrowserCache(_, cache) {
+    console.log('UPDATEBROWSERCACHE');
     if (cache.name && cache.data) {
       localStorage.setItem(cache.name, JSON.stringify(cache.data), { expires: 1 });
     }
   },
   updateFormTreeData({ commit, dispatch }, { data, stepName }) {
+    console.log('UPDATEFORMTREEDATA');
     const steps = {
       vehicleData: (stepData) => commit("SET_VEHICLE_DATA", stepData),
       costData: (stepData) => commit("SET_COST_DATA", stepData),
@@ -29,6 +31,7 @@ export default {
     commit("SET_STEPS_RENDERED", stepsRendered);
   },
   updateAllSteps({ commit, getters }) {
+    console.log('UPDATEALLCACHE');
     commit("SET_VEHICLE_DATA", getters.getVehicleDataFromCache);
     commit("SET_COST_DATA", getters.getCostDataFromCache);
     commit("SET_TRIBUTE_DATA", getters.getTributeDataFromCache);

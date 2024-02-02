@@ -14,6 +14,7 @@ export default new Vuex.Store({
     loading: false,
     stepsRendered: [],
     vehicleData: {},
+    clientData: {},
     costData: {},
     tributeData: {},
     importData: {},
