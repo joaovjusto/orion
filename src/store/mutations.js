@@ -18,6 +18,9 @@ export default {
   SET_VEHICLE_DATA(state, newValue) {
     state.vehicleData = VehicleBaseFileCalc(newValue);
   },
+  SET_COSTUMER_DATA(state, newValue) {
+    state.clientData = newValue;
+  },
   SET_IMAGES_CAR_TEMPLATE(state, newValue) {
     state.imagesCarTemplate.push(newValue);
   },
