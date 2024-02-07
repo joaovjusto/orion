@@ -2,20 +2,23 @@
   <div>
     <el-form label-position="top" label-width="120px" :inline="true">
       <el-form-item label="Selecione de um template" prop="template">
-        <el-select v-model="selectedVehicleTemplate" placeholder="Selecione">
+        <el-select 
+          v-model="selectedCustomerTemplate"
+          placeholder="Selecione"
+          :loading="isLoadingCostumerTemplate"
+          filterable
+          clearable
+          @change="onChangeTemplate"
+          @clear="onClearTemplate"
+        >
           <el-option
-            v-for="template in vehicleTemplates"
+            v-for="template in customerTemplates"
             :key="template.id"
-            :label="template.model"
+            :label="template.name"
             :value="template.id"
           >
             <div class="select-template-content">
-              <span>{{ template.model }} </span>
-              <span
-                class="description"
-                style="color: #8492a6; font-size: 13px"
-                v-html="parseHtml(template.description.substring(0, 180))"
-              ></span>
+              <span>{{ template.name }} (CPF: {{ template.cpf }})</span>
             </div>
           </el-option>
         </el-select>
@@ -64,11 +67,11 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Profissão" prop="ocupation">
+      <el-form-item label="Profissão" prop="occupation">
         <el-input
           @input="inputChanged($event)"
           placeholder="Insira a ocupação"
-          v-model="clientForm.ocupation"
+          v-model="clientForm.occupation"
         ></el-input>
       </el-form-item>
     </el-form>
@@ -118,16 +121,20 @@
         content="Salva todas as informações do cliente para serem usadas posteriomente através da seleção no início do formulário"
         placement="top-start"
       >
-        <el-button :loading="isLoadingVehicleTemplate">
+        <el-button 
+          @click="saveCostumer"
+          :loading="isLoadingCostumerTemplate"
+        >
           Salvar como template
         </el-button>
       </el-tooltip>
       <el-button
-        v-if="selectedVehicleTemplate != ''"
+        v-if="selectedCustomerTemplate != ''"
         type="danger"
         icon="el-icon-delete"
         circle
-        :loading="isLoadingVehicleTemplate"
+        :loading="isLoadingCostumerTemplate"
+        @click="deleteCostumer"
       ></el-button>
     </div>
   </div>
@@ -137,6 +144,8 @@
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
+import { CostumerService } from "@/services";
+import { Costumer } from "@/models";
 
 import ModeloContrato from "./data/modelo_contrato.js";
 
@@ -173,7 +182,7 @@ export default {
       dialogVisible: false,
       disabled: false,
       loadingUpload: false,
-      isLoadingVehicleTemplate: false,
+      isLoadingCostumerTemplate: false,
       inputChangedTimes: 0,
       currencyOptions: [
         {
@@ -205,8 +214,8 @@ export default {
         icmsDestination: "",
         ncm: "",
       },
-      vehicleTemplates: [],
-      selectedVehicleTemplate: "",
+      customerTemplates: [],
+      selectedCustomerTemplate: "",
     };
   },
   computed: {
@@ -217,7 +226,7 @@ export default {
     ]),
   },
   mounted() {
-    this.handleCanChangeInput();
+    this.initCostumerData();
   },
   methods: {
     ...mapMutations([
@@ -231,24 +240,155 @@ export default {
       "updateCurrencyData",
       "updateBrowserCache",
     ]),
+    async initCostumerData() {
+      this.handleCanChangeInput();
+
+      if (this.customerTemplates.length == 0) {
+        this.getCostumerTemplates()
+      }
+    },
     handleCanChangeInput() {
       setTimeout(() => {
         this.canChangeInput = true;
         if (this.getClientDataFromCache) {
           this.clientForm = this.getClientDataFromCache;
+          this.selectedCustomerTemplate = this.getClientDataFromCache.id
         }
       }, 500);
     },
-    inputChanged() {
-      if (this.inputChangedTimes >= 1 && this.canChangeInput) {
-        const dataToUpdate = { ...this.clientForm };
+    inputChanged(forceUpdate) {
+      if ((this.inputChangedTimes >= 1 && this.canChangeInput) || forceUpdate) {
+        const dataToUpdate = { ...this.clientForm, id: this.selectedCustomerTemplate };
         this.updateFormTreeData({
           data: dataToUpdate,
           stepName: "clientData",
+
         });
       }
       this.inputChangedTimes += 1;
     },
+    onClearTemplate() {
+      this.resetCostumerFormFields()
+      this.editorData = ModeloContrato
+    },
+    onChangeTemplate(selectedCostumerId) {
+      const costumer = this.customerTemplates.find(c => c.id === selectedCostumerId);
+
+      if (!costumer) {
+        return
+      }
+
+      this.clientForm.name = costumer.name
+      this.clientForm.cpf = costumer.cpf
+      this.clientForm.rg = costumer.rg
+      this.clientForm.civilState = costumer.civilState
+      this.clientForm.occupation = costumer.occupation
+      this.clientForm.address = costumer.address
+      this.clientForm.complement = costumer.complement
+
+      if (costumer.contractTemplate) {
+        this.editorData = costumer.contractTemplate
+      }
+
+      this.inputChanged(true)
+    },
+    async getCostumerTemplates(){
+      this.isLoadingCostumerTemplate = true;
+
+      try {
+        this.customerTemplates = await new CostumerService().getAll()
+      } catch (error) {
+        console.error(error);
+        this.$notify({
+          title: "Erro",
+          message: "Ocorreu um erro ao buscar templates dos clientes",
+          type: "error",
+        });
+      } finally {
+        this.isLoadingCostumerTemplate = false;
+      }
+    },
+    resetCostumerFormFields() {
+      this.clientForm.name = ""
+      this.clientForm.cpf = ""
+      this.clientForm.rg = ""
+      this.clientForm.civilState = ""
+      this.clientForm.occupation = ""
+      this.clientForm.address = ""
+      this.clientForm.complement = ""
+
+      this.editorData = ModeloContrato
+    },
+    async saveCostumer() {
+      this.isLoadingCostumerTemplate = true;
+
+      try {
+        const costumer = new Costumer()
+
+        if (this.selectedCustomerTemplate) {
+          costumer.id = this.selectedCustomerTemplate
+        }
+
+        costumer.name = this.clientForm.name
+        costumer.cpf = this.clientForm.cpf
+        costumer.rg = this.clientForm.rg
+        costumer.civilState = this.clientForm.civilState
+        costumer.occupation = this.clientForm.occupation
+        costumer.address = this.clientForm.address
+        costumer.complement = this.clientForm.complement
+
+        if (this.editorData !== ModeloContrato) {
+          costumer.contractTemplate = this.editorData
+        }
+
+        await new CostumerService().save(costumer);
+
+        this.$notify({
+          title: "Sucesso",
+          message: "Cliente salvo com sucesso",
+          type: "success",
+        });
+
+      } catch (error) {
+        console.error(error);
+        this.$notify({
+          title: "Erro",
+          message: "Ocorreu um erro ao tentar salvar o cliente",
+          type: "error",
+        });
+      } finally {
+        this.isLoadingCostumerTemplate = false;
+      }
+    },
+    async deleteCostumer() {
+      this.isLoadingCostumerTemplate = true;
+
+      try {
+        if (!this.selectedCustomerTemplate) {
+          return
+        }
+        await new CostumerService().delete(this.selectedCustomerTemplate);
+        this.selectedCustomerTemplate = ""
+
+        await this.getCostumerTemplates()
+        this.resetCostumerFormFields()
+
+        this.$notify({
+          title: "Sucesso",
+          message: "Cliente deletado com sucesso",
+          type: "success",
+        });
+      } catch(error){
+        console.error(error);
+        this.$notify({
+          title: "Erro",
+          message: "Ocorreu um erro ao deletar o cliente",
+          type: "error",
+        });
+      } finally {
+        this.isLoadingCostumerTemplate = false;
+      }
+    }
   },
 };
 </script>

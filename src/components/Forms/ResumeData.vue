@@ -342,6 +342,7 @@ export default {
       "getImportDataFromCache",
       "getUserFromCache",
       "getProposal",
+      "getClientDataFromCache"
     ]),
   },
   methods: {
@@ -445,6 +446,7 @@ export default {
         proposal.user = this.getUserFromCache.email;
         proposal.resume = this.resumeForm;
         proposal.images = this.getImagesCarTemplate;
+        proposal.costumer = this.getClientDataFromCache;
 
         console.log(proposal)
 

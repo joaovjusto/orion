@@ -53,6 +53,11 @@
             </el-table-column>
             <el-table-column prop="id" label="Proposta">
             </el-table-column>
+            <el-table-column label="Cliente" width="100">
+                <template slot-scope="scope">
+                    {{ scope.row.costumer?.name ?? '-'}}
+                </template>
+            </el-table-column>
             <el-table-column prop="user" label="Usuário">
             </el-table-column>
             <el-table-column label="Carro">
@@ -151,6 +156,7 @@ export default {
             try {
                 const steps = {
                     vehicleData: data.vehicle,
+                    clientData: data.costumer,
                     currency: data.currency,
                     costData: data.cost,
                     tributeData: data.tribute,

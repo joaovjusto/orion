@@ -11,6 +11,8 @@
           placeholder="Selecione"
           :loading="isLoadingVehicleTemplate"
           @change="onChangeSelectedVehicle"
+          filterable
+          clearable
         >
           <el-option
             v-for="template in vehicleTemplates"
@@ -199,9 +201,9 @@ export default {
   },
   mounted() {
     this.initVehicleDataData();
-    setInterval(() => {
-      console.log(this.editorData);
-    }, 5000);
+    // setInterval(() => {
+    //   console.log(this.editorData);
+    // }, 5000);
   },
   computed: {
     ...mapGetters([

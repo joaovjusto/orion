@@ -1,21 +1,21 @@
+import { v4 as uuidv4 } from 'uuid';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import { v4 as uuidv4 } from 'uuid';
 
-export class VehicleTemplateService {
+export class CostumerService {
 
-    #collection = 'vehicle-templates'
+    #collection = 'costumers'
 
-    async save(vehicleTemplate) {
-        if(!vehicleTemplate.id) {
-            vehicleTemplate.id = uuidv4()
+    async save(costumer) {
+        if(!costumer.id) {
+            costumer.id = uuidv4()
         }
         
         const firestoreApp = firebase.app()
         await firestoreApp.firestore().runTransaction(async (transaction) => {    
-            const docRef = firestoreApp.firestore().collection(this.#collection).doc(vehicleTemplate.id);
-            transaction.set(docRef, JSON.parse(JSON.stringify(vehicleTemplate)))
+            const docRef = firestoreApp.firestore().collection(this.#collection).doc(costumer.id);
+            transaction.set(docRef, JSON.parse(JSON.stringify(costumer)))
         })
     }
 
@@ -38,5 +38,6 @@ export class VehicleTemplateService {
                 throw error
             })
     }
+
 
 }
