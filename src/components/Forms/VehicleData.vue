@@ -301,6 +301,8 @@ export default {
         };
         url;
         xhr.crossOrigin = 'Anonymous';
+        xhr.setRequestHeader("crossOrigin", 'Anonymous');
+        xhr.setRequestHeader("X-Requested-With", XMLHttpRequest);
         xhr.open("GET", url);
         xhr.responseType = "blob";
         xhr.send();
