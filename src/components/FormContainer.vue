@@ -61,9 +61,13 @@ export default {
       this.$emit("changeStep", step);
     },
     handleCancel() {
-      this.updateAllSteps();
-      this.setProposal({})
-      this.$router.push('/propostas')
+      try {
+        this.updateAllSteps();
+        this.setProposal({})
+        this.$router.push('/propostas')
+      } catch (error) {
+        this.$router.push('/propostas')
+      }
     }
   }
 };

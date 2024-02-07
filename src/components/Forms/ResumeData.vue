@@ -211,14 +211,25 @@
       </el-form-item> -->
     </el-form>
     <el-dialog
-      title="Template Proposta"
-      :visible.sync="centerDialogVisible"
+      title="Template Contrato"
+      :visible.sync="centerDialogVisibleContract"
       width="100%"
       top
     >
-      <ProposalTemplate :data="resumeForm" @finishPDF="centerDialogVisible = false" />
+      <ContractTemplate :data="resumeForm" @finishPDF="centerDialogVisibleContract = false" />
       <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">Cancelar</el-button>
+        <el-button @click="centerDialogVisibleContract = false">Cancelar</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="Template Proposta"
+      :visible.sync="centerDialogVisibleProposal"
+      width="100%"
+      top
+    >
+      <ProposalTemplate :data="resumeForm" @finishPDF="centerDialogVisibleProposal = false" />
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisibleProposal = false">Cancelar</el-button>
       </span>
     </el-dialog>
     <VehicleResumeTemplate :customData="resumeForm" />
@@ -229,13 +240,26 @@
           type="secondary"
           class="mt-2 mb-2"
           v-loading="isLoadingStorage"
+          @click="openCorsWorkaround()"
+          >Acesso Thumb</el-button
+        >
+        <el-button
+          type="secondary"
+          class="mt-2 mb-2"
+          v-loading="isLoadingStorage"
           @click="saveOrder"
           >Salvar Proposta em banco</el-button
         >
         <el-button
           type="primary"
           class="mt-2 mb-2"
-          @click="centerDialogVisible = true"
+          @click="centerDialogVisibleContract = true"
+          >Visualizar CONTRATO</el-button
+        >
+        <el-button
+          type="primary"
+          class="mt-2 mb-2"
+          @click="centerDialogVisibleProposal = true"
           >Visualizar PROPOSTA</el-button
         >
         <el-button
@@ -256,6 +280,7 @@ import commonFormMixin from "@/utils/mixins/commonFormMixin";
 import html2canvas from "html2canvas";
 
 import ResumeDataBaseFileCalc from "@/utils/ResumeDataBaseFileCalc";
+import ContractTemplate from "@/components/ContractTemplate.vue";
 import ProposalTemplate from "@/components/ProposalTemplate.vue";
 import VehicleResumeTemplate from "@/components/VehicleResumeTemplate.vue";
 import { Proposal } from "@/models";
@@ -265,12 +290,14 @@ export default {
   name: "ResumeData",
   mixins: [commonFormMixin],
   components: {
+    ContractTemplate,
     ProposalTemplate,
     VehicleResumeTemplate,
   },
   data() {
     return {
-      centerDialogVisible: false,
+      centerDialogVisibleProposal: false,
+      centerDialogVisibleContract: false,
       canChangeInput: false,
       inputChangedTimes: 0,
       resumeForm: {
@@ -315,10 +342,14 @@ export default {
       "getImportDataFromCache",
       "getUserFromCache",
       "getProposal",
+      "getClientDataFromCache"
     ]),
   },
   methods: {
     ...mapActions(["updateFormTreeData", "setLoadingState"]),
+    openCorsWorkaround() {
+      window.open('http://cors-anywhere.herokuapp.com/corsdemo', '_blank').focus();
+    },  
     handleUpdatedCalcValues() {
       setTimeout(() => {
         const {
@@ -415,6 +446,7 @@ export default {
         proposal.user = this.getUserFromCache.email;
         proposal.resume = this.resumeForm;
         proposal.images = this.getImagesCarTemplate;
+        proposal.costumer = this.getClientDataFromCache;
 
         console.log(proposal)
 

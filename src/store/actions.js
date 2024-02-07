@@ -12,6 +12,7 @@ export default {
   updateFormTreeData({ commit, dispatch }, { data, stepName }) {
     const steps = {
       vehicleData: (stepData) => commit("SET_VEHICLE_DATA", stepData),
+      clientData: (stepData) => commit("SET_COSTUMER_DATA", stepData),
       costData: (stepData) => commit("SET_COST_DATA", stepData),
       tributeData: (stepData) => commit("SET_TRIBUTE_DATA", stepData),
       importData: (stepData) => commit("SET_IMPORT_DATA", stepData),
@@ -30,6 +31,7 @@ export default {
   },
   updateAllSteps({ commit, getters }) {
     commit("SET_VEHICLE_DATA", getters.getVehicleDataFromCache);
+    commit("SET_COSTUMER_DATA", getters.getClientDataFromCache);
     commit("SET_COST_DATA", getters.getCostDataFromCache);
     commit("SET_TRIBUTE_DATA", getters.getTributeDataFromCache);
     commit("SET_IMPORT_DATA", getters.getImportDataFromCache);

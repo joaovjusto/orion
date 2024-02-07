@@ -19,6 +19,7 @@ import VehicleData from "./Forms/VehicleData.vue";
 import CostData from "./Forms/CostData.vue";
 import TributeData from "./Forms/TributeData.vue";
 import ImportData from "./Forms/ImportData.vue";
+import ClientData from "./Forms/ClientData.vue";
 import FinalStep from "./Forms/FinalStep.vue";
 import ResumeData from "./Forms/ResumeData.vue";
 import { ProposalService } from "@/services";
@@ -29,6 +30,7 @@ import { mapActions, mapGetters } from "vuex";
 
 const steps = [
     { name: "ImportCrucialData", title: "Dados Importação" },
+    { name: "ClientData", title: "Cliente" },
     { name: "VehicleData", title: "Veículo" },
     { name: "CostData", title: "Custos Importação" },
     { name: "TributeData", title: "Impostos Nacionalização" },
@@ -40,6 +42,7 @@ const steps = [
 export default {
     name: "HomeScreen",
     components: {
+        ClientData,
         ImportCrucialData,
         NavBar,
         StepDescription,
@@ -53,6 +56,7 @@ export default {
     },
     data() {
         return {
+            saveLocalStorageData: 0,
             steps,
             activeForm: steps[0],
             activeIndex: 0,

@@ -12,6 +12,8 @@ export class Proposal {
     resume
     documents
 
+    costumer
+
     constructor() {
         this.id = uuidv4()
         this.createdAt = new Date().toISOString()
