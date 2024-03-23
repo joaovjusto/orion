@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <NavBar v-if="isAuthenticated" />,
+    <NavBar v-if="isAuthenticated" />
     <div class="body">
       <transition name="slide">
         <router-view></router-view>

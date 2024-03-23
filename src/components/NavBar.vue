@@ -2,7 +2,9 @@
   <nav>
     <div id="navbar" class="d-flex container">
       <div style="display: flex;">
-        <img class="logo" src="../assets/orion-white.png" alt="">
+        <router-link to="/home">
+          <img class="logo" src="../assets/orion-white.png" alt="">
+        </router-link>
         <!-- <el-menu class="menu" :default-active="activeIndex" mode="horizontal" background-color="#1A1A1A" text-color="#fff"
           active-text-color="#ff5f18">
           <el-menu-item index="1" @click="$router.push('/home')">Início</el-menu-item>
