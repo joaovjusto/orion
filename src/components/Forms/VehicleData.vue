@@ -215,6 +215,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 import { VehicleTemplateService } from "@/services";
 import { VehicleTemplate } from "@/models";
+import html2canvas from "html2canvas";
 
 export default {
   name: "VehicleData",
@@ -335,6 +336,29 @@ export default {
           "carImages",
           JSON.stringify({ images: filteredArr })
         );
+      }
+    },
+    async convertToBase64() {
+      try {
+        const div = this.$refs.myDiv;
+        const canvas = await html2canvas(div, {
+          allowTaint: true,
+          useCORS: true, // Set this to true if you're capturing content from other domains
+          backgroundColor: null, // Use the default background color
+          scale: 2, // Increase the scale for higher quality
+          dpi: 300, // Set the DPI to improve print quality
+          letterRendering: true, // Use higher quality text rendering
+        });
+        var scrBase64;
+
+        canvas.toDataURL("image/png");
+        scrBase64 = scrBase64.split(",")[1];
+        console.log(scrBase64);
+
+        // return canvas;
+        // }, 5000);
+      } catch (error) {
+        console.error(error);
       }
     },
     async initVehicleDataData() {
