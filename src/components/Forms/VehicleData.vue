@@ -1,13 +1,9 @@
 <template>
   <div>
-    <el-form
-      label-position="top"
-      label-width="120px"
-      :inline="true"
-    >
+    <el-form label-position="top" label-width="120px" :inline="true">
       <el-form-item label="Selecione de um template" prop="template">
-        <el-select 
-          v-model="selectedVehicleTemplate" 
+        <el-select
+          v-model="selectedVehicleTemplate"
           placeholder="Selecione"
           :loading="isLoadingVehicleTemplate"
           @change="onChangeSelectedVehicle"
@@ -22,7 +18,11 @@
           >
             <div class="select-template-content">
               <span>{{ template.model }} </span>
-              <span class="description" style="color: #8492a6; font-size: 13px" v-html="parseHtml(template.description.substring(0, 180))"></span>
+              <span
+                class="description"
+                style="color: #8492a6; font-size: 13px"
+                v-html="parseHtml(template.description.substring(0, 180))"
+              ></span>
             </div>
           </el-option>
         </el-select>
@@ -36,7 +36,6 @@
       :inline="true"
       class="demo-vehicleForm"
     >
-
       <el-form-item label="Veículo" prop="product">
         <el-input
           @input="inputChanged($event)"
@@ -85,17 +84,20 @@
           </el-upload>
           <!-- v-else -->
         </div>
-        <div class="d-flex display-img" 
-        >
-          <span
-          v-for="(img, index) in getImagesCarTemplate"
-          :key="index"
-          >
+        <div class="d-flex display-img">
+          <span v-for="(img, index) in getImagesCarTemplate" :key="index">
             <span @click="removeImg(img, index)" class="material-icons icon">
               close
             </span>
-            <img @click="handlePictureCardPreview({ url: img })" :src="img" alt="" />
-            <i @click="handlePictureCardPreview({ url: img })" class="el-icon-zoom-in"></i>
+            <img
+              @click="handlePictureCardPreview({ url: img })"
+              :src="img"
+              alt=""
+            />
+            <i
+              @click="handlePictureCardPreview({ url: img })"
+              class="el-icon-zoom-in"
+            ></i>
           </span>
         </div>
         <el-dialog :visible.sync="dialogVisible">
@@ -120,16 +122,21 @@
       </el-form-item>
     </el-form>
     <div class="vehicle-template-actions">
-      <el-tooltip class="item" effect="dark" content="Salva todas as informações do veículo para serem usadas posteriomente através da seleção no início do formulário" placement="top-start">
-        <el-button 
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="Salva todas as informações do veículo para serem usadas posteriomente através da seleção no início do formulário"
+        placement="top-start"
+      >
+        <el-button
           @click="saveVehicleTemplate"
           :loading="isLoadingVehicleTemplate"
         >
           Salvar como template
         </el-button>
       </el-tooltip>
-      <el-button 
-        v-if="selectedVehicleTemplate != ''" 
+      <el-button
+        v-if="selectedVehicleTemplate != ''"
         type="danger"
         icon="el-icon-delete"
         circle
@@ -146,6 +153,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 import { VehicleTemplateService } from "@/services";
 import { VehicleTemplate } from "@/models";
+// import axios from "axios";
 
 export default {
   name: "VehicleData",
@@ -196,7 +204,7 @@ export default {
         ncm: "",
       },
       vehicleTemplates: [],
-      selectedVehicleTemplate: ""
+      selectedVehicleTemplate: "",
     };
   },
   mounted() {
@@ -222,7 +230,7 @@ export default {
       "SET_IMAGES_CAR_TEMPLATE",
       "SET_DESCRIPTION_DATA",
       "SET_VIDEO_DATA",
-      "REMOVE_IMAGES_CAR_TEMPLATE"
+      "REMOVE_IMAGES_CAR_TEMPLATE",
     ]),
     ...mapActions([
       "updateFormTreeData",
@@ -232,47 +240,102 @@ export default {
     removeImg(img, index) {
       // console.log(img, index, this.getImagesCarTemplate);
 
-      let filteredArr = []
+      let filteredArr = [];
       //  = this.getImagesCarTemplate.splice(index, 1)
       this.getImagesCarTemplate.map((item, i) => {
         if (i != index) {
-          filteredArr.push(item)
+          filteredArr.push(item);
         }
-      })
+      });
 
       this.REMOVE_IMAGES_CAR_TEMPLATE(filteredArr);
 
       localStorage.setItem(
-                  "carImages",
-                  JSON.stringify({ images: filteredArr })
-                );
+        "carImages",
+        JSON.stringify({ images: filteredArr })
+      );
     },
     async initVehicleDataData() {
       this.handleCanChangeInput();
 
       if (this.vehicleTemplates.length == 0) {
-        this.getVehicleTemplates()
+        this.getVehicleTemplates();
       }
     },
     youtubeParser(url) {
       var regExp =
         /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
       var match = url.match(regExp);
+      console.log(match && match[7].length == 11 ? match[7] : false);
       return match && match[7].length == 11 ? match[7] : false;
     },
-    updateVideoData() {
-      setInterval(() => {
-        const videoId = this.youtubeParser(this.videoData);
-        this.toDataUrl(
-          `http://cors-anywhere.herokuapp.com/http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-        ).then((resp) => {
-          this.SET_VIDEO_DATA({
-            url: this.videoData,
-            thumbBase64: resp,
-          });
+    async updateVideoData() {
+      const videoId = this.youtubeParser(this.videoData);
+      const youtubeKey = "AIzaSyCsc9ZZ8h6J7xsNFSzeF-VHI53T47um7U4";
+      // const videoId = "gePj3nXoXRQ";
+      const videosUrl = new URL(
+        "https://youtube.googleapis.com/youtube/v3/videos"
+      );
+
+      videosUrl.searchParams.set("part", "snippet");
+      videosUrl.searchParams.set("id", videoId);
+      videosUrl.searchParams.set("key", youtubeKey);
+
+      try {
+        // Send a GET request to the API with the constructed URL
+        const response = await fetch(videosUrl);
+        if (!response.ok) {
+          // If the response is not successful (i.e. not in the 2xx range), throw an error
+          throw new Error(`HTTP error: ${response.status}`);
+        }
+        const data = await response.json();
+        const { items } = data;
+        console.log(items, items[0].snippet.thumbnails.default.url);
+        // setInterval(() => {
+        // this.toDataUrl(
+        //   `${items[0].snippet.thumbnails.default.url}?key=${youtubeKey}`
+        // ).then((resp) => {
+        this.SET_VIDEO_DATA({
+          url: items[0].snippet.thumbnails.maxres.url,
+          thumbBase64: "teste",
         });
-      }, 1500);
+        // });
+        // }, 1500);
+      } catch (error) {
+        // If there is an error, log it to the console
+        console.error(`Could not get talks: ${error}`);
+      }
     },
+    // updateVideoData() {
+    //   const youtubeKey = "AIzaSyDQJ09UGyiQ7kd7283hPfIwd4E1eaUsOcQ";
+
+    //   // https://youtube.googleapis.com/youtube/v3/channels?id=7zslAVnkzsU&access_token=AIzaSyDQJ09UGyiQ7kd7283hPfIwd4E1eaUsOcQ&key=[YOUR_API_KEY]
+
+    //   // const videoId = this.youtubeParser(this.videoData);
+    //   let data = {
+    //     Authorization: `Bearer ${youtubeKey}`,
+    //     Accept: 'application/json',
+    //   };
+
+    //   axios
+    //     .get(
+    //       `https://youtube.googleapis.com/youtube/v3/videos/7zslAVnkzsU?id=7zslAVnkzsU&access_token?key=${youtubeKey}`,
+    //       data
+    //     )
+    //     .then((result) => {
+    //       console.log(result);
+    //     });
+    //   setInterval(() => {
+    //     // this.toDataUrl(
+    //     //   `http://cors-anywhere.herokuapp.com/http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+    //     // ).then((resp) => {
+    //     //   this.SET_VIDEO_DATA({
+    //     //     url: this.videoData,
+    //     //     thumbBase64: resp,
+    //     //   });
+    //     // });
+    //   }, 1500);
+    // },
     handleExceed() {
       this.$notify({
         title: "Limite de imagens atingido!",
@@ -302,9 +365,6 @@ export default {
           });
         };
         url;
-        xhr.crossOrigin = 'Anonymous';
-        xhr.setRequestHeader("crossOrigin", 'Anonymous');
-        xhr.setRequestHeader("X-Requested-With", XMLHttpRequest);
         xhr.open("GET", url);
         xhr.responseType = "blob";
         xhr.send();
@@ -366,11 +426,11 @@ export default {
       }
       this.inputChangedTimes += 1;
     },
-    async getVehicleTemplates(){
+    async getVehicleTemplates() {
       this.isLoadingVehicleTemplate = true;
 
       try {
-        this.vehicleTemplates = await new VehicleTemplateService().getAll()
+        this.vehicleTemplates = await new VehicleTemplateService().getAll();
       } catch (error) {
         console.error(error);
         this.$notify({
@@ -382,18 +442,18 @@ export default {
         this.isLoadingVehicleTemplate = false;
       }
     },
-    parseHtml (html) {
-        const parser = new DOMParser();
-        const elem = parser.parseFromString(html, 'text/html');
+    parseHtml(html) {
+      const parser = new DOMParser();
+      const elem = parser.parseFromString(html, "text/html");
 
-        return elem.body.innerText;
+      return elem.body.innerText;
     },
     onChangeSelectedVehicle(id) {
-      const template = this.vehicleTemplates.find(t => t.id == id)
-      this.vehicleForm.product = template.model
-      this.editorData = template.description
+      const template = this.vehicleTemplates.find((t) => t.id == id);
+      this.vehicleForm.product = template.model;
+      this.editorData = template.description;
       if (template.videos.length > 0) {
-        this.videoData = template.videos[0]
+        this.videoData = template.videos[0];
       }
       if (template.images.length > 0) {
         localStorage.setItem(
@@ -406,20 +466,20 @@ export default {
       this.isLoadingVehicleTemplate = true;
 
       try {
-        const template = new VehicleTemplate()
+        const template = new VehicleTemplate();
 
         if (this.selectedVehicleTemplate) {
-          template.id = this.selectedVehicleTemplate
+          template.id = this.selectedVehicleTemplate;
         }
 
-        template.description = this.editorData
+        template.description = this.editorData;
         // template.manufacturer = this.
         // template.color = this.
         // template.year = this.
         // template.currency = this.
-        template.model = this.vehicleForm.product
-        template.images = this.getImagesCarTemplate
-        template.videos = this.videoData.length > 0 ? [this.videoData] : []
+        template.model = this.vehicleForm.product;
+        template.images = this.getImagesCarTemplate;
+        template.videos = this.videoData.length > 0 ? [this.videoData] : [];
 
         await new VehicleTemplateService().save(template);
 
@@ -428,7 +488,6 @@ export default {
           message: "Template salvo com sucesso",
           type: "success",
         });
-
       } catch (error) {
         console.error(error);
         this.$notify({
@@ -445,16 +504,16 @@ export default {
 
       try {
         await new VehicleTemplateService().delete(this.selectedVehicleTemplate);
-        this.selectedVehicleTemplate = ""
+        this.selectedVehicleTemplate = "";
 
-        await this.getVehicleTemplates()
+        await this.getVehicleTemplates();
 
         this.$notify({
           title: "Sucesso",
           message: "Template deletado com sucesso",
           type: "success",
         });
-      } catch(error){
+      } catch (error) {
         console.error(error);
         this.$notify({
           title: "Erro",
@@ -464,7 +523,7 @@ export default {
       } finally {
         this.isLoadingVehicleTemplate = false;
       }
-    }
+    },
   },
 };
 </script>
@@ -531,8 +590,8 @@ export default {
         display: block;
       }
       .icon {
-       display: block;
-      } 
+        display: block;
+      }
     }
   }
 }
@@ -559,6 +618,5 @@ export default {
     display: block;
     max-width: 300px;
   }
-
 }
 </style>

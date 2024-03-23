@@ -116,7 +116,7 @@
             src="../assets/next_hires.png"
             alt=""
           />
-          <img :src="getVideoData.thumbBase64" width="600" alt="" />
+          <img :src="getVideoData.url" width="600" alt="" />
         </div>
       </a>
 
