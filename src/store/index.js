@@ -21,6 +21,7 @@ export default new Vuex.Store({
     // finalStep: {},
     resumeData: {},
     currency: {},
+    thumbImg: [],
     imagesCarTemplate: [],
     user: {},
     proposal: null

@@ -116,7 +116,7 @@
             src="../assets/next_hires.png"
             alt=""
           />
-          <img :src="getVideoData.url" width="600" alt="" />
+          <img :src="getImagesThumb[0]" width="600" alt="" />
         </div>
       </a>
 
@@ -198,6 +198,7 @@ export default {
     ...mapGetters([
       "getImagesCarTemplate",
       "getDescriptionData",
+      "getImagesThumb",
       "getVideoData",
       "getVehicleDataFromCache",
       "getProposal"
@@ -289,6 +290,7 @@ export default {
         image: { type: "jpeg", quality: 1 },
         filename: fileName,
         html2canvas: {
+          proxy: this.getVideoData.thumbUrl,
           dpi: 100,
           scale: 2,
           letterRendering: true,

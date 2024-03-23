@@ -86,7 +86,7 @@
         </div>
         <div class="d-flex display-img">
           <span v-for="(img, index) in getImagesCarTemplate" :key="index">
-            <span @click="removeImg(img, index)" class="material-icons icon">
+            <span @click="removeImg(img, index,'other')" class="material-icons icon">
               close
             </span>
             <img
@@ -108,10 +108,72 @@
         <input
           style="width: 50%"
           class="el-input__inner w-100"
-          @keydown="updateVideoData($event)"
+          @change="updateVideoData($event)"
           v-model="videoData"
           placeholder="https://youtube/mmdsKJdsn"
         />
+      </el-form-item>
+      <el-form-item v-if="getVideoData.thumbUrl" class="w-100" label="Pré Visualização">
+        <strong>Salve a thumb local para fazer upload o Orion</strong>
+        <div id="imgdiv" class="w-100">
+          <img
+          ref="myDiv"
+          :src="getVideoData.thumbUrl"
+          width="200"
+          alt=""
+          />
+        </div>
+        <a width="600" class="mt-2 el-button el-button--primary" @click="openLinkNewTab(getVideoData.thumbUrl)" heigth="600" download>Download da thumb</a>
+      </el-form-item>
+      <el-form-item label="Upload de thumbnail">
+        <div v-if="getImagesThumb">
+          <el-upload
+            action="#"
+            multiple
+            :limit="8"
+            :on-change="fileInputThumb"
+            v-loading="loadingUpload"
+            list-type="picture-card"
+            :auto-upload="false"
+            :on-exceed="handleExceed"
+          >
+            <i slot="default">
+              <i class="el-icon-upload2"></i>
+            </i>
+            <div slot="file" slot-scope="{ file }">
+              <img
+                class="el-upload-list__item-thumbnail"
+                :src="file.url"
+                alt=""
+              />
+              <span class="el-upload-list__item-actions">
+                <span
+                  class="el-upload-list__item-preview"
+                  @click="handlePictureCardPreview(file)"
+                >
+                  <i class="el-icon-zoom-in"></i>
+                </span>
+              </span>
+            </div>
+          </el-upload>
+          <!-- v-else -->
+        </div>
+        <div class="d-flex display-img">
+          <span v-for="(img, index) in getImagesThumb" :key="index">
+            <span @click="removeImg(img, index, 'thumb')" class="material-icons icon">
+              close
+            </span>
+            <img
+              @click="handlePictureCardPreview({ url: img })"
+              :src="img"
+              alt=""
+            />
+            <i
+              @click="handlePictureCardPreview({ url: img })"
+              class="el-icon-zoom-in"
+            ></i>
+          </span>
+        </div>
       </el-form-item>
       <el-form-item label="Descrição Veículo">
         <ckeditor
@@ -153,7 +215,6 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import commonFormMixin from "@/utils/mixins/commonFormMixin";
 import { VehicleTemplateService } from "@/services";
 import { VehicleTemplate } from "@/models";
-// import axios from "axios";
 
 export default {
   name: "VehicleData",
@@ -166,6 +227,7 @@ export default {
       editorConfig: {
         width: "75%",
       },
+      videoThumb: [],
       videoData: "",
       dialogImageUrl: "",
       dialogVisible: false,
@@ -209,13 +271,12 @@ export default {
   },
   mounted() {
     this.initVehicleDataData();
-    // setInterval(() => {
-    //   console.log(this.editorData);
-    // }, 5000);
   },
   computed: {
     ...mapGetters([
+      "getVideoData",
       "getImagesCarTemplate",
+      "getImagesThumb",
       "getVehicleDataFromCache",
       "getCurrency",
     ]),
@@ -227,33 +288,54 @@ export default {
   },
   methods: {
     ...mapMutations([
+      "SET_THUMB_IMG",
       "SET_IMAGES_CAR_TEMPLATE",
       "SET_DESCRIPTION_DATA",
       "SET_VIDEO_DATA",
       "REMOVE_IMAGES_CAR_TEMPLATE",
+      "REMOVE_IMAGES_THUMB_TEMPLATE",
     ]),
     ...mapActions([
       "updateFormTreeData",
       "updateCurrencyData",
       "updateBrowserCache",
     ]),
-    removeImg(img, index) {
-      // console.log(img, index, this.getImagesCarTemplate);
-
-      let filteredArr = [];
-      //  = this.getImagesCarTemplate.splice(index, 1)
-      this.getImagesCarTemplate.map((item, i) => {
-        if (i != index) {
-          filteredArr.push(item);
-        }
-      });
-
-      this.REMOVE_IMAGES_CAR_TEMPLATE(filteredArr);
-
-      localStorage.setItem(
-        "carImages",
-        JSON.stringify({ images: filteredArr })
-      );
+    openLinkNewTab(url) {
+      window.open(url, '_blank').focus();
+    },
+    clearData(sStr) {
+      return sStr.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    },
+    removeImg(img, index, type) {
+      if (type === 'thumb') {
+        let filteredArr = [];
+        this.getImagesThumb.map((item, i) => {
+          if (i != index) {
+            filteredArr.push(item);
+          }
+        });
+  
+        this.REMOVE_IMAGES_THUMB_TEMPLATE(filteredArr);
+  
+        localStorage.setItem(
+          "thumbImage",
+          JSON.stringify({ images: filteredArr })
+        );
+      }else {
+        let filteredArr = [];
+        this.getImagesCarTemplate.map((item, i) => {
+          if (i != index) {
+            filteredArr.push(item);
+          }
+        });
+  
+        this.REMOVE_IMAGES_CAR_TEMPLATE(filteredArr);
+  
+        localStorage.setItem(
+          "carImages",
+          JSON.stringify({ images: filteredArr })
+        );
+      }
     },
     async initVehicleDataData() {
       this.handleCanChangeInput();
@@ -272,7 +354,6 @@ export default {
     async updateVideoData() {
       const videoId = this.youtubeParser(this.videoData);
       const youtubeKey = "AIzaSyCsc9ZZ8h6J7xsNFSzeF-VHI53T47um7U4";
-      // const videoId = "gePj3nXoXRQ";
       const videosUrl = new URL(
         "https://youtube.googleapis.com/youtube/v3/videos"
       );
@@ -291,51 +372,16 @@ export default {
         const data = await response.json();
         const { items } = data;
         console.log(items, items[0].snippet.thumbnails.default.url);
-        // setInterval(() => {
-        // this.toDataUrl(
-        //   `${items[0].snippet.thumbnails.default.url}?key=${youtubeKey}`
-        // ).then((resp) => {
-        this.SET_VIDEO_DATA({
-          url: items[0].snippet.thumbnails.maxres.url,
-          thumbBase64: "teste",
-        });
-        // });
-        // }, 1500);
+        const canvas = await this.convertToBase64();
+          this.SET_VIDEO_DATA({
+            url: this.videoData,
+            thumbUrl: items[0].snippet.thumbnails.maxres.url,
+            canvas,
+          });
       } catch (error) {
-        // If there is an error, log it to the console
         console.error(`Could not get talks: ${error}`);
       }
     },
-    // updateVideoData() {
-    //   const youtubeKey = "AIzaSyDQJ09UGyiQ7kd7283hPfIwd4E1eaUsOcQ";
-
-    //   // https://youtube.googleapis.com/youtube/v3/channels?id=7zslAVnkzsU&access_token=AIzaSyDQJ09UGyiQ7kd7283hPfIwd4E1eaUsOcQ&key=[YOUR_API_KEY]
-
-    //   // const videoId = this.youtubeParser(this.videoData);
-    //   let data = {
-    //     Authorization: `Bearer ${youtubeKey}`,
-    //     Accept: 'application/json',
-    //   };
-
-    //   axios
-    //     .get(
-    //       `https://youtube.googleapis.com/youtube/v3/videos/7zslAVnkzsU?id=7zslAVnkzsU&access_token?key=${youtubeKey}`,
-    //       data
-    //     )
-    //     .then((result) => {
-    //       console.log(result);
-    //     });
-    //   setInterval(() => {
-    //     // this.toDataUrl(
-    //     //   `http://cors-anywhere.herokuapp.com/http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-    //     // ).then((resp) => {
-    //     //   this.SET_VIDEO_DATA({
-    //     //     url: this.videoData,
-    //     //     thumbBase64: resp,
-    //     //   });
-    //     // });
-    //   }, 1500);
-    // },
     handleExceed() {
       this.$notify({
         title: "Limite de imagens atingido!",
@@ -346,29 +392,6 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
-    },
-    async toDataUrl(url) {
-      //Convert to base64
-      return new Promise((resolve, reject) => {
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-          var reader = new FileReader();
-          reader.onloadend = function () {
-            resolve(reader.result);
-          };
-          reader.readAsDataURL(xhr.response);
-        };
-        xhr.onerror = () => {
-          reject({
-            status: this.status,
-            statusText: xhr.statusText,
-          });
-        };
-        url;
-        xhr.open("GET", url);
-        xhr.responseType = "blob";
-        xhr.send();
-      });
     },
     async fileInput(file) {
       try {
@@ -390,6 +413,37 @@ export default {
                 localStorage.setItem(
                   "carImages",
                   JSON.stringify({ images: that.getImagesCarTemplate })
+                );
+              });
+              that.loadingUpload = false;
+            });
+        }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.processing = false;
+      }
+    },
+    async fileInputThumb(file) {
+      try {
+        if (file && file.name) {
+          this.processing = true;
+          var url = file.url;
+          const imgData = new FormData();
+          imgData.append("image", file);
+          // eslint-disable-next-line no-unused-vars
+          const metadata = { contentType: file.type };
+          const that = this;
+          that.loadingUpload = true;
+          fetch(url)
+            .then((res) => res.blob())
+            // eslint-disable-next-line no-unused-vars
+            .then((blob) => {
+              that.blobToBase64(blob).then((resp) => {
+                that.SET_THUMB_IMG(resp);
+                localStorage.setItem(
+                  "thumbImage",
+                  JSON.stringify({ images: that.getImagesThumb })
                 );
               });
               that.loadingUpload = false;

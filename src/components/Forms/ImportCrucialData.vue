@@ -256,25 +256,6 @@ export default {
       "updateCurrencyData",
       "updateBrowserCache",
     ]),
-    youtubeParser(url) {
-      var regExp =
-        /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-      var match = url.match(regExp);
-      return match && match[7].length == 11 ? match[7] : false;
-    },
-    updateVideoData() {
-      setInterval(() => {
-        const videoId = this.youtubeParser(this.videoData);
-        this.toDataUrl(
-          `http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-        ).then((resp) => {
-          this.SET_VIDEO_DATA({
-            url: this.videoData,
-            thumbBase64: resp,
-          });
-        });
-      }, 1500);
-    },
     handleExceed() {
       this.$notify({
         title: "Limite de imagens atingido!",
