@@ -175,8 +175,9 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item label="Descrição Veículo">
+      <el-form-item label="Descrição Veículo" class="w-100">
         <ckeditor
+        class="w-100"
           :editor="editor"
           v-model="editorData"
           :config="editorConfig"
@@ -284,7 +285,11 @@ export default {
   },
   watch: {
     editorData(newValue) {
+      localStorage.setItem('editorTemp', newValue);
       this.SET_DESCRIPTION_DATA(newValue);
+    },
+    videoData(newValue) {
+      localStorage.setItem('thumbUrl', newValue);
     },
   },
   methods: {
@@ -362,6 +367,15 @@ export default {
       }
     },
     async initVehicleDataData() {
+      if (localStorage.getItem('editorTemp')) {
+        this.editorData = localStorage.getItem('editorTemp')
+      }
+      if (localStorage.getItem('thumbUrl')) {
+        this.videoData = localStorage.getItem('thumbUrl')
+        setTimeout(() => {
+          this.updateVideoData();
+        }, 1500);
+      }
       this.handleCanChangeInput();
 
       if (this.vehicleTemplates.length == 0) {

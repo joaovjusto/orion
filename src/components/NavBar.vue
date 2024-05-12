@@ -2,7 +2,7 @@
   <nav>
     <div id="navbar" class="d-flex container">
       <div style="display: flex;">
-        <router-link to="/home">
+        <router-link to="/propostas">
           <img class="logo" src="../assets/orion-white.png" alt="">
         </router-link>
         <!-- <el-menu class="menu" :default-active="activeIndex" mode="horizontal" background-color="#1A1A1A" text-color="#fff"

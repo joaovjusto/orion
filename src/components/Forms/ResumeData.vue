@@ -232,7 +232,7 @@
         <el-button @click="centerDialogVisibleProposal = false">Cancelar</el-button>
       </span>
     </el-dialog>
-    <VehicleResumeTemplate :customData="resumeForm" />
+    <VehicleResumeTemplate :customData="resumeForm" v-if="generatingResume" />
     <el-divider />
     <div class="row">
       <div class="col-12 text-right">
@@ -240,15 +240,8 @@
           type="secondary"
           class="mt-2 mb-2"
           v-loading="isLoadingStorage"
-          @click="openCorsWorkaround()"
-          >Acesso Thumb</el-button
-        >
-        <el-button
-          type="secondary"
-          class="mt-2 mb-2"
-          v-loading="isLoadingStorage"
           @click="saveOrder"
-          >Salvar Proposta em banco</el-button
+          >Salvar Proposta</el-button
         >
         <el-button
           type="primary"
@@ -296,6 +289,7 @@ export default {
   },
   data() {
     return {
+      generatingResume: false,
       centerDialogVisibleProposal: false,
       centerDialogVisibleContract: false,
       canChangeInput: false,
@@ -347,9 +341,6 @@ export default {
   },
   methods: {
     ...mapActions(["updateFormTreeData", "setLoadingState"]),
-    openCorsWorkaround() {
-      window.open('http://cors-anywhere.herokuapp.com/corsdemo', '_blank').focus();
-    },  
     handleUpdatedCalcValues() {
       setTimeout(() => {
         const {
@@ -388,47 +379,51 @@ export default {
       this.inputChangedTimes += 1;
     },
     printResume() {
-      const element = document.getElementById("vehicle-resume-template");
-      this.setLoadingState(true);
-      this.isLoadingDownloadImage = true;
-      this.$notify({
-        title: "Atenção",
-        message: "Gerando imagem, por favor aguarde...",
-        type: "warning",
-      });
-      const that = this;
-      html2canvas(element)
-        .then(function (canvas) {
-          var downloadLink = document.createElement("a");
-          downloadLink.href = canvas.toDataURL();
-          const date = that.$options.filters.formatDate(
-            new Date().toISOString()
-          );
-          const imageName = `Cotação ${that.getVehicleDataFromCache.product} em ${date}.png`;
-          downloadLink.download = imageName;
-
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          document.body.removeChild(downloadLink);
-        })
-        .then(() =>
-          this.$notify({
-            title: "Sucesso",
-            message: "Imagem gerada com sucesso",
-            type: "success",
-          })
-        )
-        .catch(() =>
-          this.$notify({
-            title: "Erro",
-            message: "Não foi possível gerar a imagem",
-            type: "error",
-          })
-        )
-        .finally(() => {
-          this.isLoadingDownloadImage = false;
-          this.setLoadingState(false);
+      this.generatingResume = true;
+      setTimeout(() => {
+        const element = document.getElementById("vehicle-resume-template");
+        this.setLoadingState(true);
+        this.isLoadingDownloadImage = true;
+        this.$notify({
+          title: "Atenção",
+          message: "Gerando imagem, por favor aguarde...",
+          type: "warning",
         });
+        const that = this;
+        html2canvas(element)
+          .then(function (canvas) {
+            var downloadLink = document.createElement("a");
+            downloadLink.href = canvas.toDataURL();
+            const date = that.$options.filters.formatDate(
+              new Date().toISOString()
+            );
+            const imageName = `Cotação ${that.getVehicleDataFromCache.product} em ${date}.png`;
+            downloadLink.download = imageName;
+  
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+          })
+          .then(() =>
+            this.$notify({
+              title: "Sucesso",
+              message: "Imagem gerada com sucesso",
+              type: "success",
+            })
+          )
+          .catch(() =>
+            this.$notify({
+              title: "Erro",
+              message: "Não foi possível gerar a imagem",
+              type: "error",
+            })
+          )
+          .finally(() => {
+            this.isLoadingDownloadImage = false;
+            this.setLoadingState(false);
+            this.generatingResume = false;
+          });
+      }, 1500);
     },
     async saveOrder() {
       this.isLoadingStorage = true;

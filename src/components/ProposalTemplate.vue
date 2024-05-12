@@ -121,7 +121,7 @@
       </a>
 
       <div class="social-media text-center">
-        <a href="http://youtube.com">
+        <a href="https://www.youtube.com/channel/UCxdzizJTQMAlMPm37hym9Dw">
           <img
             src="../assets/youtube.png"
             style="margin-right: 20px"
@@ -129,7 +129,7 @@
             alt=""
           />
         </a>
-        <a href="http://instagram.com">
+        <a href="https://www.instagram.com/vision.comex">
           <img
             src="../assets/instagram.png"
             style="margin-right: 20px"
@@ -137,7 +137,7 @@
             alt=""
           />
         </a>
-        <a href="http://whatsapp.com">
+        <a href="https://visioncomex.com/whatsapp/">
           <img
             src="../assets/whatsapp.png"
             style="margin-right: 20px"
@@ -145,7 +145,7 @@
             alt=""
           />
         </a>
-        <a href="http://wordpress.com">
+        <a href="https://visioncomex.com/ ">
           <img
             src="../assets/wordpress.png"
             style="margin-right: 20px"
@@ -153,7 +153,7 @@
             alt=""
           />
         </a>
-        <p class="mb-4 d-block mt-4">Link Úteis</p>
+        <p class="mb-4 d-block mt-4">Links Úteis</p>
       </div>
 
       <!-- Footer -->
