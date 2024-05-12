@@ -97,10 +97,14 @@ export default {
   font-family: "Acumin letiable Concept", sans-serif;
   color: #7b7b7b;
   letter-spacing: 0.8px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
+  // visibility: hidden;
+  // display: none;
+  // position: absolute;
+  // left: -10000px;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // z-index: -1;
 }
 .template-images {
   margin-top: -50px;

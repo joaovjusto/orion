@@ -10,6 +10,18 @@ export default {
   getStepsRendered(state) {
     return state.stepsRendered;
   },
+  getImagesThumb(state) {
+    let imagesArr = [];
+    if (JSON.parse(localStorage.getItem("thumbImage"))) {
+      imagesArr = JSON.parse(localStorage.getItem("thumbImage")).images;
+    }
+
+    if (state.thumbImg.length > 0) {
+      return state.thumbImg;
+    }
+
+    return imagesArr
+  },
   getImagesCarTemplate(state) {
     let imagesArr = [];
     if (JSON.parse(localStorage.getItem("carImages"))) {

@@ -24,6 +24,12 @@ export default {
   SET_IMAGES_CAR_TEMPLATE(state, newValue) {
     state.imagesCarTemplate.push(newValue);
   },
+  SET_THUMB_IMG(state, newValue) {
+    state.thumbImg.push(newValue);
+  },
+  REMOVE_IMAGES_THUMB_TEMPLATE(state, newValue) {
+    state.thumbImg = newValue;
+  },
   REMOVE_IMAGES_CAR_TEMPLATE(state, newValue) {
     state.imagesCarTemplate = newValue;
   },

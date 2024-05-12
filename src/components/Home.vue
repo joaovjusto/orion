@@ -29,9 +29,9 @@ import { ProposalService } from "@/services";
 import { mapActions, mapGetters } from "vuex";
 
 const steps = [
-    { name: "ImportCrucialData", title: "Dados Importação" },
     { name: "ClientData", title: "Cliente" },
     { name: "VehicleData", title: "Veículo" },
+    { name: "ImportCrucialData", title: "Dados Importação" },
     { name: "CostData", title: "Custos Importação" },
     { name: "TributeData", title: "Impostos Nacionalização" },
     { name: "ImportData", title: "Despesas Operacionais" },

@@ -256,6 +256,17 @@ export default {
       "updateCurrencyData",
       "updateBrowserCache",
     ]),
+    handleExceed() {
+      this.$notify({
+        title: "Limite de imagens atingido!",
+        message: "Favor recarregar a página e tentar novamente.",
+        type: "warning",
+      });
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
     async toDataUrl(url) {
       //Convert to base64
       return new Promise((resolve, reject) => {

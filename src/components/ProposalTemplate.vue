@@ -86,39 +86,57 @@
           <img v-if="i > 0" :src="img" width="500" alt="" />
         </div>
       </div>
-      <a :href="getVehicleDataFromCache.videoData.url">
-        <div class="text-center mb-5" style="position: relative;">
-          <img style="
-                  opacity: 0.7;
-                  left: 50%;
-                  bottom: 50%;
-                  margin-bottom: -125px;
-                  margin-left: -150px;
-                  position: absolute;
-            " width="300px" src="../assets/next_hires.png" alt="" />
-          <img :src="getVehicleDataFromCache.videoData.thumbBase64" width="600"
-            alt="" />
+      <a :href="getVideoData.url">
+        <div class="text-center mb-5">
+          <img
+            style="
+              opacity: 0.7;
+              left: 50%;
+              margin-left: -150px;
+              position: absolute;
+            "
+            width="300px"
+            src="../assets/next_hires.png"
+            alt=""
+          />
+          <img :src="getImagesThumb[0]" width="600" alt="" />
         </div>
       </a>
 
       <div class="social-media text-center">
-        <a href="http://youtube.com">
-          <img src="../assets/youtube.png" style="margin-right: 20px" width="100"
-            alt="" />
+        <a href="https://www.youtube.com/channel/UCxdzizJTQMAlMPm37hym9Dw">
+          <img
+            src="../assets/youtube.png"
+            style="margin-right: 20px"
+            width="100"
+            alt=""
+          />
         </a>
-        <a href="http://instagram.com">
-          <img src="../assets/instagram.png" style="margin-right: 20px"
-            width="100" alt="" />
+        <a href="https://www.instagram.com/vision.comex">
+          <img
+            src="../assets/instagram.png"
+            style="margin-right: 20px"
+            width="100"
+            alt=""
+          />
         </a>
-        <a href="http://whatsapp.com">
-          <img src="../assets/whatsapp.png" style="margin-right: 20px" width="100"
-            alt="" />
+        <a href="https://visioncomex.com/whatsapp/">
+          <img
+            src="../assets/whatsapp.png"
+            style="margin-right: 20px"
+            width="100"
+            alt=""
+          />
         </a>
-        <a href="http://wordpress.com">
-          <img src="../assets/wordpress.png" style="margin-right: 20px"
-            width="100" alt="" />
+        <a href="https://visioncomex.com/ ">
+          <img
+            src="../assets/wordpress.png"
+            style="margin-right: 20px"
+            width="100"
+            alt=""
+          />
         </a>
-        <p class="mb-4 d-block mt-4">Link Úteis</p>
+        <p class="mb-4 d-block mt-4">Links Úteis</p>
       </div>
 
       <!-- Footer -->
@@ -163,6 +181,7 @@ export default {
     ...mapGetters([
       "getImagesCarTemplate",
       "getDescriptionData",
+      "getImagesThumb",
       "getVideoData",
       "getVehicleDataFromCache",
       "getCurrency",
@@ -255,6 +274,7 @@ export default {
         image: { type: "jpeg", quality: 1 },
         filename: fileName,
         html2canvas: {
+          proxy: this.getVideoData.thumbUrl,
           dpi: 100,
           scale: 2,
           letterRendering: true,
