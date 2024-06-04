@@ -47,7 +47,7 @@ export class ProposalService {
         let collection = firestoreApp.firestore().collection(this.#collection)
         
         if(userEmail) {
-            collection = collection.where('user', "==", userEmail)
+            collection = collection.where('user', "==", userEmail).orderBy('createdAtTimestamp', 'desc')
         }
 
         return collection.get()
