@@ -51,7 +51,7 @@
                     {{ new Date(scope.row.vehicle.date) | formatDate }}
                 </template>
             </el-table-column>
-            <el-table-column prop="id" label="Proposta">
+            <el-table-column prop="customId" label="Proposta">
             </el-table-column>
             <el-table-column label="Cliente" width="100">
                 <template slot-scope="scope">
