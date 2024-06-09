@@ -24,7 +24,7 @@
     "html2pdf.js": "^0.10.1",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.1",
-    "material-icons": "^1.12.0",
+    "material-icons": "^1.13.12",
     "uuid": "^9.0.0",
     "v-money": "^0.8.1",
     "vue": "^2.6.14",
