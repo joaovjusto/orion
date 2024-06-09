@@ -9,14 +9,24 @@ export class Proposal {
     tribute
     vehicle
     createdAt
+    createdAtTimestamp
+    year
     resume
     documents
-
     costumer
+
+    // ID customizável. Exemplo (VSN240001) Sendo o orçamento 01 de 2024.
+    customId
+
+    //Sequencial número referente aos orçamentos gerados no ano
+    orderNumber
 
     constructor() {
         this.id = uuidv4()
-        this.createdAt = new Date().toISOString()
+        const date = new Date()
+        this.createdAt = date.toISOString()
+        this.createdAtTimestamp = date.getTime()
+        this.year = date.getFullYear()
     }
 }
 

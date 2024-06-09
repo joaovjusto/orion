@@ -2,7 +2,7 @@
   <div>
     <el-form label-position="top" label-width="120px" :inline="true">
       <el-form-item label="Selecione de um template" prop="template">
-        <el-select 
+        <el-select
           v-model="selectedCustomerTemplate"
           placeholder="Selecione"
           :loading="isLoadingCostumerTemplate"
@@ -121,10 +121,7 @@
         content="Salva todas as informações do cliente para serem usadas posteriomente através da seleção no início do formulário"
         placement="top-start"
       >
-        <el-button 
-          @click="saveCostumer"
-          :loading="isLoadingCostumerTemplate"
-        >
+        <el-button @click="saveCostumer" :loading="isLoadingCostumerTemplate">
           Salvar como template
         </el-button>
       </el-tooltip>
@@ -173,7 +170,7 @@ export default {
         },
       ],
       editor: ClassicEditor,
-      editorData: ModeloContrato,
+      editorData: "",
       editorConfig: {
         width: "75%",
       },
@@ -228,6 +225,12 @@ export default {
   mounted() {
     this.initCostumerData();
   },
+  watch: {
+    editorData() {
+      this.clientForm.contractTemplate = this.editorData;
+      this.inputChanged(true);
+    },
+  },
   methods: {
     ...mapMutations([
       "SET_IMAGES_CAR_TEMPLATE",
@@ -243,8 +246,20 @@ export default {
     async initCostumerData() {
       this.handleCanChangeInput();
 
+      if (
+        Object.keys(JSON.parse(localStorage.getItem("clientData"))).includes(
+          "contractTemplate"
+        )
+      ) {
+        this.editorData = JSON.parse(
+          localStorage.getItem("clientData")
+        ).contractTemplate;
+      } else {
+        this.editorData = ModeloContrato;
+      }
+
       if (this.customerTemplates.length == 0) {
-        this.getCostumerTemplates()
+        this.getCostumerTemplates();
       }
     },
     handleCanChangeInput() {
@@ -252,51 +267,55 @@ export default {
         this.canChangeInput = true;
         if (this.getClientDataFromCache) {
           this.clientForm = this.getClientDataFromCache;
-          this.selectedCustomerTemplate = this.getClientDataFromCache.id
+          this.selectedCustomerTemplate = this.getClientDataFromCache.id;
         }
       }, 500);
     },
     inputChanged(forceUpdate) {
       if ((this.inputChangedTimes >= 1 && this.canChangeInput) || forceUpdate) {
-        const dataToUpdate = { ...this.clientForm, id: this.selectedCustomerTemplate };
+        const dataToUpdate = {
+          ...this.clientForm,
+          id: this.selectedCustomerTemplate,
+        };
         this.updateFormTreeData({
           data: dataToUpdate,
           stepName: "clientData",
-
         });
       }
       this.inputChangedTimes += 1;
     },
     onClearTemplate() {
-      this.resetCostumerFormFields()
-      this.editorData = ModeloContrato
+      this.resetCostumerFormFields();
+      this.editorData = "";
     },
     onChangeTemplate(selectedCostumerId) {
-      const costumer = this.customerTemplates.find(c => c.id === selectedCostumerId);
+      const costumer = this.customerTemplates.find(
+        (c) => c.id === selectedCostumerId
+      );
 
       if (!costumer) {
-        return
+        return;
       }
 
-      this.clientForm.name = costumer.name
-      this.clientForm.cpf = costumer.cpf
-      this.clientForm.rg = costumer.rg
-      this.clientForm.civilState = costumer.civilState
-      this.clientForm.occupation = costumer.occupation
-      this.clientForm.address = costumer.address
-      this.clientForm.complement = costumer.complement
+      this.clientForm.name = costumer.name;
+      this.clientForm.cpf = costumer.cpf;
+      this.clientForm.rg = costumer.rg;
+      this.clientForm.civilState = costumer.civilState;
+      this.clientForm.occupation = costumer.occupation;
+      this.clientForm.address = costumer.address;
+      this.clientForm.complement = costumer.complement;
 
       if (costumer.contractTemplate) {
-        this.editorData = costumer.contractTemplate
+        this.editorData = costumer.contractTemplate;
       }
 
-      this.inputChanged(true)
+      this.inputChanged(true);
     },
-    async getCostumerTemplates(){
+    async getCostumerTemplates() {
       this.isLoadingCostumerTemplate = true;
 
       try {
-        this.customerTemplates = await new CostumerService().getAll()
+        this.customerTemplates = await new CostumerService().getAll();
       } catch (error) {
         console.error(error);
         this.$notify({
@@ -309,36 +328,36 @@ export default {
       }
     },
     resetCostumerFormFields() {
-      this.clientForm.name = ""
-      this.clientForm.cpf = ""
-      this.clientForm.rg = ""
-      this.clientForm.civilState = ""
-      this.clientForm.occupation = ""
-      this.clientForm.address = ""
-      this.clientForm.complement = ""
+      this.clientForm.name = "";
+      this.clientForm.cpf = "";
+      this.clientForm.rg = "";
+      this.clientForm.civilState = "";
+      this.clientForm.occupation = "";
+      this.clientForm.address = "";
+      this.clientForm.complement = "";
 
-      this.editorData = ModeloContrato
+      this.editorData = ModeloContrato;
     },
     async saveCostumer() {
       this.isLoadingCostumerTemplate = true;
 
       try {
-        const costumer = new Costumer()
+        const costumer = new Costumer();
 
         if (this.selectedCustomerTemplate) {
-          costumer.id = this.selectedCustomerTemplate
+          costumer.id = this.selectedCustomerTemplate;
         }
 
-        costumer.name = this.clientForm.name
-        costumer.cpf = this.clientForm.cpf
-        costumer.rg = this.clientForm.rg
-        costumer.civilState = this.clientForm.civilState
-        costumer.occupation = this.clientForm.occupation
-        costumer.address = this.clientForm.address
-        costumer.complement = this.clientForm.complement
+        costumer.name = this.clientForm.name;
+        costumer.cpf = this.clientForm.cpf;
+        costumer.rg = this.clientForm.rg;
+        costumer.civilState = this.clientForm.civilState;
+        costumer.occupation = this.clientForm.occupation;
+        costumer.address = this.clientForm.address;
+        costumer.complement = this.clientForm.complement;
 
         if (this.editorData !== ModeloContrato) {
-          costumer.contractTemplate = this.editorData
+          costumer.contractTemplate = this.editorData;
         }
 
         await new CostumerService().save(costumer);
@@ -348,7 +367,6 @@ export default {
           message: "Cliente salvo com sucesso",
           type: "success",
         });
-
       } catch (error) {
         console.error(error);
         this.$notify({
@@ -365,20 +383,20 @@ export default {
 
       try {
         if (!this.selectedCustomerTemplate) {
-          return
+          return;
         }
         await new CostumerService().delete(this.selectedCustomerTemplate);
-        this.selectedCustomerTemplate = ""
+        this.selectedCustomerTemplate = "";
 
-        await this.getCostumerTemplates()
-        this.resetCostumerFormFields()
+        await this.getCostumerTemplates();
+        this.resetCostumerFormFields();
 
         this.$notify({
           title: "Sucesso",
           message: "Cliente deletado com sucesso",
           type: "success",
         });
-      } catch(error){
+      } catch (error) {
         console.error(error);
         this.$notify({
           title: "Erro",
@@ -388,7 +406,7 @@ export default {
       } finally {
         this.isLoadingCostumerTemplate = false;
       }
-    }
+    },
   },
 };
 </script>
