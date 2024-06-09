@@ -247,6 +247,7 @@ export default {
       this.handleCanChangeInput();
 
       if (
+        localStorage.getItem("clientData") &&
         Object.keys(JSON.parse(localStorage.getItem("clientData"))).includes(
           "contractTemplate"
         )

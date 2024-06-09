@@ -1,6 +1,12 @@
 <template>
-  <div id="proposal" class="pdf">
-    <div v-html="getClientDataFromCache.contractTemplate"></div>
+  <div class="pdf">
+    <div id="proposal">
+      <div v-html="getClientDataFromCache.contractTemplate"></div>
+    </div>
+    <div class="text-center">
+      <el-button class="mt-5" type="primary" @click="makeProposal">Download
+        Contrato</el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -99,18 +105,18 @@ export default {
       this.setLoadingState(true);
       this.$notify({
         title: "Atenção",
-        message: "Gerando Proposta, por favor aguarde...",
+        message: "Gerando Contrato, por favor aguarde...",
         type: "warning",
       });
       let that = this;
 
       const id = uuidv4();
-      if (this.getProposal && this.getProposal.id) {
+      // if (this.getClientDataFromCache && this.getClientDataFromCache.contractTemplate) {
         //Adicionar o ID da proposta no PDF
-        document.getElementById("proposal-id").innerHTML = `Proposta: ${id}`;
-      }
+        // document.getElementById("proposal").innerHTML = `Contrato: ${id}`;
+      // }
 
-      const elm = document.getElementById("proposal-template");
+      const elm = document.getElementById("proposal");
       const date = that.$options.filters.formatDate(new Date().toISOString());
 
       const fileName = `Contrato ${that.getVehicleDataFromCache.product} em ${date}`;
@@ -139,7 +145,7 @@ export default {
           that.setLoadingState(false);
           that.$notify({
             title: "Sucesso",
-            message: "Proposta gerada com sucesso",
+            message: "Contrato gerada com sucesso",
             type: "success",
           });
 
@@ -151,7 +157,7 @@ export default {
             );
             FileSaver.saveAs(
               blob,
-              `Proposta ${that.getVehicleDataFromCache.product} em ${date}`
+              `Contrato ${that.getVehicleDataFromCache.product} em ${date}`
             );
           }, 1500);
         })
@@ -165,6 +171,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.el-dialog__body{
+  word-break: break-word !important;
+}
+</style>
 
 <style lang="scss" scoped>
 body {
@@ -184,14 +196,6 @@ p {
   margin-bottom: 0pt;
   line-height: normal;
   font-size: 11pt;
-}
-
-#proposal {
-  border: 1px solid black;
-  padding: 15px;
-  margin: 0px auto;
-  max-width: 700px;
-  color: black;
 }
 
 .first-section {
@@ -220,9 +224,14 @@ p {
   margin-top: 15px;
 }
 .pdf {
+  // text-wrap: wrap;
+  border: 1px solid black;
+  padding: 15px;
+  margin: 0px auto;
+  max-width: 700px;
+  color: black;
   font-family: "Calibri", sans-serif !important;
   letter-spacing: 0px;
-  color: #7b7b7b;
 }
 
 h1 {
